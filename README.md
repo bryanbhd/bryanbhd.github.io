@@ -5,6 +5,8 @@ Source for the GitHub Pages portfolio site.
 - **`portfolio.md`** — the content. Edit this.
 - **`index.html`** — build output, committed because GitHub Pages serves it directly. Do not edit by hand.
 - **`build_site.py`** — regenerates `index.html` from `portfolio.md`.
+- **`resume/`** — resume PDFs and DOCXs, linked from the top of the page. Built from the
+  Markdown sources in `Enterprise-Sandbox/documents/`; copy new builds in, don't edit here.
 
 ## Rebuild
 

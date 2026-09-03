@@ -3,6 +3,13 @@
 **Systems Architect → AI Platform / MLOps Engineer**
 Lewisville, TX · bdebnam@gmail.com · [linkedin.com/in/bryanhd](https://www.linkedin.com/in/bryanhd)
 
+**Resume —** AI Platform / MLOps:
+[PDF](resume/Bryan_Debnam_Resume_AI_Platform.pdf) ·
+[DOCX](resume/Bryan_Debnam_Resume_AI_Platform.docx)
+ | Systems Architect:
+[PDF](resume/Bryan_Debnam_Resume_Systems_Architect.pdf) ·
+[DOCX](resume/Bryan_Debnam_Resume_Systems_Architect.docx)
+
 ---
 
 ## Positioning
