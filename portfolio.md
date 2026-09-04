@@ -167,7 +167,7 @@ architecture — the multi-account control plane, not a workload environment.
 unpopulated — the artifact is the account structure, delegation model, and identity federation,
 not running services.*
 
-### 7. SaaS Spend & License Governance Portal ("Najar") — **[Work]** · *Pilot — production target end of Q3 2026*
+### 7. SaaS Procurement & Spend Optimization Platform — **[Work]** · *Pilot — production target end of Q3 2026*
 
 An Azure-hosted internal portal that turns scattered vendor licensing data into a single
 view of software spend and seat waste.
@@ -219,13 +219,15 @@ view of software spend and seat waste.
 
 Two separate evidence bases, never blurred:
 
-- **Independent R&D (the sandbox)** is a **single-host reference platform**, not a production
-  system with a user base — it demonstrates architecture judgment, integration breadth, and
-  knowledge of failure modes. Projects 1, 3, 4, 5.
+- **Independent R&D** is personal work, not a production system with a user base — it
+  demonstrates architecture judgment, integration breadth, and knowledge of failure modes. The
+  sandbox is a **single-host reference platform** (projects 1, 3, 4); the AWS landing zone is a
+  control-plane build with intentionally unpopulated workload OUs (project 6).
 - **"At scale / in production" evidence** comes from the **work** at Inform Diagnostics: four
-  M&A integrations, identity modernization for ~1,800 users, a 60+-control SOX program, an
-  org-wide Copilot rollout, and the Script Portal agent platform in real internal use.
-  Projects 2, 6.
+  M&A integrations, identity modernization for ~1,800 users, a 60+-control SOX program, and an
+  org-wide Copilot rollout. The agent-platform projects built on top of that experience —
+  Script Portal, the SOX evidence agents, and the spend portal — are **pilots** doing real
+  production work, not yet production-environment systems. Projects 2, 5, 7.
 
 ---
 
