@@ -77,6 +77,9 @@ An internal platform for deploying interchangeable agentic-AI backends under one
 A ~60-instance self-hosted platform on a single dual-GPU host — the environment projects 1, 4,
 and 5 run in.
 
+**Detail —** [Architecture & infrastructure deck](architecture/) ·
+[AI service cards](model-cards/) for the on-prem model fleet
+
 - **Incus** (LXD-successor) fleet — ~60 containers/VMs across projects; a 3-master/3-worker
   k3s cluster; ZFS/Btrfs pools with snapshot rollback; four segmented bridge networks with
   reverse-proxy-only external exposure (Caddy).

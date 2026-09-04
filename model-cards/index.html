@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Model Cards</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F1F2F0;
+    --surface: #FFFFFF;
+    --surface-2: #E9EBE8;
+    --ink: #1B2023;
+    --ink-dim: #5C666C;
+    --ink-faint: #8A939A;
+    --rule: #D6DAD9;
+    --rule-strong: #B7BDBB;
+    --accent: #A85A22;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #EFDFCB;
+    --accent-soft-ink: #6B3A12;
+    --good: #3F7A4E;
+    --warn: #9C6B12;
+    --font-display: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15181A;
+      --surface: #1D2124;
+      --surface-2: #22262A;
+      --ink: #E7E9E7;
+      --ink-dim: #9BA5A9;
+      --ink-faint: #6C767A;
+      --rule: #2C3134;
+      --rule-strong: #3B4145;
+      --accent: #E0995A;
+      --accent-ink: #1B1200;
+      --accent-soft: #362819;
+      --accent-soft-ink: #F0C793;
+      --good: #6FBF7F;
+      --warn: #D9A441;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15181A;
+    --surface: #1D2124;
+    --surface-2: #22262A;
+    --ink: #E7E9E7;
+    --ink-dim: #9BA5A9;
+    --ink-faint: #6C767A;
+    --rule: #2C3134;
+    --rule-strong: #3B4145;
+    --accent: #E0995A;
+    --accent-ink: #1B1200;
+    --accent-soft: #362819;
+    --accent-soft-ink: #F0C793;
+    --good: #6FBF7F;
+    --warn: #D9A441;
+  }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  ::selection { background: var(--accent-soft); color: var(--accent-soft-ink); }
+  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  /* ---- Masthead ---- */
+  header.masthead {
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  h1 {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: clamp(28px, 4.2vw, 40px);
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .lede {
+    max-width: 62ch;
+    color: var(--ink-dim);
+    font-size: 17px;
+    margin: 0;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .fleet-strip {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .fleet-stat {
+    background: var(--surface);
+    padding: 16px 18px;
+  }
+  .fleet-stat .k {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .fleet-stat .v {
+    font-family: var(--font-mono);
+    font-size: 14.5px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Cards ---- */
+  main { padding-top: 48px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    margin-bottom: 28px;
+  }
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--surface-2);
+  }
+  .card-id {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .card-role {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .pill.modal { border-color: var(--good); color: var(--good); }
+  .pill.warn-tone { border-color: var(--warn); color: var(--warn); }
+
+  .section-divider {
+    margin: 56px 0 12px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule-strong);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .divider-note {
+    max-width: 68ch;
+    color: var(--ink-dim);
+    font-size: 15px;
+    margin: 8px 0 28px;
+  }
+
+  .card-body { padding: 24px; }
+
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+  }
+  .spec-table tr { border-bottom: 1px solid var(--rule); }
+  .spec-table tr:last-child { border-bottom: none; }
+  .spec-table th, .spec-table td {
+    text-align: left;
+    padding: 8px 0;
+    vertical-align: top;
+  }
+  .spec-table th {
+    color: var(--ink-faint);
+    font-weight: 500;
+    width: 34%;
+    letter-spacing: 0.02em;
+  }
+  .spec-table td { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .section { max-width: 68ch; }
+  .section + .section { margin-top: 20px; }
+  .section h3 {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .section p { margin: 0 0 8px; color: var(--ink); }
+  .section p:last-child { margin-bottom: 0; }
+  .section ul { margin: 0; padding-left: 20px; }
+  .section li { margin-bottom: 6px; }
+  .section li:last-child { margin-bottom: 0; }
+
+  code.inline {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border: 1px solid var(--rule);
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule-strong);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .spec-table th { width: 42%; }
+  }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a[href="/model-cards.pdf"] { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <a href="/model-cards.pdf" style="float:right; font-family:var(--font-mono); font-size:0.78rem; color:var(--accent); text-decoration:none; border:1px solid var(--rule-strong); padding:4px 10px; border-radius:6px;">Download PDF &darr;</a>
+    <div class="eyebrow">On-Prem AI Fleet · Agentic-OS</div>
+    <h1>Model Cards</h1>
+    <p class="lede">
+      Intended use, limitations, and governance notes for the language,
+      embedding, and image models running in production on this sandbox —
+      written in the spirit of <a href="https://aws.amazon.com/machine-learning/responsible-ai/resources/" target="_blank" rel="noopener">AWS's AI Service Cards</a>,
+      applied to a fully self-hosted stack. <strong>Every model below runs
+      on-prem</strong> — no inference call in this fleet leaves the building.
+    </p>
+    <div class="fleet-strip">
+      <div class="fleet-stat">
+        <div class="k">Compute</div>
+        <div class="v">2× RTX 3090, 24GB VRAM each</div>
+      </div>
+      <div class="fleet-stat">
+        <div class="k">Serving</div>
+        <div class="v">Ollama → LiteLLM (OpenAI-compatible)</div>
+      </div>
+      <div class="fleet-stat">
+        <div class="k">Tracing</div>
+        <div class="v">Langfuse, every LiteLLM call</div>
+      </div>
+      <div class="fleet-stat">
+        <div class="k">Secrets</div>
+        <div class="v">Vault-issued, never in source</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- QWEN3-CODER:30B -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">qwen3-coder:30b</div>
+          <div class="card-role">Coding agent backend</div>
+        </div>
+        <span class="pill">Agentic</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Mixture-of-experts code model, quantized (GGUF, Ollama registry default)</td></tr>
+          <tr><th>Served via</th><td><code class="inline">the inference proxy</code> (LiteLLM) → <code class="inline">the model host</code></td></tr>
+          <tr><th>Consumers</th><td>openclaw-agent (CLI coding agent)</td></tr>
+          <tr><th>Pinned deps</th><td><code class="inline">litellm[proxy]</code>, <code class="inline">fastapi==0.115.6</code>, <code class="inline">langfuse==2.60.9</code></td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Autonomous and semi-autonomous code editing, refactors, and shell-level
+          tasks issued through openclaw-agent. Runs alongside a native Ollama provider
+          path that was left untouched — this is an additive LiteLLM route, not a
+          replacement.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <ul>
+            <li>Quantized weights — no benchmark run against the full-precision
+            checkpoint on this fleet; treat generated code as unreviewed until
+            tested, same as any LLM output.</li>
+            <li>No sandboxed execution boundary beyond openclaw-agent's own
+            allowlist — the model does not independently rate-limit or scope
+            its own tool calls.</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h3>Deployment notes</h3>
+          <p>Version pins exist because <code class="inline">litellm==1.95.0</code>
+          breaks on newer FastAPI (<code class="inline">get_flat_dependant</code>
+          import error) and <code class="inline">langfuse 4.x</code> drops the
+          attribute LiteLLM's callback expects. Upgrade either only after
+          re-verifying both constraints.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- QWEN3:8B -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">qwen3:8b</div>
+          <div class="card-role">Router / classification model</div>
+        </div>
+        <span class="pill">Router</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Small, low-latency general model — designated router/classifier</td></tr>
+          <tr><th>Served via</th><td><code class="inline">the model host</code>, direct and via LiteLLM</td></tr>
+          <tr><th>Consumers</th><td>Flowise chatflows (email classification), Sandy chat routing</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Fast triage and classification ahead of a heavier model or a
+          human decision — e.g. sorting inbound email into
+          Work / Personal / Tour / Other / Spam and producing a structured
+          <code class="inline">{category, needs_reply, draft_reply}</code>
+          object for review.</p>
+        </div>
+        <div class="section">
+          <h3>Responsible AI design choices</h3>
+          <ul>
+            <li><strong>Draft-only, human-in-the-loop:</strong> the email
+            classifier chatflow stops at a JSON draft. No send/label action is
+            wired to it — a person reviews and sends, by design, not by
+            omission.</li>
+            <li><strong>Local-only by policy:</strong> an earlier OpenAI-backed
+            variant of this same flow was retired in favor of qwen3:8b
+            specifically to keep the pipeline at zero cloud calls, rather than
+            carry a design that broke that guarantee.</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>Selected in part because the flow's original router
+          (<code class="inline">qwen2.5:7b</code>) aged out of the registry —
+          re-validate classification accuracy after any future model swap
+          rather than assuming continuity.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- NOMIC-EMBED-TEXT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">nomic-embed-text</div>
+          <div class="card-role">Embedding model</div>
+        </div>
+        <span class="pill modal">Retrieval</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Text embedding model</td></tr>
+          <tr><th>Vector store</th><td>Qdrant (the vector store)</td></tr>
+          <tr><th>Consumers</th><td>All Flowise RAG chatflows, incl. Sandy's own knowledge base</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Backs every retrieval-augmented chatflow in the fleet — documents
+          and notes are embedded once at ingest and queried at chat time
+          against Qdrant, rather than re-embedded per request.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <ul>
+            <li>Retrieval quality has not been measured with a held-out eval
+            set — there is no golden-set or regression suite behind these
+            chatflows yet, so silent retrieval drift after a document-set
+            change would currently go unnoticed.</li>
+            <li>Single embedding model across all collections — no per-domain
+            fine-tuning, so domain-specific jargon retrieves at whatever
+            quality the base model provides.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- GPT-OSS:20B -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">gpt-oss:20b</div>
+          <div class="card-role">General-purpose chat model</div>
+        </div>
+        <span class="pill">Chat</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Open-weight general chat/reasoning model</td></tr>
+          <tr><th>Served via</th><td><code class="inline">the inference proxy</code> → Open WebUI</td></tr>
+          <tr><th>Alternatives on fleet</th><td>deepseek-coder-v2:16b, qwen3.6:27b, gemma4:31b-it-q8_0</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Default conversational model surfaced to Open WebUI users —
+          general Q&A, drafting, and reasoning where no specialized router
+          has already selected a narrower model.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>No model-selection telemetry exists yet to confirm this is
+          actually the model most sessions land on — Open WebUI allows
+          per-session override, and usage hasn't been audited against
+          Langfuse traces to date. Treat this card's "default" framing as
+          intent, not a measured fact, until that's checked.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- FLUX.1 -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">FLUX.1 schnell / Kontext</div>
+          <div class="card-role">Image generation &amp; editing</div>
+        </div>
+        <span class="pill modal">Multimodal</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Text-to-image (schnell) and instruction-based image editing (Kontext)</td></tr>
+          <tr><th>Runtime</th><td>ComfyUI on <code class="inline">the model host</code>, port 8188</td></tr>
+          <tr><th>Consumers</th><td>Open WebUI image tools, standalone Photo Editor app</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Text-to-image generation and instruction-driven edits, including
+          multi-image reference chaining (e.g. transferring a garment from
+          one reference image onto a subject in another).</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <ul>
+            <li>No content-safety filter layered in front of this endpoint at
+            the application level — anything ComfyUI itself doesn't refuse
+            will render.</li>
+            <li>Multi-image compositing (garment transfer, subject blending)
+            has an unreviewed likeness/consent surface — treat outputs
+            involving real people's photos with the same care as any other
+            image edit of a real person, on or off this fleet.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <div class="section-divider">
+      <span>Resume Pipeline · Specialist Agents</span>
+    </div>
+    <p class="divider-note">
+      Six single-purpose models behind the Resume Pipeline chatflow (separate
+      Azure DevOps repo). All six fine-tune the same Qwen3 8.2B base via
+      dedicated Modelfiles — narrow prompts, tight decoding limits, and in
+      three cases a code-level guardrail that checks the model's own output
+      rather than trusting the prompt alone.
+    </p>
+
+    <!-- GRAMMAR-AGENT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">grammar-agent</div>
+          <div class="card-role">Grammar &amp; mechanics review</div>
+        </div>
+        <span class="pill warn-tone">Resume Pipeline</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Qwen3 8.2B base, dedicated system prompt</td></tr>
+          <tr><th>Decoding</th><td>temp 0.15 · num_ctx 8192 · num_predict 800 · repeat_penalty 1.05</td></tr>
+          <tr><th>Tool</th><td><code class="inline">review_grammar</code>, memoized per session+candidate</td></tr>
+          <tr><th>Observed latency</th><td>p50 103.0s · p90 961.4s (~16 min)</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Grammar, spelling, and mechanics review of a saved or pasted
+          resume — feedback only, does not rewrite structure or content.</p>
+        </div>
+        <div class="section">
+          <h3>Responsible AI design choices</h3>
+          <p>Decoding limits above exist because of a real incident: the
+          original config (<code class="inline">repeat_penalty 1</code> — no
+          penalty — with no <code class="inline">num_predict</code> cap and
+          Qwen3's thinking mode never disabled) let one request run past
+          50,000 tokens without stopping. Fixed with the caps shown here plus
+          <code class="inline">/no_think</code> appended to the outgoing
+          prompt.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>Session+candidate-keyed caching means a substantive resume edit
+          followed by an immediate re-ask can replay a stale cached result
+          rather than regenerate — an accepted trade-off against the
+          alternative (redundant-call storms that stalled real requests).</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- FORMATTING-AGENT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">formatting-agent</div>
+          <div class="card-role">Structural reformatting</div>
+        </div>
+        <span class="pill warn-tone">Resume Pipeline</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Qwen3 8.2B base, dedicated system prompt</td></tr>
+          <tr><th>Decoding</th><td>temp 0.15 · num_ctx 16384 · num_predict 7000 · repeat_penalty 1.05</td></tr>
+          <tr><th>Tool</th><td><code class="inline">reformat_document</code> — highest-volume tool, 250 traced calls</td></tr>
+          <tr><th>Observed latency</th><td>p50 40.8s · p90 1144.5s (~19 min)</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Restructures and cleans up a resume's formatting. Explicitly
+          forbidden from cutting content — shortening is <code class="inline">condense-agent</code>'s
+          job, kept as a separate model so "reformat" can never silently lose
+          material.</p>
+        </div>
+        <div class="section">
+          <h3>Responsible AI design choices</h3>
+          <p>Caught fabricating content in production — invented an Executive
+          Summary section, fake percentages, and invented months/cities for
+          date ranges the source never specified. Fixed with explicit
+          verbatim-grounding rules in the Modelfile, verified clean against
+          real resumes afterward. Also affected by a silent-truncation mode
+          on long resumes (12KB+): the tool now fetches a saved candidate's
+          text directly from <code class="inline">docgen</code> instead of
+          asking the model to re-type it as a JSON argument.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>The p90 here is a known Ollama daemon-hang signature (multiple
+          requests completing at an identical timestamp), not generic
+          slowness — mitigated by a watchdog service since 2026-08-11, whose
+          real catch-and-recover behavior against a live hang is still
+          unverified in production.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- CONDENSE-AGENT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">condense-agent</div>
+          <div class="card-role">Length reduction</div>
+        </div>
+        <span class="pill warn-tone">Resume Pipeline</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Qwen3 8.2B base, dedicated system prompt</td></tr>
+          <tr><th>Decoding</th><td>temp 0.15 · num_ctx 16384 · num_predict 4000 · repeat_penalty 1.05</td></tr>
+          <tr><th>Tool</th><td><code class="inline">condense_resume</code>, keyed by session+candidate+target length</td></tr>
+          <tr><th>Observed latency</th><td>p50 19.7s · p90 28.1s — tightest of the six</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Shortens a resume to a target length by cutting and tightening
+          the weakest/oldest material first. Every output ends with a
+          <code class="inline">CUT SUMMARY:</code> line naming everything
+          removed, so nothing is dropped silently.</p>
+        </div>
+        <div class="section">
+          <h3>Responsible AI design choices</h3>
+          <p>Prompt-only "don't invent sections" rules didn't hold: a live
+          test produced a fabricated "Technical Skills" section listing
+          "Linux" — a skill absent from the actual source resume. Fixed with
+          a code-level check that strips any output heading whose exact text
+          doesn't appear in the source, with follow-up fixes for whitespace
+          artifacts (e.g. a PDF-extracted no-break space) and legitimate
+          heading merges (e.g. "Education" + "Professional Development" →
+          "Education &amp; Certifications") so the guardrail doesn't flag
+          real edits as fabrication.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>Early version cached by content fingerprint, but the
+          orchestrator re-serializes long text slightly differently each
+          call — so a single turn could trigger 7+ live model calls before a
+          cache hit ever landed. Fixed by dropping the fingerprint and
+          keying on session+candidate+target only.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- RESUME-CRITIC-AGENT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">resume-critic-agent</div>
+          <div class="card-role">Content &amp; narrative critique</div>
+        </div>
+        <span class="pill warn-tone">Resume Pipeline</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Qwen3 8.2B base, dedicated system prompt</td></tr>
+          <tr><th>Decoding</th><td>temp 0.2 · num_ctx 8192 · num_predict 1800 · repeat_penalty 1.05</td></tr>
+          <tr><th>Tool</th><td><code class="inline">review_resume_content</code>, memoized per session+candidate</td></tr>
+          <tr><th>Observed latency</th><td>p50 17.6s · p90 734.6s (~12 min)</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Qualitative feedback on length, quantification, targeting, and
+          narrative strength — critique only, produces no rewritten output
+          of its own.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>Same Ollama-hang latency signature as the other specialist
+          agents; shares GPU scheduling with the fleet's general chat model,
+          so real-world response time depends on what else is loaded at
+          request time, not just this model's own cost.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- COVER-LETTER-AGENT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">cover-letter-agent</div>
+          <div class="card-role">Cover letter drafting</div>
+        </div>
+        <span class="pill warn-tone">Resume Pipeline</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Qwen3 8.2B base, dedicated system prompt</td></tr>
+          <tr><th>Decoding</th><td>temp 0.3 · num_ctx 10240 · num_predict 1200 · repeat_penalty 1.05</td></tr>
+          <tr><th>Tool</th><td><code class="inline">build_cover_letter</code> — not memoized (multi-posting use is legitimate)</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Drafts a cover letter from a candidate's saved resume against
+          one specific job posting.</p>
+        </div>
+        <div class="section">
+          <h3>Responsible AI design choices</h3>
+          <p>Code-level guardrail strips any generated sentence that claims a
+          technology or term from the job posting which the candidate's own
+          resume never mentions — a fabrication check applied to the actual
+          output, not left to prompt instructions alone.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- JOB-FIT-AGENT -->
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-id">job-fit-agent</div>
+          <div class="card-role">Fit scoring</div>
+        </div>
+        <span class="pill warn-tone">Resume Pipeline</span>
+      </div>
+      <div class="card-body">
+        <table class="spec-table">
+          <tr><th>Class</th><td>Qwen3 8.2B base, dedicated system prompt</td></tr>
+          <tr><th>Decoding</th><td>temp 0.2 · num_ctx 12288 · num_predict 1800 · repeat_penalty 1.05</td></tr>
+          <tr><th>Tool</th><td><code class="inline">assess_job_fit</code> — not memoized (multi-posting use is legitimate)</td></tr>
+        </table>
+        <div class="section">
+          <h3>Intended use</h3>
+          <p>Produces a justified 0–100 fit score against one specific job
+          posting, with named strengths, gaps, and a self-check of its own
+          reasoning.</p>
+        </div>
+        <div class="section">
+          <h3>Limitations</h3>
+          <p>The score is model-justified, not validated against actual
+          hiring outcomes — treat it as a structured opinion to inform a
+          decision, not a calibrated probability.</p>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <footer>
+    <span>Sandbox fleet, on-prem, dual RTX&nbsp;3090</span>
+    <span>Format after AWS AI Service Cards</span>
+  </footer>
+
+</div>
+</body>
+</html>
