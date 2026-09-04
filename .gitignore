@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# local working notes — never publish (this is a public Pages site)
+*.local.md
