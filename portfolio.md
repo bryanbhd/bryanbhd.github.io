@@ -150,12 +150,16 @@ Cost and usage visibility for a self-hosted / mixed LLM fleet.
 
 ## Certifications & education
 
-- **AWS:** Solutions Architect – Associate (2026) · AI Practitioner (2025) · Cloud Practitioner
-  (2024) · ML – Practitioner
-- **Microsoft:** Azure Solutions Architect Expert · Azure Administrator Associate · Power
-  Platform Fundamentals (2025) · **AI-300 Azure AI Engineer — in progress**
-- **Post-Grad, AI & ML Business Applications** — Texas McCombs School of Business (2024–2025)
-- **AAS, Network Administration** — Dallas College
+- **AWS** *(all current)***:** Solutions Architect – Associate (2026, exp. 2029) · AI
+  Practitioner (2025, exp. 2028) · Cloud Practitioner (2024, exp. 2029)
+- **Microsoft** *(active through 2027)***:** [Azure Solutions Architect
+  Expert](https://learn.microsoft.com/api/credentials/share/en-us/DebnamBryan-0771/9CE5F1B1F5EE4BF?sharingId=3CD650BEC1A4B731)
+  · Azure Administrator Associate · Azure Fundamentals (2019) · **AI-102 Azure AI Engineer
+  Associate — in progress**
+- **Post Graduate Program in AI & Machine Learning: Business Applications** — McCombs School
+  of Business, The University of Texas at Austin (conferred July 2025)
+- **A.A.S., Information Technology — CIT: Network Administration & Support** — Dallas County
+  Community College District (now Dallas College)
 - U.S. patent (2014 Microsoft hackathon project, placed 25th worldwide)
 
 ---
