@@ -187,6 +187,9 @@ Issuer-hosted records, verifiable without an account:
 - **Microsoft Certified: Azure Administrator Associate** — [verify on Microsoft
   Learn](https://learn.microsoft.com/api/credentials/share/en-us/DebnamBryan-0771/2A541EB9D2212380?sharingId=3CD650BEC1A4B731)
   · earned Apr 2019, active through Oct 2027
+- **AWS certifications** — [Credly badge
+  wall](https://www.credly.com/users/bryan-debnam.158b6f96) · Solutions Architect – Associate,
+  AI Practitioner, Cloud Practitioner
 - **Post Graduate Program in AI & Machine Learning: Business Applications**, McCombs School of
   Business, UT Austin — [verify](https://vrfy.digital/index.php?key=onsxllql) · conferred July
   2025, 9.5 CEUs
