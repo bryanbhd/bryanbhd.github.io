@@ -35,8 +35,9 @@ engineering — few people have both.
 ## Selected projects
 
 Each project is tagged **[Work]** (Inform Diagnostics) or **[Independent R&D]** (personal), and
-scoped: **Production** (in real organizational use), **Reference build** (complete and running,
-single-environment / not scale-tested), **POC** (proves the pattern).
+scoped: **Pilot** (not yet in the production environment, but performing real production work),
+**Reference build** (complete and running, single-environment / not scale-tested), **POC**
+(proves the pattern).
 
 ### 1. AI Governance & MLOps Lifecycle — **[Independent R&D]** · *Reference build, flagship*
 
@@ -59,23 +60,44 @@ rigor to AI oversight.
 - **AI Gateway** (FastAPI/uvicorn) — unified model-access boundary with a local detect-quality
   model; GenAI UI wired (Prompts registry for 7 agent system prompts, review queues, label
   schemas).
+- **Model-version cost/quality comparison** — compare cost and quality across registered
+  model versions to inform promotion decisions.
 - **Stack:** MLflow 3.x (Postgres backend, decoupled artifact volume, Vault-sourced secrets,
   AppRole), Marquez, Ollama, Grafana, Python.
 
-### 2. Provider-Agnostic Agentic AI Platform ("Script Portal" / Agent Bridge) — **[Work]** · *Production*
+### 2. Provider-Agnostic Agentic AI Platform ("Script Portal" / Agent Bridge) — **[Work]** · *Pilot — daily driver*
 
-An internal platform for deploying interchangeable agentic-AI backends under one safety model.
+An internal accelerator — teams get interchangeable agentic-AI backends that can act against
+real enterprise systems under one allowlist and masking model, instead of a per-tool approval
+for every new agent.
 
-- Interchangeable agent CLIs — Claude Code CLI, Copilot GPT CLI, and a **custom VS Code
+- **Interchangeable agent backends** — Claude Code CLI, Copilot GPT CLI, and a **custom VS Code
   "Agent Bridge" extension** (LLM-broker) — behind a shared allowlist and output-masking layer.
-- Secret-aware execution framework; provider-agnostic orchestration so the underlying model/
-  vendor can be swapped without changing the agent contract.
-- In real use inside the organization.
+- **Provider-independent agent contract** — spans tool use, memory, reasoning workflows, and
+  decision frameworks, so the underlying model or vendor can be swapped without changing how
+  agents are invoked or governed.
+- **Secret-aware execution framework** with output masking applied to agent transcripts, so
+  agents can act against authenticated internal systems under one safety model rather than
+  per-tool exceptions.
+- **Running in pilot across identity-lifecycle workflows** — provisioning vendor accounts;
+  detecting duplicate accounts; monitoring expiring service accounts and
+  **app-registration secrets**; writing findings to a SharePoint register and opening tickets
+  whose summary and detail are **model-generated** (Claude / Copilot) rather than templated;
+  rotating expiring secrets and storing the new values in the credential vault. Also drives the
+  SOX evidence-capture agents (see below).
+- **Closed loop, not just detection** — the privileged writes (account creation, secret
+  rotation, vault storage) run *inside* the allowlist and masking boundary rather than as
+  scripted exceptions around it. That boundary is what let the same framework be pointed at new
+  problems without a fresh security review each time.
+
+*Scope: runs in the Dev environment under the author's own access and authorization — which is
+precisely what bounds it to single-operator scale. Broader rollout would require a dedicated
+service identity with least-privilege delegation rather than operator credentials; that
+boundary, not the automation, is the remaining work.*
 
 ### 3. Agentic-OS Sandbox — **[Independent R&D]** · *Reference build (self-hosted AI platform)*
 
-A ~60-instance self-hosted platform on a single dual-GPU host — the environment projects 1, 4,
-and 5 run in.
+A ~60-instance self-hosted platform on a single dual-GPU host — the environment projects 1 and 4 run in.
 
 **Detail —** [Architecture & infrastructure deck](architecture/) ·
 [AI service cards](model-cards/) for the on-prem model fleet
@@ -87,7 +109,8 @@ and 5 run in.
   runtime NVIDIA library injection (survives host driver upgrades), consumed by an Ollama fleet
   (~20 models, role-based routing) and an image-gen stack.
 - **Observability:** Prometheus, Grafana, Loki, Pyroscope, Checkmk, OpenTelemetry collector;
-  a custom token-metrics proxy tapping Ollama traffic for per-model Prometheus metrics.
+  a custom token-metrics proxy tapping Ollama traffic for per-model Prometheus metrics;
+  Langfuse traces costed against a per-model pricing model for per-model spend reporting.
 - **Secrets:** HashiCorp Vault — every generated credential, per-service AppRole delivery,
   Shamir unseal with auto-unseal automation.
 - **Data:** Postgres, MariaDB, MongoDB, Qdrant (vectors), Redis, Elasticsearch/OpenSearch;
@@ -108,20 +131,16 @@ A red-team scanning and triage pipeline for LLM endpoints.
 - Paired with an **llm-guard guardrail** (LiteLLM integration) that returns a graceful
   200-refusal instead of a hard 400 on block.
 
-### 5. LLM Cost Analytics — **[Independent R&D]** · *Reference build*
+### 5. SOX/ITGC Automation & Copilot Enterprise Governance — **[Work]** · *Pilot*
 
-Cost and usage visibility for a self-hosted / mixed LLM fleet.
-
-- Pulls traces from **Langfuse**, applies a per-model **pricing model**, emits **Prometheus**
-  metrics + Grafana; logs to OpenSearch.
-- Per-model cost reporting and inventory discovery.
-- **MLflow model-version comparison** — compare cost/quality across registered versions.
-
-### 6. SOX/ITGC Automation & Copilot Enterprise Governance — **[Work]** · *Production*
-
-- **Playwright-driven RPA agents** for SOX evidence gathering — agents authenticate to
-  enterprise portals, make record-selection decisions, and capture timestamped, masked evidence
-  into the correct control package.
+- **Two cooperating Playwright RPA agents** run the SOX evidence cycle end to end — the first
+  digests incoming audit requests and resolves what each control activity requires; the second
+  authenticates to enterprise portals and collects it: privileged-access records from the
+  credential vault and **Entra group membership / permissions**, reasoning across grid and tab
+  navigation to locate the right records. It then assembles timestamped, masked **evidence
+  packages** and files them to SharePoint under the correct control.
+- **Auditor-ready output** — evidence arrives already scoped to the control activity rather than
+  as raw exports someone has to reconcile by hand.
 - Built and led the **SOX/ITGC compliance program** — 60+ control activities, PowerShell-
   automated evidence generation; primary liaison between Infrastructure, Security, and Audit.
 - Manage the org's **GitHub Enterprise Copilot** deployment; built an n8n workflow monitoring
@@ -129,6 +148,44 @@ Cost and usage visibility for a self-hosted / mixed LLM fleet.
 - Led **M&A technology integration for four acquisitions** — M365 tenant consolidation, AD/Entra
   ID identity integration for ~1,800 users, 400+ mailbox/OneDrive migrations, multi-forest AD
   trust across 6 forests.
+
+### 6. Multi-Account AWS Landing Zone — **[Independent R&D]** · *Reference build (control plane)*
+
+A personally-owned **9-account AWS Organization** built as a governance reference
+architecture — the multi-account control plane, not a workload environment.
+
+- **Account topology** separated by blast radius rather than by team: Security (CloudTrail
+  administration, Config aggregation), Shared Services (Central Backup, Backup Administrator,
+  Network), and Workloads.
+- **OU hierarchy** — Security, Shared Services (nested Network OU), and a Workloads OU
+  subdivided into Dev, Test, QA, Prod, Prod-Sim, ML, and IoT, so **service control policies**
+  scope per environment tier.
+- **Federated identity** — IAM Identity Center fronting all member accounts, federated to an
+  external **Entra ID** tenant; SSO device-code flow with per-account permission sets, so no
+  account carries long-lived IAM access keys.
+- **Centralized security telemetry** — dedicated CloudTrail administration and Config
+  aggregator accounts, keeping audit evidence where workload OUs cannot write to it.
+- **Backup separation of duties** — distinct Central Backup and Backup Administrator accounts,
+  isolating backup data from the identities that administer it.
+
+*Scope: control-plane and governance build. The workload OUs are provisioned but intentionally
+unpopulated — the artifact is the account structure, delegation model, and identity federation,
+not running services.*
+
+### 7. SaaS Spend & License Governance Portal ("Najar") — **[Work]** · *Pilot — production target end of Q3 2026*
+
+An Azure-hosted internal portal that turns scattered vendor licensing data into a single
+view of software spend and seat waste.
+
+- **Multi-source aggregation** — pulls licensing and usage data from vendor REST APIs and
+  normalizes seat models that differ from vendor to vendor into one comparable schema.
+- **Waste detection** — surfaces duplicate license assignments, unused seats, and per-vendor
+  spend, producing an actionable reclaim list rather than a static dashboard.
+- **Shared component library** — reuses helpers from the agent framework (project 2): Active
+  Directory and Graph email helpers, plus the duplicate-account detection logic generalized into
+  duplicate **license** assignment detection — the same instinct applied to identity and to spend.
+- **Delivery** — built through agentic AI-assisted development (Claude Code, GitHub Copilot)
+  and shipped via **Azure DevOps build and release pipelines** with Azure service connections.
 
 ---
 
