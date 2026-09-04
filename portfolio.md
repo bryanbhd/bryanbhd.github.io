@@ -152,9 +152,8 @@ Cost and usage visibility for a self-hosted / mixed LLM fleet.
 
 - **AWS** *(all current)***:** Solutions Architect – Associate (2026, exp. 2029) · AI
   Practitioner (2025, exp. 2028) · Cloud Practitioner (2024, exp. 2029)
-- **Microsoft** *(active through 2027)***:** [Azure Solutions Architect
-  Expert](https://learn.microsoft.com/api/credentials/share/en-us/DebnamBryan-0771/9CE5F1B1F5EE4BF?sharingId=3CD650BEC1A4B731)
-  · Azure Administrator Associate · Azure Fundamentals (2019) · **AI-102 Azure AI Engineer
+- **Microsoft** *(active through 2027)***:** Azure Solutions Architect Expert · Azure
+  Administrator Associate · Azure Fundamentals (2019) · **AI-102 Azure AI Engineer
   Associate — in progress**
 - **Post Graduate Program in AI & Machine Learning: Business Applications** — McCombs School
   of Business, The University of Texas at Austin (conferred July 2025)
@@ -175,3 +174,16 @@ Two separate evidence bases, never blurred:
   M&A integrations, identity modernization for ~1,800 users, a 60+-control SOX program, an
   org-wide Copilot rollout, and the Script Portal agent platform in real internal use.
   Projects 2, 6.
+
+---
+
+## Verification
+
+Issuer-hosted records, verifiable without an account:
+
+- **Microsoft Certified: Azure Solutions Architect Expert** — [verify on Microsoft
+  Learn](https://learn.microsoft.com/api/credentials/share/en-us/DebnamBryan-0771/9CE5F1B1F5EE4BF?sharingId=3CD650BEC1A4B731)
+  · earned Nov 2019, active through Nov 2027
+- **Post Graduate Program in AI & Machine Learning: Business Applications**, McCombs School of
+  Business, UT Austin — [verify](https://vrfy.digital/index.php?key=onsxllql) · conferred July
+  2025, 9.5 CEUs
