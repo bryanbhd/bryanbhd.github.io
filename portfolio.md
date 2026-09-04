@@ -3,7 +3,8 @@
 **Systems Architect → AI Platform / MLOps Engineer**
 Lewisville, TX · bdebnam@gmail.com · [linkedin.com/in/bryanhd](https://www.linkedin.com/in/bryanhd)
 
-**Resume —** available on request.
+**Resume —** [request a copy](mailto:bdebnam@gmail.com?subject=Resume%20request) · PDF or DOCX,
+AI Platform / MLOps or Systems Architect.
 
 ---
 
