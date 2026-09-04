@@ -20,6 +20,13 @@ HEAD = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bryan Debnam — Systems Architect / AI Platform Engineer</title>
 <meta name="description" content="Portfolio: AI governance and MLOps lifecycle, agentic AI platforms, AI security triage, and enterprise infrastructure architecture.">
+<link rel="canonical" href="https://bryandebnam.com/">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="Bryan Debnam">
+<meta property="og:title" content="Bryan Debnam — Systems Architect / AI Platform Engineer">
+<meta property="og:description" content="AI governance and MLOps lifecycle, agentic AI platforms, AI security triage, and enterprise infrastructure architecture.">
+<meta property="og:url" content="https://bryandebnam.com/">
+<meta name="twitter:card" content="summary">
 <style>
 :root {
   --bg: #ffffff; --fg: #1b1f24; --muted: #5b6570; --accent: #1f4e9c;
