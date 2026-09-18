@@ -30,7 +30,7 @@ engineering — few people have both.
 
 ## Selected projects
 
-Each project is tagged **[Work]** (Inform Diagnostics) or **[Independent R&D]** (personal), and
+Each project is tagged **[Work]** (current employer) or **[Independent R&D]** (personal), and
 scoped: **Pilot** (not yet in the production environment, but performing real production work),
 **Reference build** (complete and running, single-environment / not scale-tested), **POC**
 (proves the pattern).
@@ -226,7 +226,7 @@ Two separate evidence bases, never blurred:
   demonstrates architecture judgment, integration breadth, and knowledge of failure modes. The
   sandbox is a **single-host reference platform** (projects 1, 3, 4); the AWS landing zone is a
   control-plane build with intentionally unpopulated workload OUs (project 6).
-- **"At scale / in production" evidence** comes from the **work** at Inform Diagnostics: four
+- **"At scale / in production" evidence** comes from the **work** at my current employer: four
   M&A integrations, identity modernization for ~1,800 users, a 60+-control SOX program, and an
   org-wide Copilot rollout. The agent-platform projects built on top of that experience —
   Script Portal, the SOX evidence agents, and the spend portal — are **pilots** doing real

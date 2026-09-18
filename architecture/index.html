@@ -299,65 +299,65 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
     <!-- ░░ SLIDE 1 — COVER ░░ -->
     <section class="slide cover active">
       <div class="cover-inner">
-        <div class="cover-badge"><span class="dot"></span> R&amp;D Sandbox · Reference Platform</div>
+        <div class="cover-badge"><span class="dot"></span> Independent R&amp;D · Single-Host Reference Platform</div>
         <h1>Agentic AI Sandbox<span class="accent">Architecture Blueprint</span></h1>
         <div class="bar"></div>
-        <p class="lead">A single reference for the full project lifecycle, team capability model, tool ownership, global network topology, and the operational challenges of running IT across the US and United Kingdom.</p>
+        <p class="lead">A single reference for how this self-hosted AI platform is actually built, audited live rather than from the original plans: the Incus fleet layout, storage and GPU topology, the MLOps governance lifecycle, the security stack, and a personal identity-lab practice environment.</p>
         <div class="cover-pills">
-          <span class="cpill"><b>Reference platform</b> · R&amp;D Sandbox</span>
-          <span class="cpill"><b>Multi-site</b> · Global operations</span>
-          <span class="cpill"><b>AWS</b> Private Cloud · <b>Microsoft Azure</b></span>
-          <span class="cpill"><b>60 / 40</b> Capacity Model</span>
+          <span class="cpill"><b>One host</b> · Dual RTX 3090</span>
+          <span class="cpill"><b>~180 instances</b> · 7 Incus projects</span>
+          <span class="cpill"><b>MLOps governance</b> + DevSecOps</span>
+          <span class="cpill"><b>Adatum</b> · AD/PKI identity lab</span>
         </div>
       </div>
       <div class="cover-foot">
         <div class="cover-wm"><span>agentic AI</span> sandbox<small>R&amp;D Sandbox · Reference Deck</small></div>
-        <div class="cover-meta">Reference architecture deck<br/>September 2026</div>
+        <div class="cover-meta">Reference architecture deck<br/>Updated September 2026</div>
       </div>
     </section>
 
     <!-- ░░ SLIDE 2 — OVERVIEW ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">What's inside</div><div class="s-title">The Operating Model at a Glance</div></div>
-        <div class="s-sub">Seven connected views — from how work enters the pipeline to how it is run, secured, and supported worldwide.</div>
+        <div><div class="kicker">What's inside</div><div class="s-title">The Platform at a Glance</div></div>
+        <div class="s-sub">Eight connected views — from how the fleet is laid out to how models are governed, secured, and stored.</div>
       </div>
       <div class="s-body">
         <div class="ov-grid">
-          <div class="ov-card" style="--c:var(--fl)"><div class="ov-n">01</div><h3>Project &amp; Service Lifecycle</h3><p>Six stages from intake to retire, governed by the 60/40 capacity rule.</p></div>
-          <div class="ov-card" style="--c:var(--blue)"><div class="ov-n">02</div><h3>IT Capability Wheel</h3><p>Five domains around a central Architects center of excellence.</p></div>
-          <div class="ov-card" style="--c:var(--purple)"><div class="ov-n">03</div><h3>Tool Responsibility</h3><p>Who owns each tool: internal, shared, or external vendor SaaS.</p></div>
-          <div class="ov-card" style="--c:var(--teal)"><div class="ov-n">04</div><h3>Infrastructure Ecosystem</h3><p>AWS + Azure core with six operational domains.</p></div>
-          <div class="ov-card" style="--c:var(--red)"><div class="ov-n">05</div><h3>Team Structure &amp; Contention</h3><p>Five teams sharing one Infrastructure platform.</p></div>
-          <div class="ov-card" style="--c:var(--green)"><div class="ov-n">06</div><h3>Network Topology</h3><p>UniFi VLANs connect the sandbox with AWS and Azure sites.</p></div>
-          <div class="ov-card" style="--c:var(--amber)"><div class="ov-n">07</div><h3>Time Zones &amp; On-Call</h3><p>Coverage gaps across PST → ACST and the 17.5 hr offset.</p></div>
-          <div class="ov-card" style="--c:var(--navy)"><div class="ov-n">★</div><h3>OpenProject Control Plane</h3><p>Resource management ties every view back to capacity.</p></div>
+          <div class="ov-card" style="--c:var(--fl)"><div class="ov-n">01</div><h3>Incus Fleet &amp; Projects</h3><p>~180 containers/VMs split across 7 projects by workload type.</p></div>
+          <div class="ov-card" style="--c:var(--blue)"><div class="ov-n">02</div><h3>MLOps Governance Lifecycle</h3><p>Champion/challenger gate, drift detection, staged rollback.</p></div>
+          <div class="ov-card" style="--c:var(--purple)"><div class="ov-n">03</div><h3>Capability Domains</h3><p>Five domains around the same single-operator core.</p></div>
+          <div class="ov-card" style="--c:var(--teal)"><div class="ov-n">04</div><h3>Infrastructure Ecosystem</h3><p>Compute, security, data, observability, automation, inference.</p></div>
+          <div class="ov-card" style="--c:var(--red)"><div class="ov-n">05</div><h3>Identity Lab — Adatum</h3><p>A practice AD/Entra domain with its own subordinate CA.</p></div>
+          <div class="ov-card" style="--c:var(--green)"><div class="ov-n">06</div><h3>Network Topology</h3><p>Five segmented bridges, one proxied egress path.</p></div>
+          <div class="ov-card" style="--c:var(--amber)"><div class="ov-n">07</div><h3>Storage &amp; Backup / DR</h3><p>Two ZFS tiers by latency need, verified scrub, offsite backup.</p></div>
+          <div class="ov-card" style="--c:var(--navy)"><div class="ov-n">★</div><h3>Known Gaps</h3><p>Tracked openly rather than hidden — see the closing section.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- ░░ SLIDE 3 — LIFECYCLE ░░ -->
+    <!-- ░░ SLIDE 3 — MLOPS GOVERNANCE LIFECYCLE ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Section 01</div><div class="s-title">Proposed Project / Service Lifecycle</div></div>
-        <div class="s-sub">Every project moves through six stages from intake to retire. 50–60% of employee time is reserved for projects.</div>
+        <div><div class="kicker">Section 01</div><div class="s-title">MLOps Governance Lifecycle</div></div>
+        <div class="s-sub">Every model change moves through six stages before it can reach production — evaluated, gated, and reversible.</div>
       </div>
       <div class="s-body">
         <div class="lc-flow">
-          <div class="lc-step" style="--c:var(--navy)"><div class="lc-k">Stage 1</div><h3>Architecture Review Board</h3><ul><li>Discuss technologies</li><li>Security &amp; governance</li><li>High-level diagram</li><li>Silo ambassadors</li></ul></div>
-          <div class="lc-step" style="--c:var(--blue)"><div class="lc-k">Stage 2</div><h3>Discovery</h3><ul><li>Scope &amp; inventory</li><li>Build vs buy</li><li>Time estimates</li><li>Materials / cost</li></ul></div>
-          <div class="lc-step" style="--c:var(--teal)"><div class="lc-k">Stage 3</div><h3>Enterprise PM and Procurement</h3><ul><li>Resource allocation</li><li>60% projects</li><li>40% break-fix / ops</li><li>Capacity visibility</li></ul></div>
-          <div class="lc-step" style="--c:var(--blue)"><div class="lc-k">Stage 4</div><h3>Project</h3><ul><li>Resourcing</li><li>Timelines</li><li>Stakeholders</li><li>Tiger Team</li></ul></div>
-          <div class="lc-step" style="--c:var(--purple)"><div class="lc-k">Stage 5</div><h3>Ops Excellence</h3><ul><li>Documentation</li><li>SLAs</li><li>Training</li><li>Maintenance</li></ul></div>
-          <div class="lc-step" style="--c:var(--amber)"><div class="lc-k">Stage 6</div><h3>Enhance / Retire</h3><ul><li>Annual review</li><li>Enhance or sunset</li><li>Feeds back to ARB</li></ul></div>
+          <div class="lc-step" style="--c:var(--navy)"><div class="lc-k">Stage 1</div><h3>Prompt / Model Edit</h3><ul><li>Modelfile changed</li><li>New candidate built</li></ul></div>
+          <div class="lc-step" style="--c:var(--blue)"><div class="lc-k">Stage 2</div><h3>Staged Tag</h3><ul><li><code>prm-&lt;sha&gt;</code> build</li><li>Never overwrites <code>:latest</code></li></ul></div>
+          <div class="lc-step" style="--c:var(--teal)"><div class="lc-k">Stage 3</div><h3>Champion/Challenger</h3><ul><li>A/B vs live model</li><li>Same testset, both sides</li></ul></div>
+          <div class="lc-step" style="--c:var(--blue)"><div class="lc-k">Stage 4</div><h3>LLM-as-Judge Gate</h3><ul><li>0.70 pass threshold</li><li>Substance, not grammar</li></ul></div>
+          <div class="lc-step" style="--c:var(--purple)"><div class="lc-k">Stage 5</div><h3>Promote + Snapshot</h3><ul><li>Pre-promotion snapshot</li><li>Rollback path proven</li></ul></div>
+          <div class="lc-step" style="--c:var(--amber)"><div class="lc-k">Stage 6</div><h3>Drift Watch</h3><ul><li>Weekly automated check</li><li>Parameter-order safe</li></ul></div>
         </div>
         <div class="kantata">
-          <div class="kstat"><div class="num" data-count="60" data-suffix="%">60%</div><div class="lbl">Total project allocation</div></div>
+          <div class="kstat"><div class="num" data-count="6">6/7</div><div class="lbl">Agents passed the real gate cycle</div></div>
           <div class="kdiv"></div>
-          <div class="kstat"><div class="num alt" data-count="40" data-suffix="%">40%</div><div class="lbl">Break-fix &amp; ops excellence</div></div>
+          <div class="kstat"><div class="num alt">0.667</div><div class="lbl">Held-back score vs. 0.70 threshold</div></div>
           <div class="kdiv"></div>
-          <div class="ktext"><h3><b>OpenProject CE</b> — Resource Management Layer</h3>
-            <p>Tracks utilization across all silos in real time, flags over-allocation at intake, and enforces the 60/40 split — escalating when thresholds are breached. Tech debt, support, enhancements, and maintenance all live inside the 40%.</p></div>
+          <div class="ktext"><h3><b>Real cycle, not simulated</b> — a genuine gate failure</h3>
+            <p>The job-fit agent scored a mismatched candidate 95/100 while its own reasoning said otherwise — an arithmetic self-contradiction. The gate held it back at 0.667, it was root-caused and re-prompted, and it re-evaluated to 0.967 before promotion. The pre-fix version is still visible in the live model registry today.</p></div>
         </div>
       </div>
     </section>
@@ -365,8 +365,8 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
     <!-- ░░ SLIDE 4 — CAPABILITY WHEEL ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Section 02</div><div class="s-title">IT Capability Wheel</div></div>
-        <div class="s-sub">Five domains surround a central Architects team — each with a dedicated architect role and a clear set of tools.</div>
+        <div><div class="kicker">Section 02</div><div class="s-title">Capability Domains</div></div>
+        <div class="s-sub">Five domains, one operator — the wheel represents function, not headcount.</div>
       </div>
       <div class="s-body">
         <div class="wheel-wrap">
@@ -394,8 +394,8 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
         <circle cx="260" cy="260" r="50" fill="#0891B2"/>
         <text x="260" y="202" text-anchor="middle" font-size="10" font-weight="800" fill="#A3E635" font-family="system-ui">AI</text>
         <path id="automation-ring-label" d="M194 260 A66 66 0 0 0 326 260" fill="none"/>
-        <text font-size="9.5" font-weight="700" fill="#A3E635" font-family="system-ui"><textPath href="#automation-ring-label" startOffset="50%" text-anchor="middle">Automations</textPath></text>
-        <text x="260" y="264" text-anchor="middle" font-size="12" font-weight="800" fill="white" font-family="system-ui">Architects</text>
+        <text font-size="9.5" font-weight="700" fill="#A3E635" font-family="system-ui"><textPath href="#automation-ring-label" startOffset="50%" text-anchor="middle">Single Operator</textPath></text>
+        <text x="260" y="264" text-anchor="middle" font-size="12" font-weight="800" fill="white" font-family="system-ui">Sandbox</text>
 
         <!-- Radial dividers use the same angles as the equal circle segments. -->
         <g stroke="rgba(23,33,43,0.28)" stroke-width="1">
@@ -407,37 +407,35 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
         </g>
 
         <!-- OUTER RING: representative applications -->
-        <text x="369" y="109" text-anchor="middle" font-size="9.5" font-weight="700" fill="#155E75" font-family="system-ui">Incus</text>
-        <text x="369" y="122" text-anchor="middle" font-size="8.5" fill="#155E75" font-family="system-ui">PostgreSQL · Qdrant</text>
-        <text x="436" y="310" text-anchor="middle" font-size="9" font-weight="700" fill="#3F6212" font-family="system-ui">Claude · Copilot</text>
-        <text x="436" y="323" text-anchor="middle" font-size="8" fill="#3F6212" font-family="system-ui">Azure DevOps · VS Code</text>
-        <text x="260" y="438" text-anchor="middle" font-size="9.5" font-weight="700" fill="#334155" font-family="system-ui">GLPI · Snipe-IT</text>
-        <text x="260" y="451" text-anchor="middle" font-size="8.5" fill="#334155" font-family="system-ui">Open WebUI</text>
-        <text x="151" y="109" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9F3F56" font-family="system-ui">LLM Guard · Garak</text>
-        <text x="151" y="122" text-anchor="middle" font-size="8.5" fill="#9F3F56" font-family="system-ui">MLflow · Marquez</text>
-        <text x="84" y="310" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0F766E" font-family="system-ui">OpenProject · OpenEMR</text>
-        <text x="84" y="323" text-anchor="middle" font-size="8" fill="#0F766E" font-family="system-ui">Snipe-IT · Power BI</text>
+        <text x="369" y="109" text-anchor="middle" font-size="9.5" font-weight="700" fill="#155E75" font-family="system-ui">Incus · ZFS</text>
+        <text x="369" y="122" text-anchor="middle" font-size="8.5" fill="#155E75" font-family="system-ui">Postgres · Qdrant</text>
+        <text x="436" y="310" text-anchor="middle" font-size="9" font-weight="700" fill="#3F6212" font-family="system-ui">MLflow · Marquez</text>
+        <text x="436" y="323" text-anchor="middle" font-size="8" fill="#3F6212" font-family="system-ui">Langfuse · Ollama</text>
+        <text x="260" y="438" text-anchor="middle" font-size="9.5" text-anchor="middle" font-weight="700" fill="#334155" font-family="system-ui">Ansible · Semaphore</text>
+        <text x="260" y="451" text-anchor="middle" font-size="8.5" fill="#334155" font-family="system-ui">Prometheus · Grafana</text>
+        <text x="151" y="109" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9F3F56" font-family="system-ui">Vault · Semgrep</text>
+        <text x="151" y="122" text-anchor="middle" font-size="8.5" fill="#9F3F56" font-family="system-ui">Trivy · Gitleaks · DefectDojo</text>
+        <text x="84" y="310" text-anchor="middle" font-size="8.5" font-weight="700" fill="#0F766E" font-family="system-ui">Adatum AD/Entra</text>
+        <text x="84" y="323" text-anchor="middle" font-size="8" fill="#0F766E" font-family="system-ui">Subordinate CA · TacticalRMM</text>
 
-        <!-- INNER RING: department ownership -->
+        <!-- INNER RING: domain ownership -->
         <text x="329" y="170" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" font-family="system-ui">Infrastructure</text>
-        <text x="370" y="294" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fff" font-family="system-ui">Application Dev</text>
-        <text x="260" y="378" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" font-family="system-ui">Service Desk</text>
-        <text x="150" y="294" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fff" font-family="system-ui">Business Apps</text>
-        <text x="191" y="170" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" font-family="system-ui">Security</text>
+        <text x="370" y="294" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fff" font-family="system-ui">AI / MLOps</text>
+        <text x="260" y="378" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" font-family="system-ui">Automation</text>
+        <text x="150" y="294" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fff" font-family="system-ui">DevSecOps</text>
+        <text x="191" y="170" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" font-family="system-ui">Identity Lab</text>
       </svg>
           </div>
           <div class="legend">
-            <div class="leg" style="border-left-color:var(--blue)"><div><div class="lt" style="color:var(--blue-d)">Infrastructure</div><div class="lto">AMD Threadripper · UniFi Gateway · UniFi Switches · VLANs · Incus · ZFS · PostgreSQL · Redis · Qdrant · MinIO · NVIDIA RTX 3090</div></div></div>
-            <div class="leg" style="border-left-color:var(--green)"><div><div class="lt" style="color:var(--green-d)">Application Development</div><div class="lto">Claude · Azure DevOps · GitHub Copilot · VS Code · Python · Node.js · Playwright · REST APIs</div></div></div>
-            <div class="leg" style="border-left-color:var(--purple)"><div><div class="lt" style="color:var(--purple-d)">Service Desk</div><div class="lto">GLPI · Snipe-IT · Open WebUI · Obsidian · Mailpit · Service Dashboard</div></div></div>
-            <div class="leg" style="border-left-color:var(--teal)"><div><div class="lt" style="color:var(--teal-d)">Automations</div><div class="lto">Ansible · Semaphore · Flowise · k8n (Experimental) · Python · PowerShell · Shell scripts</div></div></div>
-            <div class="leg" style="border-left-color:var(--red)"><div><div class="lt" style="color:var(--red-d)">Security &amp; AI Governance</div><div class="lto">LLM Guard · Garak · LiteLLM · MLflow · Langfuse · Marquez · HashiCorp Vault · Caddy · UFW · Network Segmentation · AppRole · TLS</div></div></div>
-            <div class="leg" style="border-left-color:var(--green)"><div><div class="lt" style="color:var(--green-d)">Business Applications</div><div class="lto">Experimental native Incus: ERPNext · OpenProject · OpenEMR · OpenMRS · Bahmni · GNU Health<br>Snipe-IT Inventory · Power BI · GLPI · Medical Equipment · Open WebUI · Services Dashboard</div></div></div>
+            <div class="leg" style="border-left-color:var(--blue)"><div><div class="lt" style="color:var(--blue-d)">Infrastructure</div><div class="lto">AMD Threadripper PRO WRX90 · dual RTX 3090 · Incus · ZFS mirrors · PostgreSQL · Redis · Qdrant · MinIO</div></div></div>
+            <div class="leg" style="border-left-color:var(--green)"><div><div class="lt" style="color:var(--green-d)">AI / MLOps</div><div class="lto">MLflow registry &amp; gate · Marquez lineage · Langfuse tracing · Ollama fleet · LiteLLM model gateway</div></div></div>
+            <div class="leg" style="border-left-color:var(--red)"><div><div class="lt" style="color:var(--red-d)">DevSecOps</div><div class="lto">HashiCorp Vault · Semgrep · Trivy · Gitleaks · SonarQube · DefectDojo · garak-triage · LLM Guard</div></div></div>
+            <div class="leg" style="border-left-color:var(--teal)"><div><div class="lt" style="color:var(--teal-d)">Automation &amp; Observability</div><div class="lto">Ansible · Semaphore · Prometheus · Grafana · Loki · Pyroscope · CheckMK · OTel collector</div></div></div>
+            <div class="leg" style="border-left-color:var(--purple)"><div><div class="lt" style="color:var(--purple-d)">Identity Lab (Adatum)</div><div class="lto">A practice AD/Entra domain: domain controller, subordinate CA, Windows clients, TacticalRMM patch management</div></div></div>
             <div class="shared-matrix">
-              <h3>Shared Responsibility</h3>
-              <div class="shared-row"><span>Platform</span><span>Incus, ZFS, backups</span><span>AWS/Azure connectivity</span></div>
-              <div class="shared-row"><span>Security</span><span>Vault, UFW, access</span><span>Caddy TLS, DNS, providers</span></div>
-              <div class="shared-row"><span>Operations</span><span>Grafana, runbooks</span><span>Network and site incidents</span></div>
+              <h3>Single-Operator Note</h3>
+              <div class="shared-row"><span>Scope</span><span>All five domains run and maintained by one person</span><span>Reference build, not a team</span></div>
+              <div class="shared-row"><span>Honesty</span><span>Independent R&amp;D, single host</span><span>Not scale/production-tested</span></div>
             </div>
           </div>
         </div>
@@ -447,24 +445,24 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
     <!-- ░░ SLIDE 5 — TOOL RESPONSIBILITY ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Section 03</div><div class="s-title">Tool Responsibility by Domain</div></div>
-        <div class="s-sub">Every tool is categorized by ownership — internal policy &amp; runbooks, shared config with vendors, or fully external SaaS.</div>
+        <div><div class="kicker">Section 03</div><div class="s-title">Tool Ownership by Domain</div></div>
+        <div class="s-sub">What's hand-built and configured vs. what's used as upstream/vendor defaults — a single operator, not a division of labor.</div>
       </div>
       <div class="s-body">
         <table class="rtbl">
           <thead><tr>
             <th class="th-dom" style="width:108px">Domain</th>
-            <th class="th-int">Internal — we own &amp; author</th>
-            <th class="th-sh">Shared responsibility</th>
-            <th class="th-ext">External / vendor SaaS</th>
+            <th class="th-int">Built &amp; authored</th>
+            <th class="th-sh">Configured on top of defaults</th>
+            <th class="th-ext">Upstream / vendor as-is</th>
           </tr></thead>
           <tbody>
-            <tr style="--c:var(--blue)"><td class="cat" style="color:var(--blue-d)">BUILD</td><td>Container templates · deployment runbooks</td><td>Incus profiles · AWS/Azure site connectivity</td><td>OCI images · package repositories</td></tr>
-            <tr style="--c:var(--red)"><td class="cat" style="color:var(--red-d)">SECURE</td><td>Vault policies · AppRole access · UFW rules</td><td>UniFi VLANs · Caddy TLS termination</td><td>AWS and Azure identity boundaries</td></tr>
-            <tr style="--c:var(--teal)"><td class="cat" style="color:var(--teal-d)">PROTECT</td><td>Incus snapshots · recovery runbooks · retention</td><td>ZFS storage · persistent service volumes</td><td>Offsite backup targets</td></tr>
-            <tr style="--c:var(--amber)"><td class="cat" style="color:var(--amber-d)">OBSERVE</td><td>Alert rules · Grafana dashboards · runbooks</td><td>Prometheus · Loki · Pyroscope · CheckMK</td><td>Email and webhook notifications</td></tr>
-            <tr style="--c:var(--purple)"><td class="cat" style="color:var(--purple-d)">AUTOMATE</td><td>Ansible playbooks · Python · shell scripts</td><td>Semaphore · Flowise · Git repositories</td><td>Provider APIs</td></tr>
-            <tr style="--c:var(--gray)"><td class="cat" style="color:var(--gray)">GOVERN</td><td>Service standards · architecture decisions</td><td>Vault audit records · container inventory</td><td>AWS and Azure service controls</td></tr>
+            <tr style="--c:var(--blue)"><td class="cat" style="color:var(--blue-d)">BUILD</td><td>Deployment runbooks · promotion scripts</td><td>Incus profiles · GPU passthrough config</td><td>OCI base images · package repos</td></tr>
+            <tr style="--c:var(--red)"><td class="cat" style="color:var(--red-d)">SECURE</td><td>Vault policies · AppRole delivery</td><td>Semgrep / Gitleaks scan rules</td><td>DefectDojo · SonarQube defaults</td></tr>
+            <tr style="--c:var(--teal)"><td class="cat" style="color:var(--teal-d)">PROTECT</td><td><code>sandbox-backup.sh</code> · retention policy</td><td>ZFS snapshots · pre-migration safety snaps</td><td>QNAP offsite target</td></tr>
+            <tr style="--c:var(--amber)"><td class="cat" style="color:var(--amber-d)">OBSERVE</td><td>Token-metrics proxy · Grafana dashboards</td><td>Prometheus · Loki · Pyroscope · CheckMK</td><td>Alert notification channels</td></tr>
+            <tr style="--c:var(--purple)"><td class="cat" style="color:var(--purple-d)">AUTOMATE</td><td>Ansible playbooks · Python / shell tooling</td><td>Semaphore · git repositories</td><td>Provider APIs</td></tr>
+            <tr style="--c:var(--gray)"><td class="cat" style="color:var(--gray)">GOVERN</td><td>MLflow gate logic · drift-check canonicalization</td><td>Marquez lineage · GenAI datasets</td><td>Personal AWS Organization (separate project)</td></tr>
           </tbody>
         </table>
       </div>
@@ -474,543 +472,145 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
     <section class="slide">
       <div class="s-head">
         <div><div class="kicker">Section 04</div><div class="s-title">Infrastructure Ecosystem</div></div>
-        <div class="s-sub">Self-hosted agentic AI infrastructure connected to AWS and Azure sites through defined network boundaries.</div>
+        <div class="s-sub">A single self-hosted host running nine operational domains, from compute to AI governance.</div>
       </div>
       <div class="s-body">
         <div class="core-bar">
           <div class="ck">Core Platform</div>
-          <div class="cv">Agentic AI Sandbox · AWS Site · Azure Site</div>
-          <div class="cs">UniFi networking · Incus containers · GPU inference · observability</div>
+          <div class="cv">One bare-metal host · Incus fleet · dual-GPU inference</div>
+          <div class="cs">ASUS Pro WS WRX90E-SAGE SE · Threadripper PRO WRX90 · 2× RTX 3090</div>
         </div>
         <div class="eco-grid">
-          <div class="eco" style="--c:var(--blue)"><div class="ek">RUN</div><h3>Compute &amp; network</h3><div class="tags"><span class="tag">AMD Threadripper</span><span class="tag">UniFi Gateway</span><span class="tag">UniFi Switches</span><span class="tag">VLANs</span><span class="tag">Incus</span><span class="tag">ZFS</span></div></div>
-          <div class="eco" style="--c:var(--red)"><div class="ek">SECURE</div><h3>Security boundaries</h3><div class="tags"><span class="tag">HashiCorp Vault</span><span class="tag">Caddy</span><span class="tag">UFW</span><span class="tag">AppRole</span></div></div>
+          <div class="eco" style="--c:var(--blue)"><div class="ek">RUN</div><h3>Compute &amp; network</h3><div class="tags"><span class="tag">Threadripper PRO</span><span class="tag">Incus</span><span class="tag">ZFS</span><span class="tag">5 bridges</span></div></div>
+          <div class="eco" style="--c:var(--red)"><div class="ek">SECURE</div><h3>Secrets &amp; boundaries</h3><div class="tags"><span class="tag">HashiCorp Vault</span><span class="tag">Caddy TLS</span><span class="tag">UFW</span><span class="tag">AppRole</span></div></div>
           <div class="eco" style="--c:var(--teal)"><div class="ek">DATA</div><h3>State &amp; retrieval</h3><div class="tags"><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">Qdrant</span><span class="tag">MinIO</span></div></div>
-          <div class="eco" style="--c:var(--amber)"><div class="ek">OBSERVE</div><h3>Telemetry</h3><div class="tags"><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Loki</span><span class="tag">Langfuse</span></div></div>
-          <div class="eco" style="--c:var(--purple)"><div class="ek">AUTOMATE</div><h3>Delivery &amp; workflows</h3><div class="tags"><span class="tag">Ansible</span><span class="tag">Semaphore</span><span class="tag">Flowise</span><span class="tag">Python</span></div></div>
-          <div class="eco" style="--c:var(--gray)"><div class="ek">INFER</div><h3>Agentic AI services</h3><div class="tags"><span class="tag">Ollama</span><span class="tag">Open WebUI</span><span class="tag">OpenClaw</span><span class="tag">RTX 3090 GPUs</span></div></div>
+          <div class="eco" style="--c:var(--amber)"><div class="ek">OBSERVE</div><h3>Telemetry</h3><div class="tags"><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Loki</span><span class="tag">Pyroscope</span></div></div>
+          <div class="eco" style="--c:var(--purple)"><div class="ek">AUTOMATE</div><h3>Delivery &amp; workflows</h3><div class="tags"><span class="tag">Ansible</span><span class="tag">Semaphore</span><span class="tag">Python</span></div></div>
+          <div class="eco" style="--c:var(--gray)"><div class="ek">INFER</div><h3>Agentic AI services</h3><div class="tags"><span class="tag">Ollama</span><span class="tag">Open WebUI</span><span class="tag">OpenClaw</span><span class="tag">2× RTX 3090</span></div></div>
+          <div class="eco" style="--c:var(--green)"><div class="ek">GOVERN</div><h3>Model governance</h3><div class="tags"><span class="tag">MLflow</span><span class="tag">Marquez</span><span class="tag">Langfuse</span></div></div>
+          <div class="eco" style="--c:var(--fl-d)"><div class="ek">SCAN</div><h3>AppSec pipeline</h3><div class="tags"><span class="tag">Semgrep</span><span class="tag">Trivy</span><span class="tag">Gitleaks</span><span class="tag">SonarQube</span><span class="tag">DefectDojo</span></div></div>
+          <div class="eco" style="--c:var(--navy2)"><div class="ek">IDENTITY</div><h3>AD/PKI practice lab</h3><div class="tags"><span class="tag">Adatum AD</span><span class="tag">Subordinate CA</span><span class="tag">TacticalRMM</span></div></div>
         </div>
       </div>
     </section>
 
-    <!-- ░░ SLIDE 7 — TEAMS ░░ -->
+    <!-- ░░ SLIDE 7 — IDENTITY LAB (ADATUM) ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Section 05</div><div class="s-title">Team Structure &amp; Contention</div></div>
-        <div class="s-sub">Five teams serve the business — all depend on Infrastructure as a shared platform with limited capacity.</div>
+        <div><div class="kicker">Section 05</div><div class="s-title">Identity Lab — the Adatum AD Domain</div></div>
+        <div class="s-sub">A dedicated Incus project running a practice Active Directory forest with its own PKI — deliberate rehearsal, not production.</div>
       </div>
       <div class="s-body">
         <div class="team-row">
-          <div class="team"><div class="tk">ML OPS</div><p>Model lifecycle, inference, observability</p></div>
-          <div class="team"><div class="tk">APP TEAM</div><p>Custom apps, integrations, APIs</p></div>
-          <div class="team"><div class="tk">LAB TECH</div><p>Laboratory technology systems</p></div>
-          <div class="team"><div class="tk">BI TEAM</div><p>Reporting, analytics, dashboards</p></div>
-          <div class="team"><div class="tk">INTERFACE</div><p>System interfaces &amp; integrations</p></div>
-          <div class="team"><div class="tk">SERVICE DESK</div><p>End-user support &amp; ITSM</p></div>
+          <div class="team"><div class="tk">AM-TL-WPDC01</div><p>Domain controller — AD DS, DNS, Group Policy</p></div>
+          <div class="team"><div class="tk">AM-TL-WSUBCA</div><p>Subordinate Certificate Authority — PKI issuance</p></div>
+          <div class="team"><div class="tk">AM-TL-WIN11</div><p>Domain-joined Windows 11 client</p></div>
+          <div class="team"><div class="tk">AM-TL-WORCA</div><p>Secondary workstation for join/GPO testing</p></div>
+          <div class="team"><div class="tk">AM-TL-WPZOHO</div><p>SaaS-integrated box — Zoho identity federation</p></div>
+          <div class="team"><div class="tk">TACTICALRMM</div><p>Remote monitoring &amp; patch management agent</p></div>
         </div>
         <div class="cont">
           <div class="cont-col">
-            <div class="ch" style="color:var(--red)">Business demand</div>
-            <div class="cont-item" style="--c:var(--red)">App team requests</div>
-            <div class="cont-item" style="--c:var(--red)">LIS team requests</div>
-            <div class="cont-item" style="--c:var(--red)">BI &amp; Interface requests</div>
+            <div class="ch" style="color:var(--red)">What it rehearses</div>
+            <div class="cont-item" style="--c:var(--red)">AD replication &amp; Group Policy</div>
+            <div class="cont-item" style="--c:var(--red)">Certificate Services / PKI issuance</div>
+            <div class="cont-item" style="--c:var(--red)">SaaS identity federation (Zoho)</div>
           </div>
           <div>
             <div class="cont-arrows" style="color:var(--red)">→</div>
-            <div class="cont-center"><h3>Infrastructure</h3><p>Limited capacity<br/>40% break-fix / ops</p></div>
+            <div class="cont-center"><h3>Adatum</h3><p>Practice AD forest<br/>Own project, own network</p></div>
             <div class="cont-arrows" style="color:var(--amber)">←</div>
           </div>
           <div class="cont-col">
-            <div class="ch" style="color:var(--amber)">Internal roadmap</div>
-            <div class="cont-item" style="--c:var(--amber)">Hardware refresh</div>
-            <div class="cont-item" style="--c:var(--amber)">Security patching</div>
-            <div class="cont-item" style="--c:var(--amber)">Platform upgrades · DR</div>
+            <div class="ch" style="color:var(--amber)">Why it's here</div>
+            <div class="cont-item" style="--c:var(--amber)">Rehearses real identity-integration work</div>
+            <div class="cont-item" style="--c:var(--amber)">TacticalRMM patch/monitoring practice</div>
+            <div class="cont-item" style="--c:var(--amber)">Isolated — no production directory touched</div>
           </div>
         </div>
         <div class="outcomes">
-          <div class="oc" style="--c:var(--red-d);--c2:#FCA5A5;background:var(--red-l)"><h4>Delayed projects</h4><p>Timelines slip when infra is over-allocated.</p></div>
-          <div class="oc" style="--c:var(--red-d);--c2:#FCA5A5;background:var(--red-l)"><h4>Tech debt grows</h4><p>Internal roadmap deferred indefinitely.</p></div>
-          <div class="oc" style="--c:var(--red-d);--c2:#FCA5A5;background:var(--red-l)"><h4>Team overloaded</h4><p>Quality &amp; morale drop under pressure.</p></div>
-          <div class="oc" style="--c:var(--fl-d);--c2:#FCD9BF;background:var(--fl-l)"><h4>OpenProject control</h4><p>Demand visibility, enforced 60/40, triage.</p></div>
+          <div class="oc" style="--c:var(--fl-d);--c2:#FCD9BF;background:var(--fl-l)"><h4>Multi-forest experience</h4><p>Complements real M&amp;A identity-integration work across acquisitions.</p></div>
+          <div class="oc" style="--c:var(--fl-d);--c2:#FCD9BF;background:var(--fl-l)"><h4>PKI hands-on</h4><p>A subordinate CA most personal labs skip entirely.</p></div>
+          <div class="oc" style="--c:var(--fl-d);--c2:#FCD9BF;background:var(--fl-l)"><h4>Patch management</h4><p>TacticalRMM mirrors real endpoint-management tooling.</p></div>
+          <div class="oc" style="--c:var(--fl-d);--c2:#FCD9BF;background:var(--fl-l)"><h4>Isolated by design</h4><p>Its own Incus project — no path into the AI fleet's data.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- ░░ SLIDE 8 — NETWORK MAP ░░ -->
+    <!-- ░░ SLIDE 8 — NETWORK TOPOLOGY ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Section 06</div><div class="s-title">Global Network Infrastructure</div></div>
-        <div class="s-sub">UniFi-managed VLANs segment the sandbox, with controlled connectivity to AWS and Azure sites.</div>
+        <div><div class="kicker">Section 06</div><div class="s-title">Network Topology</div></div>
+        <div class="s-sub">One host, five segmented bridges, and a deliberate no-NAT design on the primary fleet network.</div>
       </div>
       <div class="s-body">
-        <div class="svg-stage">
-          <div class="svg-box"><style>
-.loc-name{font:700 11px/1 system-ui,sans-serif}
-.loc-sub {font:400 9px/1 system-ui,sans-serif;fill:#6B7280}
-.cloud-lbl{font:600 10px/1 system-ui,sans-serif}
-.legend-t{font:500 10px/1 system-ui,sans-serif}
-.site-tag{font:700 10px/1 system-ui,sans-serif}
-</style>
-<svg width="100%" viewBox="0 0 760 520" role="img">
-<title>Sandbox network infrastructure map — UniFi network with AWS and Azure sites</title>
-<desc>Network diagram showing the UniFi-managed sandbox, isolated VLANs, remote access, and controlled connectivity to AWS and Azure sites.</desc>
-<defs>
-  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </marker>
-</defs>
-
-<!-- Background: light map tint -->
-<rect x="0" y="0" width="760" height="520" fill="#F0F4F8" rx="0"/>
-
-<!-- ── US landmass shape (simplified) ── -->
-<path d="M30 120 L50 90 L120 70 L200 60 L290 55 L380 58 L450 65 L500 80 L540 95 L555 120 L550 180 L530 240 L510 290 L480 320 L450 340 L400 355 L350 360 L300 355 L250 345 L200 330 L150 310 L100 280 L60 240 L35 200 Z" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="1"/>
-<!-- Gulf coast bump -->
-<path d="M350 360 L380 375 L420 380 L450 375 L480 360 L510 340" fill="none" stroke="#CBD5E1" stroke-width="1"/>
-<!-- Florida -->
-<path d="M480 320 L490 350 L485 380 L475 370 L470 340" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="1"/>
-
-<!-- ── United Kingdom (bottom-right) ── -->
-<rect x="590" y="340" width="160" height="130" rx="8" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
-<path d="M662 366 L677 372 L681 390 L674 404 L682 417 L675 438 L662 450 L654 435 L658 418 L650 403 L656 386 Z" fill="#BFDBFE" stroke="#93C5FD" stroke-width="0.8"/>
-<text class="loc-sub" x="670" y="358" text-anchor="middle" dominant-baseline="central" fill="#1E40AF">United Kingdom</text>
-
-<!-- ══════════════════
-     INTERNET HUB
-══════════════════ -->
-<circle cx="310" cy="220" r="28" fill="#1E40AF" stroke="#1D4ED8" stroke-width="1.5"/>
-<text class="cloud-lbl" x="310" y="215" text-anchor="middle" dominant-baseline="central" fill="#fff">Internet</text>
-<text style="font:400 8px system-ui" x="310" y="229" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.8)">Hub</text>
-
-<!-- ══════════════════
-     HYBRID CLOUD BOX
-══════════════════ -->
-<rect x="190" y="48" width="148" height="52" rx="8" fill="#EFF6FF" stroke="#3B82F6" stroke-width="1.2"/>
-<text class="cloud-lbl" x="264" y="62" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">Hybrid Cloud</text>
-<text style="font:500 9px system-ui" x="264" y="78" text-anchor="middle" dominant-baseline="central" fill="#2563EB">Azure  ·  AWS</text>
-<text style="font:400 8px system-ui" x="264" y="91" text-anchor="middle" dominant-baseline="central" fill="#6B7280">External sites</text>
-
-<!-- ══════════════════
-     SAAS BOX
-══════════════════ -->
-<rect x="350" y="48" width="148" height="52" rx="8" fill="#F0FDF4" stroke="#10B981" stroke-width="1.2"/>
-<text class="cloud-lbl" x="424" y="62" text-anchor="middle" dominant-baseline="central" fill="#065F46">Sandbox Services</text>
-<text style="font:400 9px system-ui" x="424" y="78" text-anchor="middle" dominant-baseline="central" fill="#059669">Ollama · Open WebUI · Flowise</text>
-<text style="font:400 8px system-ui" x="424" y="91" text-anchor="middle" dominant-baseline="central" fill="#6B7280">Vault · Qdrant · Langfuse</text>
-
-<!-- Cloud→Internet lines -->
-<line x1="264" y1="100" x2="290" y2="196" stroke="#3B82F6" stroke-width="1.2" stroke-dasharray="4 3"/>
-<line x1="424" y1="100" x2="320" y2="196" stroke="#10B981" stroke-width="1.2" stroke-dasharray="4 3"/>
-
-<!-- ══════════════════
-     SITE NODES
-══════════════════ -->
-
-<!-- Helper: site block function -->
-<!-- Boise HQ: x=55, y=185 -->
-<g>
-  <rect x="28" y="168" width="88" height="48" rx="6" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1.5"/>
-  <text class="site-tag" x="72" y="183" text-anchor="middle" dominant-baseline="central" fill="#fff">Boise</text>
-  <text style="font:500 9px system-ui" x="72" y="196" text-anchor="middle" dominant-baseline="central" fill="#93C5FD">Headquarters</text>
-  <text style="font:400 8px system-ui" x="72" y="208" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">Boise, ID</text>
-</g>
-
-<!-- Portland: x=95, y=275 -->
-<g>
-  <rect x="68" y="258" width="80" height="40" rx="6" fill="#374151" stroke="#6B7280" stroke-width="1"/>
-  <text class="site-tag" x="108" y="272" text-anchor="middle" dominant-baseline="central" fill="#fff">Portland</text>
-  <text style="font:400 8px system-ui" x="108" y="286" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">Portland, OR</text>
-</g>
-
-<!-- Omaha DR: x=280, y=310 -->
-<g>
-  <rect x="238" y="292" width="88" height="48" rx="6" fill="#7C3AED" stroke="#A78BFA" stroke-width="1.2"/>
-  <text class="site-tag" x="282" y="307" text-anchor="middle" dominant-baseline="central" fill="#fff">Omaha</text>
-  <text style="font:500 9px system-ui" x="282" y="320" text-anchor="middle" dominant-baseline="central" fill="#DDD6FE">Backup / DR</text>
-  <text style="font:400 8px system-ui" x="282" y="332" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">Omaha, NE</text>
-</g>
-
-<!-- Atlanta: x=420, y=278 -->
-<g>
-  <rect x="392" y="260" width="80" height="40" rx="6" fill="#374151" stroke="#6B7280" stroke-width="1"/>
-  <text class="site-tag" x="432" y="274" text-anchor="middle" dominant-baseline="central" fill="#fff">Louisville</text>
-  <text style="font:400 8px system-ui" x="432" y="288" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">Louisville, KY</text>
-</g>
-
-<!-- Boston: x=480, y=148 -->
-<g>
-  <rect x="452" y="132" width="80" height="40" rx="6" fill="#374151" stroke="#6B7280" stroke-width="1"/>
-  <text class="site-tag" x="492" y="146" text-anchor="middle" dominant-baseline="central" fill="#fff">Manchester</text>
-  <text style="font:400 8px system-ui" x="492" y="160" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">Manchester, NH</text>
-</g>
-
-<!-- Delaware: x=460, y=215 -->
-<g>
-  <rect x="430" y="198" width="82" height="36" rx="6" fill="#374151" stroke="#6B7280" stroke-width="1"/>
-  <text class="site-tag" x="471" y="212" text-anchor="middle" dominant-baseline="central" fill="#fff">Raleigh</text>
-  <text style="font:400 8px system-ui" x="471" y="225" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">Raleigh, NC</text>
-</g>
-
-<!-- Remote Users VPN: x=310, y=360 -->
-<g>
-  <rect x="268" y="358" width="92" height="36" rx="18" fill="#F59E0B" stroke="#D97706" stroke-width="1.2"/>
-  <text class="site-tag" x="314" y="371" text-anchor="middle" dominant-baseline="central" fill="#fff">Remote Users</text>
-  <text style="font:400 8px system-ui" x="314" y="384" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.85)">UniFi VPN</text>
-</g>
-
-<!-- London: x=650, y=420 -->
-<g>
-  <rect x="614" y="402" width="96" height="40" rx="6" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1.2"/>
-  <text class="site-tag" x="662" y="416" text-anchor="middle" dominant-baseline="central" fill="#fff">London</text>
-  <text style="font:400 8px system-ui" x="662" y="430" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.6)">United Kingdom</text>
-</g>
-
-<!-- ══════════════════
-     IPSec TUNNEL LINES (blue dashed)
-══════════════════ -->
-<!-- El Monte → Internet hub -->
-<line x1="116" y1="194" x2="282" y2="216" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="6 3"/>
-<!-- Phoenix → Internet hub -->
-<line x1="148" y1="272" x2="285" y2="228" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="6 3"/>
-<!-- Dallas → Internet hub -->
-<line x1="282" y1="292" x2="303" y2="248" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="6 3"/>
-<!-- Atlanta → Internet hub -->
-<line x1="392" y1="274" x2="336" y2="232" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="6 3"/>
-<!-- Boston → Internet hub -->
-<line x1="468" y1="158" x2="338" y2="208" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="6 3"/>
-<!-- Delaware → Internet hub -->
-<line x1="430" y1="212" x2="338" y2="218" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="6 3"/>
-<!-- London → Internet hub (long line) -->
-<line x1="614" y1="418" x2="338" y2="228" stroke="#2563EB" stroke-width="1.2" stroke-dasharray="8 4"/>
-<!-- Remote Users → Internet hub -->
-<line x1="314" y1="358" x2="312" y2="248" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="4 3"/>
-
-<!-- ══════════════════
-     FIREWALL ICONS (small shields at each site)
-══════════════════ -->
-<!-- On-prem firewall marker: small red square at each site connection point -->
-<rect x="110" y="188" width="10" height="10" rx="2" fill="#DC2626"/>
-<rect x="142" y="266" width="10" height="10" rx="2" fill="#DC2626"/>
-<rect x="278" y="286" width="10" height="10" rx="2" fill="#DC2626"/>
-<rect x="386" y="268" width="10" height="10" rx="2" fill="#DC2626"/>
-<rect x="462" y="152" width="10" height="10" rx="2" fill="#DC2626"/>
-<rect x="424" y="206" width="10" height="10" rx="2" fill="#DC2626"/>
-<rect x="608" y="412" width="10" height="10" rx="2" fill="#DC2626"/>
-
-<!-- UniFi Gateway marker at Internet hub -->
-<circle cx="310" cy="193" r="7" fill="#F59E0B" stroke="#D97706" stroke-width="1"/>
-<text style="font:700 6px system-ui" x="310" y="193" text-anchor="middle" dominant-baseline="central" fill="#fff">FW</text>
-
-<!-- ══════════════════
-     LEGEND
-══════════════════ -->
-<rect x="580" y="46" width="172" height="150" rx="6" fill="#fff" stroke="#E2E8F0" stroke-width="0.8"/>
-<text class="cloud-lbl" x="666" y="62" text-anchor="middle" dominant-baseline="central" fill="#374151">Legend</text>
-
-<rect x="592" y="74" width="12" height="12" rx="2" fill="#1E3A8A"/>
-<text class="legend-t" x="612" y="80" dominant-baseline="central" fill="#374151">Primary site (HQ / UK)</text>
-
-<rect x="592" y="94" width="12" height="12" rx="2" fill="#374151"/>
-<text class="legend-t" x="612" y="100" dominant-baseline="central" fill="#374151">Branch / secondary site</text>
-
-<rect x="592" y="114" width="12" height="12" rx="2" fill="#7C3AED"/>
-<text class="legend-t" x="612" y="120" dominant-baseline="central" fill="#374151">Backup / DR site</text>
-
-<line x1="592" y1="136" x2="604" y2="136" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5 2"/>
-<text class="legend-t" x="612" y="136" dominant-baseline="central" fill="#374151">IPSec tunnels</text>
-
-<rect x="592" y="148" width="10" height="10" rx="2" fill="#DC2626"/>
-<text class="legend-t" x="612" y="153" dominant-baseline="central" fill="#374151">On-prem firewall</text>
-
-<circle cx="597" cy="170" r="6" fill="#F59E0B" stroke="#D97706" stroke-width="1"/>
-<text class="legend-t" x="612" y="170" dominant-baseline="central" fill="#374151">UniFi Gateway / firewall</text>
-
-<!-- ══════════════════
-     SITE DETAIL CALLOUTS (right side)
-══════════════════ -->
-<rect x="580" y="204" width="172" height="130" rx="6" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.8"/>
-<text class="cloud-lbl" x="666" y="218" text-anchor="middle" dominant-baseline="central" fill="#374151">Sites</text>
-<text class="legend-t" x="586" y="234" dominant-baseline="central" fill="#1E3A8A">● Boise — HQ · ID</text>
-<text class="legend-t" x="586" y="250" dominant-baseline="central" fill="#374151">→ Manchester · NH</text>
-<text class="legend-t" x="586" y="266" dominant-baseline="central" fill="#374151">→ Portland · OR</text>
-<text class="legend-t" x="586" y="282" dominant-baseline="central" fill="#374151">→ Louisville · KY</text>
-<text class="legend-t" x="586" y="298" dominant-baseline="central" fill="#374151">→ Raleigh · NC</text>
-<text class="legend-t" x="586" y="314" dominant-baseline="central" fill="#1E3A8A">★ London · UK</text>
-
-<!-- Sandbox label -->
-<text style="font:700 16px system-ui" x="42" y="478" dominant-baseline="central" fill="#06B6D4">AI sandbox</text>
-<text style="font:400 8px system-ui" x="42" y="494" dominant-baseline="central" fill="#65727A">R&amp;D Sandbox · Global operations</text>
-
-</svg></div>
-          <div class="svg-side">
-            <div class="chip" style="--c:var(--blue)"><div class="cn" data-count="7">7</div><div class="cl">Physical sites across the US &amp; United Kingdom, plus remote VPN users.</div></div>
-            <div class="chip" style="--c:var(--purple)"><h4>Omaha DR</h4><p>Backup &amp; disaster-recovery failover for all primary sites.</p></div>
-            <div class="chip" style="--c:var(--green)"><h4>London</h4><p>International site (GMT, UTC+0) in the United Kingdom.</p></div>
-            <div class="chip" style="--c:var(--amber)"><h4>Sandbox Platform</h4><p>UniFi · Incus · Ollama · Vault · Prometheus · Grafana connect through defined boundaries.</p></div>
-          </div>
+        <div class="core-bar">
+          <div class="ck">Distinctive design choice</div>
+          <div class="cv">agentic-net has no route to the internet</div>
+          <div class="cs">All outbound HTTP(S) from the fleet must go through a single forward proxy — nothing egresses silently</div>
         </div>
+        <table class="rtbl">
+          <thead><tr>
+            <th class="th-dom" style="width:150px">Bridge</th>
+            <th class="th-int">Subnet</th>
+            <th class="th-sh">Role</th>
+            <th class="th-ext">Internet</th>
+          </tr></thead>
+          <tbody>
+            <tr style="--c:var(--fl)"><td class="cat" style="color:var(--fl-d)">agentosbr0</td><td>10.253.15.0/24</td><td>Primary fleet fabric ("agentic-net") — ~98 instances</td><td>No — proxy-only egress via tinyproxy</td></tr>
+            <tr style="--c:var(--blue)"><td class="cat" style="color:var(--blue-d)">physbr0</td><td>10.0.20.0/24</td><td>Real LAN, VLAN 20 — human + internet access</td><td>Yes</td></tr>
+            <tr style="--c:var(--red)"><td class="cat" style="color:var(--red-d)">ollama-br0</td><td>172.18.0.0/24</td><td>Isolated GPU network — Ollama + its proxies only</td><td>No, by design</td></tr>
+            <tr style="--c:var(--teal)"><td class="cat" style="color:var(--teal-d)">incusbr0</td><td>10.102.92.0/24</td><td>Default Incus bridge — Windows VMs, UniFi</td><td>Yes</td></tr>
+            <tr style="--c:var(--purple)"><td class="cat" style="color:var(--purple-d)">k8s-net</td><td>10.89.30.0/24</td><td>k3s cluster — 3 masters, 3 workers</td><td>Yes</td></tr>
+            <tr style="--c:var(--gray)"><td class="cat" style="color:var(--gray)">mgmtbr0</td><td>—</td><td>Unmanaged, unused, undocumented — flagged for review</td><td>Unknown</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- ░░ SLIDE 9 — TIME ZONES ░░ -->
+    <!-- ░░ SLIDE 9 — STORAGE & BACKUP/DR ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Section 07</div><div class="s-title">Time Zone Convergence &amp; On-Call</div></div>
-        <div class="s-sub">A seven-hour daily window has no staffed coverage; the seven-hour Boise ↔ London difference is the largest offset.</div>
+        <div><div class="kicker">Section 07</div><div class="s-title">Storage &amp; Backup / DR</div></div>
+        <div class="s-sub">Two ZFS tiers split by latency need, plus a verified snapshot-and-offsite backup path.</div>
       </div>
       <div class="s-body">
-        <div class="svg-stage">
-          <div class="svg-box"><style>
-.hd{font:700 13px/1 system-ui,sans-serif}
-.sub{font:400 10px/1.3 system-ui,sans-serif}
-.cell{font:500 10px/1 system-ui,sans-serif}
-.sm{font:400 9px/1 system-ui,sans-serif}
-.warn{font:600 10px/1 system-ui,sans-serif}
-</style>
-<svg width="100%" viewBox="0 0 760 580" role="img">
-<title>Time zone coverage, on-call challenges, and regionality across sandbox sites</title>
-<desc>Three-section diagram: 24-hour coverage bar showing gaps between US and United Kingdom sites, on-call matrix by site, and regionality challenge cards.</desc>
-<defs>
-  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </marker>
-</defs>
-
-<!-- ══ SECTION 1: 24-hr coverage timeline ══ -->
-<rect x="10" y="10" width="740" height="26" rx="5" fill="#1E3A8A"/>
-<text class="hd" x="380" y="23" text-anchor="middle" dominant-baseline="central" fill="#fff">24-Hour Coverage Map — Time Zone Convergence</text>
-
-<!-- Hour labels 0-23 -->
-<!-- Timeline bar: x=10 w=740, so each hour = 740/24 ≈ 30.8px -->
-<!-- y=52 h=16 for hour markers -->
-<rect x="10" y="52" width="740" height="8" rx="2" fill="#E2E8F0"/>
-
-<!-- Hour ticks every 2h -->
-<line x1="10"  y1="50" x2="10"  y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="72"  y1="50" x2="72"  y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="134" y1="50" x2="134" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="195" y1="50" x2="195" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="257" y1="50" x2="257" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="318" y1="50" x2="318" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="380" y1="50" x2="380" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="441" y1="50" x2="441" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="503" y1="50" x2="503" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="564" y1="50" x2="564" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="626" y1="50" x2="626" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="688" y1="50" x2="688" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<line x1="750" y1="50" x2="750" y2="62" stroke="#9CA3AF" stroke-width="0.5"/>
-<text class="sm" x="10"  y="68" text-anchor="middle" fill="#6B7280">0</text>
-<text class="sm" x="72"  y="68" text-anchor="middle" fill="#6B7280">2</text>
-<text class="sm" x="134" y="68" text-anchor="middle" fill="#6B7280">4</text>
-<text class="sm" x="195" y="68" text-anchor="middle" fill="#6B7280">6</text>
-<text class="sm" x="257" y="68" text-anchor="middle" fill="#6B7280">8</text>
-<text class="sm" x="318" y="68" text-anchor="middle" fill="#6B7280">10</text>
-<text class="sm" x="380" y="68" text-anchor="middle" fill="#6B7280">12</text>
-<text class="sm" x="441" y="68" text-anchor="middle" fill="#6B7280">14</text>
-<text class="sm" x="503" y="68" text-anchor="middle" fill="#6B7280">16</text>
-<text class="sm" x="564" y="68" text-anchor="middle" fill="#6B7280">18</text>
-<text class="sm" x="626" y="68" text-anchor="middle" fill="#6B7280">20</text>
-<text class="sm" x="688" y="68" text-anchor="middle" fill="#6B7280">22</text>
-<text class="sm" x="380" y="46" text-anchor="middle" fill="#9CA3AF">UTC</text>
-
-<!-- Coverage bars per region (each row = 16px tall, gap 4px) -->
-<!-- PST = UTC-8: business 8am-6pm PST = UTC 16:00-02:00 next day -->
-<!-- bar from hr16=10+16*30.8=503 to hr24+2 = wrap. Simplify: show 9am-6pm local in UTC -->
-<!-- PST 9am-6pm = UTC 17:00-02:00. Show 17→24 then 0→2 -->
-<!-- Row y=78 -->
-<text class="cell" x="8" y="86" text-anchor="end" dominant-baseline="central" fill="#1E3A8A">PST (CA/AZ)</text>
-<!-- UTC 17-24: x = 10 + 17*30.8 = 534, w=7*30.8=216 -->
-<rect x="534" y="78" width="216" height="14" rx="3" fill="#2563EB"/>
-<!-- UTC 0-2: x=10, w=2*30.8=62 -->
-<rect x="10"  y="78" width="62"  height="14" rx="3" fill="#2563EB"/>
-<text class="sm" x="540" y="85" dominant-baseline="central" fill="#fff">PST 9am – 6pm</text>
-
-<!-- MST 9am-6pm = UTC 16:00-01:00 -->
-<text class="cell" x="8" y="106" text-anchor="end" dominant-baseline="central" fill="#1E3A8A">MST (Boise)</text>
-<rect x="503" y="98" width="247" height="14" rx="3" fill="#3B82F6"/>
-<rect x="10" y="98" width="31" height="14" rx="3" fill="#3B82F6"/>
-<text class="sm" x="509" y="105" dominant-baseline="central" fill="#fff">MST 9am – 6pm</text>
-
-<!-- EST 9am-6pm = UTC 14:00-23:00 -->
-<text class="cell" x="8" y="126" text-anchor="end" dominant-baseline="central" fill="#1E3A8A">CST (Omaha)</text>
-<rect x="441" y="118" width="277" height="14" rx="3" fill="#60A5FA"/>
-<text class="sm" x="447" y="125" dominant-baseline="central" fill="#fff">CST 9am – 6pm</text>
-
-<!-- EST 9am-6pm = UTC 14:00-23:00 -->
-<text class="cell" x="8" y="146" text-anchor="end" dominant-baseline="central" fill="#1E3A8A">EST (KY/NH/NC)</text>
-<rect x="441" y="138" width="277" height="14" rx="3" fill="#10B981"/>
-<text class="sm" x="447" y="145" dominant-baseline="central" fill="#fff">EST 9am – 6pm</text>
-
-<!-- GAP HIGHLIGHT -->
-<!-- Gap between Perth end (UTC 10:00) and Eastern start (UTC 14:00) -->
-<rect x="318" y="76" width="123" height="82" rx="3" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4 2"/>
-<text class="warn" x="380" y="110" text-anchor="middle" dominant-baseline="central" fill="#92400E">Coverage gap ~4 hrs</text>
-<text class="sm"   x="380" y="124" text-anchor="middle" dominant-baseline="central" fill="#B45309">UTC 10:00 – 14:00</text>
-<text class="sm"   x="406" y="136" text-anchor="middle" dominant-baseline="central" fill="#B45309">No staffed coverage</text>
-
-<!-- AWST and Pacific overlap around UTC 01:00–02:00 -->
-<rect x="41" y="76" width="31" height="82" rx="3" fill="#DCFCE7" stroke="#16A34A" stroke-width="1" stroke-dasharray="4 2"/>
-<text class="sm" x="56" y="106" text-anchor="middle" dominant-baseline="central" fill="#166534">Overlap</text>
-<text class="sm" x="56" y="118" text-anchor="middle" dominant-baseline="central" fill="#166534">~1 hr</text>
-
-<!-- ══ SECTION 2: On-Call Matrix ══ -->
-<rect x="10" y="168" width="740" height="22" rx="4" fill="#374151"/>
-<text class="hd" x="380" y="179" text-anchor="middle" dominant-baseline="central" fill="#fff">On-Call Coverage Matrix by Site</text>
-
-<!-- Table header -->
-<rect x="10"  y="190" width="148" height="18" fill="#1E3A8A"/>
-<rect x="158" y="190" width="92"  height="18" fill="#1E3A8A"/>
-<rect x="250" y="190" width="92"  height="18" fill="#1E3A8A"/>
-<rect x="342" y="190" width="92"  height="18" fill="#1E3A8A"/>
-<rect x="434" y="190" width="92"  height="18" fill="#1E3A8A"/>
-<rect x="526" y="190" width="92"  height="18" fill="#1E3A8A"/>
-<rect x="618" y="190" width="132" height="18" fill="#1E3A8A"/>
-<text class="cell" x="84"  y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">Site</text>
-<text class="cell" x="204" y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">Time Zone</text>
-<text class="cell" x="296" y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">Business Hrs</text>
-<text class="cell" x="388" y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">On-Call</text>
-<text class="cell" x="480" y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">After Hours</text>
-<text class="cell" x="572" y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">DR / Failover</text>
-<text class="cell" x="684" y="199" text-anchor="middle" dominant-baseline="central" fill="#fff">Challenge</text>
-
-<!-- Row data -->
-<!-- Boise -->
-<rect x="10"  y="208" width="740" height="20" fill="#EFF6FF"/>
-<text class="sm" x="84"  y="218" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">Boise HQ</text>
-<text class="sm" x="204" y="218" text-anchor="middle" dominant-baseline="central" fill="#374151">MST (UTC-7)</text>
-<text class="sm" x="296" y="218" text-anchor="middle" dominant-baseline="central" fill="#374151">9am–6pm</text>
-<rect x="352" y="211" width="72" height="14" rx="7" fill="#16A34A"/><text class="sm" x="388" y="218" text-anchor="middle" dominant-baseline="central" fill="#fff">Primary</text>
-<rect x="444" y="211" width="72" height="14" rx="7" fill="#F59E0B"/><text class="sm" x="480" y="218" text-anchor="middle" dominant-baseline="central" fill="#fff">Grafana alerts</text>
-<rect x="536" y="211" width="72" height="14" rx="7" fill="#2563EB"/><text class="sm" x="572" y="218" text-anchor="middle" dominant-baseline="central" fill="#fff">Omaha DR</text>
-<text class="sm" x="684" y="218" text-anchor="middle" dominant-baseline="central" fill="#DC2626">Covers GMT gap</text>
-
-<!-- London -->
-<rect x="10"  y="228" width="740" height="20" fill="#F0FDF4"/>
-<text class="sm" x="84"  y="238" text-anchor="middle" dominant-baseline="central" fill="#065F46">London</text>
-<text class="sm" x="204" y="238" text-anchor="middle" dominant-baseline="central" fill="#374151">GMT (UTC+0)</text>
-<text class="sm" x="296" y="238" text-anchor="middle" dominant-baseline="central" fill="#374151">9am–6pm</text>
-<rect x="352" y="231" width="72" height="14" rx="7" fill="#16A34A"/><text class="sm" x="388" y="238" text-anchor="middle" dominant-baseline="central" fill="#fff">Local team</text>
-<rect x="444" y="231" width="72" height="14" rx="7" fill="#DC2626"/><text class="sm" x="480" y="238" text-anchor="middle" dominant-baseline="central" fill="#fff">US team</text>
-<rect x="536" y="231" width="72" height="14" rx="7" fill="#6B7280"/><text class="sm" x="572" y="238" text-anchor="middle" dominant-baseline="central" fill="#fff">Limited</text>
-<text class="sm" x="684" y="238" text-anchor="middle" dominant-baseline="central" fill="#DC2626">7 hr offset</text>
-
-<!-- Eastern sites -->
-<rect x="10"  y="248" width="740" height="20" fill="#FFF7ED"/>
-<text class="sm" x="84"  y="258" text-anchor="middle" dominant-baseline="central" fill="#92400E">Louisville / Raleigh</text>
-<text class="sm" x="204" y="258" text-anchor="middle" dominant-baseline="central" fill="#374151">EST (UTC-5)</text>
-<text class="sm" x="296" y="258" text-anchor="middle" dominant-baseline="central" fill="#374151">9am–6pm</text>
-<rect x="352" y="251" width="72" height="14" rx="7" fill="#16A34A"/><text class="sm" x="388" y="258" text-anchor="middle" dominant-baseline="central" fill="#fff">Secondary</text>
-<rect x="444" y="251" width="72" height="14" rx="7" fill="#F59E0B"/><text class="sm" x="480" y="258" text-anchor="middle" dominant-baseline="central" fill="#fff">Grafana alerts</text>
-<rect x="536" y="251" width="72" height="14" rx="7" fill="#2563EB"/><text class="sm" x="572" y="258" text-anchor="middle" dominant-baseline="central" fill="#fff">Boise / Omaha</text>
-<text class="sm" x="684" y="258" text-anchor="middle" dominant-baseline="central" fill="#374151">2hr offset from HQ</text>
-
-<!-- Omaha -->
-<rect x="10"  y="268" width="740" height="20" fill="#F5F3FF"/>
-<text class="sm" x="84"  y="278" text-anchor="middle" dominant-baseline="central" fill="#4C1D95">Omaha (DR)</text>
-<text class="sm" x="204" y="278" text-anchor="middle" dominant-baseline="central" fill="#374151">CST (UTC-6)</text>
-<text class="sm" x="296" y="278" text-anchor="middle" dominant-baseline="central" fill="#374151">Automated</text>
-<rect x="352" y="271" width="72" height="14" rx="7" fill="#6B7280"/><text class="sm" x="388" y="278" text-anchor="middle" dominant-baseline="central" fill="#fff">Automated</text>
-<rect x="444" y="271" width="72" height="14" rx="7" fill="#6B7280"/><text class="sm" x="480" y="278" text-anchor="middle" dominant-baseline="central" fill="#fff">Monitoring</text>
-<rect x="536" y="271" width="72" height="14" rx="7" fill="#7C3AED"/><text class="sm" x="572" y="278" text-anchor="middle" dominant-baseline="central" fill="#fff">Primary DR</text>
-<text class="sm" x="684" y="278" text-anchor="middle" dominant-baseline="central" fill="#374151">Failover site only</text>
-
-<!-- ══ SECTION 3: Regionality Challenges ══ -->
-<rect x="10" y="300" width="740" height="22" rx="4" fill="#374151"/>
-<text class="hd" x="380" y="311" text-anchor="middle" dominant-baseline="central" fill="#fff">Regionality &amp; On-Call Challenges</text>
-
-<!-- 5 challenge cards -->
-<!-- Card 1: Coverage gap -->
-<rect x="10" y="330" width="140" height="110" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
-<rect x="10" y="330" width="140" height="20"  rx="8" fill="#F59E0B"/>
-<rect x="10" y="338" width="140" height="12"  fill="#F59E0B"/>
-<text class="warn" x="80" y="340" text-anchor="middle" dominant-baseline="central" fill="#fff">Coverage Gap</text>
-<text class="sm" x="80" y="360" text-anchor="middle" dominant-baseline="central" fill="#92400E">~7 hr window</text>
-<text class="sm" x="80" y="374" text-anchor="middle" dominant-baseline="central" fill="#92400E">where no team is</text>
-<text class="sm" x="80" y="388" text-anchor="middle" dominant-baseline="central" fill="#92400E">in business hours.</text>
-<text class="sm" x="80" y="404" text-anchor="middle" dominant-baseline="central" fill="#92400E">Grafana alerts</text>
-<text class="sm" x="80" y="418" text-anchor="middle" dominant-baseline="central" fill="#92400E">only coverage.</text>
-
-<!-- Card 2: AU escalation -->
-<rect x="158" y="330" width="140" height="110" rx="8" fill="#FEE2E2" stroke="#F87171" stroke-width="1"/>
-<rect x="158" y="330" width="140" height="20"  rx="8" fill="#DC2626"/>
-<rect x="158" y="338" width="140" height="12"  fill="#DC2626"/>
-<text class="warn" x="228" y="340" text-anchor="middle" dominant-baseline="central" fill="#fff">GMT Escalation</text>
-<text class="sm" x="228" y="360" text-anchor="middle" dominant-baseline="central" fill="#7F1D1D">London after-hours</text>
-<text class="sm" x="228" y="374" text-anchor="middle" dominant-baseline="central" fill="#7F1D1D">incidents must wake</text>
-<text class="sm" x="228" y="388" text-anchor="middle" dominant-baseline="central" fill="#7F1D1D">US team at 3-5am</text>
-<text class="sm" x="228" y="402" text-anchor="middle" dominant-baseline="central" fill="#7F1D1D">MST. 7 hr offset</text>
-<text class="sm" x="228" y="416" text-anchor="middle" dominant-baseline="central" fill="#7F1D1D">is the largest gap.</text>
-
-<!-- Card 3: DR coordination -->
-<rect x="306" y="330" width="140" height="110" rx="8" fill="#EDE9FE" stroke="#A78BFA" stroke-width="1"/>
-<rect x="306" y="330" width="140" height="20"  rx="8" fill="#7C3AED"/>
-<rect x="306" y="338" width="140" height="12"  fill="#7C3AED"/>
-<text class="warn" x="376" y="340" text-anchor="middle" dominant-baseline="central" fill="#fff">DR Coordination</text>
-<text class="sm" x="376" y="360" text-anchor="middle" dominant-baseline="central" fill="#4C1D95">Omaha failover must</text>
-<text class="sm" x="376" y="374" text-anchor="middle" dominant-baseline="central" fill="#4C1D95">be triggered across</text>
-<text class="sm" x="376" y="388" text-anchor="middle" dominant-baseline="central" fill="#4C1D95">time zones. Runbooks</text>
-<text class="sm" x="376" y="402" text-anchor="middle" dominant-baseline="central" fill="#4C1D95">must be clear for</text>
-<text class="sm" x="376" y="416" text-anchor="middle" dominant-baseline="central" fill="#4C1D95">on-call staff.</text>
-
-<!-- Card 4: Compliance -->
-<rect x="454" y="330" width="140" height="110" rx="8" fill="#ECFDF5" stroke="#34D399" stroke-width="1"/>
-<rect x="454" y="330" width="140" height="20"  rx="8" fill="#059669"/>
-<rect x="454" y="338" width="140" height="12"  fill="#059669"/>
-<text class="warn" x="524" y="340" text-anchor="middle" dominant-baseline="central" fill="#fff">Compliance / Data</text>
-<text class="sm" x="524" y="360" text-anchor="middle" dominant-baseline="central" fill="#065F46">UK data residency</text>
-<text class="sm" x="524" y="374" text-anchor="middle" dominant-baseline="central" fill="#065F46">differs from US HIPAA.</text>
-<text class="sm" x="524" y="388" text-anchor="middle" dominant-baseline="central" fill="#065F46">Cross-border data</text>
-<text class="sm" x="524" y="402" text-anchor="middle" dominant-baseline="central" fill="#065F46">flows must be</text>
-<text class="sm" x="524" y="416" text-anchor="middle" dominant-baseline="central" fill="#065F46">audited and logged.</text>
-
-<!-- Card 5: OpenProject control -->
-<rect x="602" y="330" width="148" height="110" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1"/>
-<rect x="602" y="330" width="148" height="20"  rx="8" fill="#1D4ED8"/>
-<rect x="602" y="338" width="148" height="12"  fill="#1D4ED8"/>
-<text class="warn" x="676" y="340" text-anchor="middle" dominant-baseline="central" fill="#fff">OpenProject Control</text>
-<text class="sm" x="676" y="360" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">Track on-call hours</text>
-<text class="sm" x="676" y="374" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">by region. Flag UK</text>
-<text class="sm" x="676" y="388" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">staff overallocation.</text>
-<text class="sm" x="676" y="402" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">Enforce rotation to</text>
-<text class="sm" x="676" y="416" text-anchor="middle" dominant-baseline="central" fill="#1E3A8A">prevent burnout.</text>
-
-<!-- ══ RECOMMENDATIONS ══ -->
-<rect x="10" y="450" width="740" height="22" rx="4" fill="#1E3A8A"/>
-<text class="hd" x="380" y="461" text-anchor="middle" dominant-baseline="central" fill="#fff">Recommendations</text>
-
-<rect x="10" y="472" width="740" height="98" rx="4" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.8"/>
-<text class="sm" x="20" y="488" dominant-baseline="central" fill="#374151">1.  Establish a <tspan font-weight="600">follow-the-sun rotation</tspan> — London hands off to EST at ~14:00 UTC, EST to Pacific at ~23:00 UTC, Pacific to London at ~09:00 UTC.</text>
-<text class="sm" x="20" y="506" dominant-baseline="central" fill="#374151">2.  Use <tspan font-weight="600">Grafana alert routing</tspan> — urgent alerts notify on-call; lower priorities queue for the next business-hours team.</text>
-<text class="sm" x="20" y="524" dominant-baseline="central" fill="#374151">3.  <tspan font-weight="600">OpenProject tracks after-hours burden</tspan> — count after-hours hours against the 40% break-fix allocation.</text>
-<text class="sm" x="20" y="542" dominant-baseline="central" fill="#374151">4.  Maintain <tspan font-weight="600">runbooks in Omaha DR</tspan> accessible to all time zones; Omaha auto-failover removes manual cross-TZ coordination for DR.</text>
-<text class="sm" x="20" y="558" dominant-baseline="central" fill="#374151">5.  Review <tspan font-weight="600">UK data residency</tspan> — confirm London data remains within approved regions; audit cross-border backup flows.</text>
-
-</svg></div>
+        <div class="eco-grid" style="margin-bottom:16px">
+          <div class="eco" style="--c:var(--blue)"><div class="ek">TIER 1</div><h3>raid10-incus (HDD)</h3><div class="tags"><span class="tag">4× drive, 2 mirrors</span><span class="tag">6.96 TiB</span><span class="tag">General fleet</span></div></div>
+          <div class="eco" style="--c:var(--teal)"><div class="ek">TIER 2</div><h3>nvme-db-incus</h3><div class="tags"><span class="tag">2× Intel P4510</span><span class="tag">Mirror</span><span class="tag">Latency-critical DBs</span></div></div>
+          <div class="eco" style="--c:var(--purple)"><div class="ek">DR</div><h3>backup01</h3><div class="tags"><span class="tag">17 databases</span><span class="tag">ZFS dispatch</span><span class="tag">QNAP offsite</span></div></div>
+        </div>
+        <div class="kantata">
+          <div class="kstat"><div class="num" data-count="130">~130×</div><div class="lbl">Latency drop moving MongoDB off spinning disk</div></div>
+          <div class="kdiv"></div>
+          <div class="kstat"><div class="num alt" data-count="21">~21×</div><div class="lbl">Latency drop for Postgres/MariaDB off the shared pool</div></div>
+          <div class="kdiv"></div>
+          <div class="ktext"><h3><b>Measured, not estimated</b></h3>
+            <p>Same <code>dd</code> fsync test run on each pool. The HDD mirror was recently reseated and independently verified: all four drives SMART-passed and a full scrub completed with zero errors before this deck was refreshed.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- ░░ SLIDE 10 — TAKEAWAYS ░░ -->
+    <!-- ░░ SLIDE 10 — KNOWN GAPS ░░ -->
     <section class="slide">
       <div class="s-head">
-        <div><div class="kicker">Where this lands</div><div class="s-title">Recommendations &amp; Key Risks</div></div>
-        <div class="s-sub">Resolving capacity and coverage comes back to one control plane — OpenProject Community Edition — and disciplined runbooks.</div>
+        <div><div class="kicker">Where this stands</div><div class="s-title">Known Gaps &amp; Open Decisions</div></div>
+        <div class="s-sub">Tracked openly in the project's own documentation rather than glossed over — this is what a reference build honestly looks like.</div>
       </div>
       <div class="s-body">
         <div class="take-grid">
           <ul class="rec-list">
-            <li class="rec"><div class="rn">1</div><p><b>Follow-the-sun rotation</b> — London hands off to EST at 14:00 UTC, EST to Pacific at 23:00 UTC, Pacific to London at 09:00 UTC.</p></li>
-            <li class="rec"><div class="rn">2</div><p><b>Grafana alert routing</b> — urgent alerts notify on-call; lower priorities queue for the next business-hours team.</p></li>
-            <li class="rec"><div class="rn">3</div><p><b>OpenProject tracks after-hours burden</b> — after-hours hours count against the 40% break-fix allocation.</p></li>
-            <li class="rec"><div class="rn">4</div><p><b>Runbooks live in Omaha DR</b>, reachable across all time zones — auto-failover removes manual cross-TZ coordination.</p></li>
-            <li class="rec"><div class="rn">5</div><p><b>Review UK data residency</b> — confirm London data remains within approved regions; audit cross-border backup flows.</p></li>
+            <li class="rec"><div class="rn">1</div><p><b>DB persistence.</b> Several DB-backed containers still sit on plain container-root disk rather than decoupled named volumes — a rebuild would take the data with it.</p></li>
+            <li class="rec"><div class="rn">2</div><p><b>GPU contention grew.</b> Three consumers (Ollama, SwarmUI, a k3s Triton node) now share two physical GPUs, up from two — no load policy has been exercised yet.</p></li>
+            <li class="rec"><div class="rn">3</div><p><b>mgmtbr0 is unexplained.</b> An unmanaged, unused bridge with no documentation trail — flagged rather than ignored.</p></li>
+            <li class="rec"><div class="rn">4</div><p><b>Flowise sits empty.</b> The real agent-orchestration effort moved to a separate project instead — worth a deliberate decision on Flowise's future.</p></li>
+            <li class="rec"><div class="rn">5</div><p><b>The AppSec stack is new.</b> Semgrep/Trivy/Gitleaks/SonarQube/DefectDojo are deployed but haven't produced a real finding yet — this section will update once they have.</p></li>
           </ul>
           <div class="risk-panel">
-            <h3>Top operational risks</h3>
-            <div class="risk"><div class="rt">8.5 hr coverage gap</div><p>UTC 08:30–17:00 has no staffed team; Grafana alerts are the safety net.</p></div>
-            <div class="risk"><div class="rt">7 hr UK offset</div><p>London incidents can reach the US team outside core hours, creating the largest gap in the portfolio.</p></div>
-            <div class="risk"><div class="rt">Infrastructure contention</div><p>Business demand vs internal roadmap competes for the same 40% capacity.</p></div>
-            <div class="risk"><div class="rt">Data residency</div><p>London data must remain within approved UK regions and controls.</p></div>
+            <h3>Why list these at all</h3>
+            <div class="risk"><div class="rt">Credibility over polish</div><p>A reference build with no listed gaps is less believable than one with a maintained, dated punch list.</p></div>
+            <div class="risk"><div class="rt">Single-operator honesty</div><p>This matches the portfolio's own scope statement: reference-implementation evidence, not scale/production.</p></div>
+            <div class="risk"><div class="rt">Living document</div><p>This list is generated from the project's own <code>sandbox-overview.md</code> and updated as items close.</p></div>
           </div>
         </div>
       </div>
@@ -1020,13 +620,13 @@ body{font-family:var(--font);background:#070E1A;color:var(--ink);overflow:hidden
     <section class="slide closing">
       <div class="closing-inner">
         <div class="bar"></div>
-        <h2>One blueprint, end&#8209;to&#8209;end.</h2>
-        <p>From intake at the ARB to retirement and review — lifecycle, capability, ownership, network, and coverage all governed through a single 60/40 capacity model.</p>
+        <h2>One host, audited honestly.</h2>
+        <p>From the Incus fleet layout to model governance, security scanning, and a dedicated identity-practice lab — one operator, one box, tracked openly rather than oversold.</p>
         <div class="sum-row">
-          <div class="sum"><div class="sn" data-count="6">6</div><div class="sl">Lifecycle stages</div></div>
-          <div class="sum"><div class="sn" data-count="5">5</div><div class="sl">Capability domains</div></div>
-          <div class="sum"><div class="sn" data-count="7">7</div><div class="sl">Global sites</div></div>
-          <div class="sum"><div class="sn">60/40</div><div class="sl">Capacity model</div></div>
+          <div class="sum"><div class="sn" data-count="7">7</div><div class="sl">Incus projects</div></div>
+          <div class="sum"><div class="sn" data-count="180">~180</div><div class="sl">Containers / VMs</div></div>
+          <div class="sum"><div class="sn" data-count="2">2</div><div class="sl">ZFS storage tiers</div></div>
+          <div class="sum"><div class="sn" data-count="3">3</div><div class="sl">GPU consumers sharing 2 cards</div></div>
         </div>
       </div>
       <div class="cover-foot">
