@@ -1,6 +1,6 @@
 # Bryan Debnam
 
-**Systems Architect → AI Platform / MLOps Engineer**
+**Systems Architect → AI Platform Architect / MLOps**
 Lewisville, TX · bdebnam@gmail.com · [linkedin.com/in/bryanhd](https://www.linkedin.com/in/bryanhd)
 
 **Resume —** [request a copy](mailto:bdebnam@gmail.com?subject=Resume%20request) · PDF or DOCX,
@@ -39,6 +39,8 @@ scoped: **Pilot** (not yet in the production environment, but performing real pr
 
 An end-to-end model-governance pipeline for a 7-agent LLM system, applying SOX/ITGC evidentiary
 rigor to AI oversight.
+
+**Detail —** [Case study: a real gate-fail → fix → re-validate cycle](case-studies/mlops-governance/)
 
 - **Model registry & staged promotion** (MLflow) — preflight validation gates, automated
   rollback, and a silent-no-op safety guard that blocks unvetted model changes from reaching
@@ -185,19 +187,19 @@ view of software spend and seat waste.
 
 ---
 
-## Skills — evidenced vs. currently deepening
+## Skills — evidenced vs. actively building
 
-| Area | Evidenced (projects above; W = work, R = independent R&D) | Currently deepening |
+| Area | Evidenced (projects above) | Actively building |
 |---|---|---|
-| **MLOps** | MLflow registry, champion/challenger, staged promotion + rollback, drift detection, Marquez lineage, LLM-as-judge eval, GenAI datasets | production scale; Prefect/Dagster pipelines; feature store |
-| **Agentic AI** | provider-agnostic orchestration, VS Code broker extension, MCP/A2A services, RAG (Qdrant), guardrails (llm-guard), garak red-teaming | LangGraph/CrewAI multi-agent; Agentic RAG; long-term memory |
+| **MLOps** | MLflow registry, champion/challenger, staged promotion + rollback, drift detection, Marquez lineage, LLM-as-judge eval, GenAI datasets | production-scale operation; Prefect/Dagster pipelines |
+| **Agentic AI** | provider-agnostic orchestration, VS Code broker extension, MCP/A2A services, RAG (Qdrant), guardrails (llm-guard), garak red-teaming | LangGraph multi-agent; agentic RAG |
 | **AI security / governance** | garak triage app, remediation library, guardrail-aware scans, SOX/ITGC rigor applied to AI | NIST AI RMF / EU AI Act mapping; eval-gated release in CI |
-| **Infra / platform** | Incus fleet, k3s, GPU passthrough, ZFS, segmented networking, Caddy, Vault | Terraform / IaC at scale; GitOps (ArgoCD/Flux) |
-| **Observability** | Prometheus, Grafana, Loki, Pyroscope, OTel collector, custom metrics proxy, Langfuse | business-AI metrics + DORA in one pipeline |
-| **Cloud** | AWS SA-Associate + AI Practitioner + Cloud Practitioner; Azure Solutions Architect Expert + Admin Associate; Landing Zones, Well-Architected, multi-account governance (architecture level) | deep hands-on AWS **and** Azure; SageMaker; cost governance at scale |
-| **Data** | Spark 3.5, MinIO/S3A, Qdrant, Postgres; MLflow on Postgres | Iceberg/Delta lakehouse + catalog; Ray; large-scale platforms |
-| **Languages** | Python, Bash, PowerShell | Java / Scala (JVM depth) |
-| **Enterprise delivery** | M&A integration ×4, identity modernization (~1,800 users), SOX program lead, Copilot rollout, lead-by-influence | people leadership of a team / sub-leaders |
+| **Infra / platform** | Incus fleet, k3s, Slurm, GlusterFS, GPU passthrough, ZFS, segmented networking, Caddy, Vault | Terraform; GitOps (ArgoCD/Flux) |
+| **Observability** | Prometheus, Grafana, Loki, Pyroscope, OTel collector, custom metrics proxy, Langfuse | — |
+| **Cloud** | AWS SA-Associate + AI Practitioner; Azure Solutions Architect Expert; multi-account AWS Organization (project 6), Landing Zones, Well-Architected | deeper hands-on breadth on both |
+| **Data** | Spark 3.5, MinIO/S3A, Qdrant, Postgres; MLflow on Postgres | Iceberg/Delta lakehouse + catalog |
+| **Languages** | Python, Bash, PowerShell | — |
+| **Enterprise delivery** | M&A integration ×4, identity modernization (~1,800 users), SOX program lead, Copilot rollout, lead-by-influence | — |
 
 ---
 
