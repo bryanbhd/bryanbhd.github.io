@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bryan Debnam — Systems Architect / AI Platform Engineer</title>
+<meta name="description" content="Portfolio: AI governance and MLOps lifecycle, agentic AI platforms, AI security triage, and enterprise infrastructure architecture.">
+<link rel="canonical" href="https://bryandebnam.com/">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="Bryan Debnam">
+<meta property="og:title" content="Bryan Debnam — Systems Architect / AI Platform Engineer">
+<meta property="og:description" content="AI governance and MLOps lifecycle, agentic AI platforms, AI security triage, and enterprise infrastructure architecture.">
+<meta property="og:url" content="https://bryandebnam.com/">
+<meta name="twitter:card" content="summary">
+<style>
+:root {
+  --bg: #ffffff; --fg: #1b1f24; --muted: #5b6570; --accent: #1f4e9c;
+  --rule: #d8dee6; --card: #f6f8fa; --code-bg: #eef1f5;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1319; --fg: #e6e9ee; --muted: #9aa5b1; --accent: #7aa7ee;
+    --rule: #263040; --card: #161c25; --code-bg: #1b222c;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.62 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 48px 22px 80px; }
+h1 { font-size: 2.1rem; line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.4px; }
+h1 + p { color: var(--muted); margin: 0 0 6px; font-size: 1.05rem; }
+h2 {
+  font-size: 1.32rem; margin: 44px 0 14px; padding-bottom: 7px;
+  border-bottom: 2px solid var(--accent); color: var(--accent);
+}
+h3 { font-size: 1.06rem; margin: 28px 0 8px; }
+p, li { margin: 8px 0; }
+ul { padding-left: 22px; }
+a { color: var(--accent); }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 34px 0; }
+strong { color: var(--fg); }
+em { color: var(--muted); }
+code {
+  background: var(--code-bg); padding: 1px 5px; border-radius: 3px;
+  font: 0.88em/1.4 "SF Mono", Consolas, monospace;
+}
+.tablewrap { overflow-x: auto; margin: 16px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; min-width: 620px; }
+th, td { border: 1px solid var(--rule); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--card); }
+h3 + p + ul, h3 + ul { margin-top: 6px; }
+footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
+         color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 600px) {
+  .wrap { padding: 30px 16px 60px; }
+  h1 { font-size: 1.7rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Bryan Debnam</h1>
+<p><strong>Systems Architect → AI Platform Architect / MLOps</strong>
+Lewisville, TX · bdebnam@gmail.com · <a href="https://www.linkedin.com/in/bryanhd">linkedin.com/in/bryanhd</a></p>
+<p><strong>Resume —</strong> <a href="mailto:bdebnam@gmail.com?subject=Resume%20request">request a copy</a> · PDF or DOCX,
+AI Platform / MLOps or Systems Architect.</p>
+<hr />
+<h2>Positioning</h2>
+<p>20+ years in enterprise IT, 3+ at the architecture level — cloud migrations, M&amp;A technology
+integration, and identity modernization across four acquisitions, plus building and leading a
+60+-control SOX/ITGC compliance program.</p>
+<p><strong>At work</strong>, more recently: &ldquo;Script Portal,&rdquo; an internal platform for interchangeable
+agentic-AI backends under one allowlist + output-masking safety model; Playwright RPA agents
+for SOX audit evidence; the org&rsquo;s GitHub Enterprise Copilot rollout.</p>
+<p><strong>Independently</strong> (personal R&D; foundation: Texas McCombs AI/ML post-grad, 2024–2025): a full
+MLOps governance lifecycle (model registry, champion/challenger promotion with rollback,
+automated drift detection, data lineage), an LLM security triage tool, and LLM cost analytics —
+all on a self-hosted, dual-GPU Incus/k3s fleet.</p>
+<p><strong>What&rsquo;s distinctive:</strong> the intersection of SOX/ITGC audit discipline and hands-on AI-platform
+engineering — few people have both.</p>
+<hr />
+<h2>Selected projects</h2>
+<p>Each project is tagged <strong>[Work]</strong> (current employer) or <strong>[Independent R&amp;D]</strong> (personal), and
+scoped: <strong>Pilot</strong> (in limited use on real workloads, ahead of formal rollout),
+<strong>Reference build</strong> (complete and running, single-environment / not scale-tested), <strong>POC</strong>
+(proves the pattern).</p>
+<h3>1. AI Governance &amp; MLOps Lifecycle — <strong>[Independent R&amp;D]</strong> · <em>Reference build, flagship</em></h3>
+<p>An end-to-end model-governance pipeline for a 7-agent LLM system, applying SOX/ITGC evidentiary
+rigor to AI oversight.</p>
+<p><strong>Detail —</strong> <a href="case-studies/mlops-governance/">Case study: a real gate-fail → fix → re-validate cycle</a></p>
+<ul>
+<li><strong>Model registry &amp; staged promotion</strong> (MLflow) — preflight validation gates, automated
+  rollback, and a silent-no-op safety guard that blocks unvetted model changes from reaching
+  production.</li>
+<li><strong>Champion/challenger A/B gate</strong> — a staged candidate model is evaluated head-to-head against
+  the live champion before any cutover.</li>
+<li><strong>Automated drift detection</strong> — weekly scheduled scanning, parameter-order-insensitive.
+  Caught a live defect in production: an arithmetic self-contradiction in a prompt-scoring agent
+  that was inflating its own output score.</li>
+<li><strong>Data lineage</strong> (Marquez / OpenLineage) across the MLflow ↔ Ollama pipeline — every model
+  version, eval run, and promotion decision is auditable.</li>
+<li><strong>LLM-as-judge evaluation harness</strong> — scores agents on substance (accuracy, completeness, no
+  fabrication) rather than surface grammar; registered judge model; testsets logged as MLflow
+  GenAI datasets. Brought all 7 agents to a validated quality gate.</li>
+<li><strong>AI Gateway</strong> (FastAPI/uvicorn) — unified model-access boundary with a local detect-quality
+  model; GenAI UI wired (Prompts registry for 7 agent system prompts, review queues, label
+  schemas).</li>
+<li><strong>Model-version cost/quality comparison</strong> — compare cost and quality across registered
+  model versions to inform promotion decisions.</li>
+<li><strong>Stack:</strong> MLflow 3.x (Postgres backend, decoupled artifact volume, Vault-sourced secrets,
+  AppRole), Marquez, Ollama, Grafana, Python.</li>
+</ul>
+<h3>2. Provider-Agnostic Agentic AI Platform (&ldquo;Script Portal&rdquo; / Agent Bridge) — <strong>[Work]</strong> · <em>Pilot — daily driver</em></h3>
+<p>An internal accelerator — teams get interchangeable agentic-AI backends that can act against
+real enterprise systems under one allowlist and masking model, instead of a per-tool approval
+for every new agent.</p>
+<ul>
+<li><strong>Interchangeable agent backends</strong> — Claude Code CLI, Copilot GPT CLI, and a <strong>custom VS Code
+  &ldquo;Agent Bridge&rdquo; extension</strong> (LLM-broker) — behind a shared allowlist and output-masking layer.</li>
+<li><strong>Provider-independent agent contract</strong> — spans tool use, memory, reasoning workflows, and
+  decision frameworks, so the underlying model or vendor can be swapped without changing how
+  agents are invoked or governed.</li>
+<li><strong>Secret-aware execution framework</strong> with output masking applied to agent transcripts, so
+  agents can act against authenticated internal systems under one safety model rather than
+  per-tool exceptions.</li>
+<li><strong>Piloted on identity-lifecycle workflows</strong> — account-hygiene checks, expiring-credential
+  monitoring, and tickets whose summary and detail are <strong>model-generated</strong> rather than
+  templated, with credential renewal handled inside the same governed boundary.</li>
+<li><strong>Closed loop, not just detection</strong> — privileged actions run <em>inside</em> the allowlist and
+  masking boundary rather than as scripted exceptions around it, so the framework extends to
+  new use cases under the same governance model.</li>
+</ul>
+<p><em>Scope: single-operator pilot. Broader rollout is designed around a dedicated service identity
+with least-privilege delegation.</em></p>
+<h3>3. Agentic-OS Sandbox — <strong>[Independent R&amp;D]</strong> · <em>Reference build (self-hosted AI platform)</em></h3>
+<p>A ~60-instance self-hosted platform on a single dual-GPU host — the environment projects 1 and 4 run in.</p>
+<p><strong>Detail —</strong> <a href="architecture/">Architecture &amp; infrastructure deck</a> ·
+<a href="model-cards/">AI service cards</a> for the on-prem model fleet</p>
+<ul>
+<li><strong>Incus</strong> (LXD-successor) fleet — ~60 containers/VMs across projects; a 3-master/3-worker
+  k3s cluster; ZFS/Btrfs pools with snapshot rollback; four segmented bridge networks with
+  reverse-proxy-only external exposure (Caddy).</li>
+<li><strong>Dual RTX 3090</strong> GPU passthrough at the container level — PCI-addressed device assignment,
+  runtime NVIDIA library injection (survives host driver upgrades), consumed by an Ollama fleet
+  (~20 models, role-based routing) and an image-gen stack.</li>
+<li><strong>Observability:</strong> Prometheus, Grafana, Loki, Pyroscope, Checkmk, OpenTelemetry collector;
+  a custom token-metrics proxy tapping Ollama traffic for per-model Prometheus metrics;
+  Langfuse traces costed against a per-model pricing model for per-model spend reporting.</li>
+<li><strong>Secrets:</strong> HashiCorp Vault — every generated credential, per-service AppRole delivery,
+  Shamir unseal with auto-unseal automation.</li>
+<li><strong>Data:</strong> Postgres, MariaDB, MongoDB, Qdrant (vectors), Redis, Elasticsearch/OpenSearch;
+  Spark 3.5 + MinIO (S3A) + JupyterLab.</li>
+<li><strong>Agent orchestration R&amp;D:</strong> MCP/A2A interoperability services (router, HR-policy, time-off
+  agents); a local Ollama fleet (~20 models) with role-based routing behind a metrics-tapping
+  proxy.</li>
+</ul>
+<h3>4. AI Security Triage (garak-triage) — <strong>[Independent R&amp;D]</strong> · <em>Reference build</em></h3>
+<p>A red-team scanning and triage pipeline for LLM endpoints.</p>
+<ul>
+<li>Runs <strong>garak</strong> probes against model endpoints; guardrail-aware scans (with/without the
+  llm-guard layer in path).</li>
+<li>Triage web UI — finding cards, severity, richer reports, <code>inspect_report</code> deep-dive.</li>
+<li><strong>Remediation library</strong> — maps findings to concrete mitigations.</li>
+<li>Deployable as a service (systemd unit, deploy script, auth&rsquo;d login).</li>
+<li>Paired with an <strong>llm-guard guardrail</strong> (LiteLLM integration) that returns a graceful
+  200-refusal instead of a hard 400 on block.</li>
+</ul>
+<h3>5. SOX/ITGC Automation &amp; Copilot Enterprise Governance — <strong>[Work]</strong> · <em>Pilot</em></h3>
+<ul>
+<li><strong>Two cooperating Playwright RPA agents</strong> run the audit-evidence cycle end to end — the first
+  interprets incoming evidence requests and resolves what each control activity requires; the
+  second collects the required records from enterprise systems and assembles timestamped,
+  masked <strong>evidence packages</strong> filed under the correct control.</li>
+<li><strong>Auditor-ready output</strong> — evidence arrives already scoped to the control activity rather than
+  as raw exports someone has to reconcile by hand.</li>
+<li>Built and led the <strong>SOX/ITGC compliance program</strong> — 60+ control activities, PowerShell-
+  automated evidence generation; primary liaison between Infrastructure, Security, and Audit.</li>
+<li>Manage the org&rsquo;s <strong>GitHub Enterprise Copilot</strong> deployment; built an n8n workflow monitoring
+  seat utilization — reclaimed 25 inactive seats (~$475–725/month).</li>
+<li>Led <strong>M&amp;A technology integration for four acquisitions</strong> — M365 tenant consolidation, AD/Entra
+  ID identity integration for ~1,800 users, 400+ mailbox/OneDrive migrations, multi-forest AD
+  trust across 6 forests.</li>
+</ul>
+<h3>6. Multi-Account AWS Landing Zone — <strong>[Independent R&amp;D]</strong> · <em>Reference build (control plane)</em></h3>
+<p>A personally-owned <strong>9-account AWS Organization</strong> built as a governance reference
+architecture — the multi-account control plane, not a workload environment.</p>
+<ul>
+<li><strong>Account topology</strong> separated by blast radius rather than by team: Security (CloudTrail
+  administration, Config aggregation), Shared Services (Central Backup, Backup Administrator,
+  Network), and Workloads.</li>
+<li><strong>OU hierarchy</strong> — Security, Shared Services (nested Network OU), and a Workloads OU
+  subdivided into Dev, Test, QA, Prod, Prod-Sim, ML, and IoT, so <strong>service control policies</strong>
+  scope per environment tier.</li>
+<li><strong>Federated identity</strong> — IAM Identity Center fronting all member accounts, federated to an
+  external <strong>Entra ID</strong> tenant; SSO device-code flow with per-account permission sets, so no
+  account carries long-lived IAM access keys.</li>
+<li><strong>Centralized security telemetry</strong> — dedicated CloudTrail administration and Config
+  aggregator accounts, keeping audit evidence where workload OUs cannot write to it.</li>
+<li><strong>Backup separation of duties</strong> — distinct Central Backup and Backup Administrator accounts,
+  isolating backup data from the identities that administer it.</li>
+</ul>
+<p><em>Scope: control-plane and governance build. The workload OUs are provisioned but intentionally
+unpopulated — the artifact is the account structure, delegation model, and identity federation,
+not running services.</em></p>
+<h3>7. SaaS Procurement &amp; Spend Optimization Platform — <strong>[Work]</strong> · <em>Pilot</em></h3>
+<p>An Azure-hosted internal portal that turns scattered vendor licensing data into a single
+view of software spend and seat waste.</p>
+<ul>
+<li><strong>Multi-source aggregation</strong> — pulls licensing and usage data from vendor REST APIs and
+  normalizes seat models that differ from vendor to vendor into one comparable schema.</li>
+<li><strong>Waste detection</strong> — surfaces duplicate license assignments, unused seats, and per-vendor
+  spend, producing an actionable reclaim list rather than a static dashboard.</li>
+<li><strong>Shared component library</strong> — reuses helpers from the agent framework (project 2): Active
+  Directory and Graph email helpers, plus the duplicate-account detection logic generalized into
+  duplicate <strong>license</strong> assignment detection — the same instinct applied to identity and to spend.</li>
+<li><strong>Delivery</strong> — built through agentic AI-assisted development (Claude Code, GitHub Copilot)
+  and shipped via <strong>Azure DevOps build and release pipelines</strong> with Azure service connections.</li>
+</ul>
+<hr />
+<h3>8. DevSecOps Pipeline, Secrets Hygiene &amp; Backup Automation — <strong>[Independent R&amp;D]</strong> · <em>Reference build</em></h3>
+<p>The CI/CD, security-scanning and recovery layer behind project 3: every change to the platform
+repo goes through a multi-scanner security gate, and every finding lands in one tracked place.</p>
+<ul>
+<li><strong>Security gate (Azure DevOps, self-hosted agent)</strong> — five scanners, hard-gating on the
+  serious tiers: <strong>gitleaks</strong> (secrets, full history), <strong>checkov + trivy config</strong> (IaC),
+  <strong>semgrep</strong> (SAST), <strong>trivy</strong> (container-image CVEs), plus a custom <strong>&ldquo;no secrets on command
+  lines&rdquo;</strong> check (below). <strong>SonarQube</strong> runs on every main build for code quality and tech-debt
+  tracking — informational, not a gate; semgrep is the SAST gate.</li>
+<li><strong>One findings dashboard</strong> — all scanners feed <strong>DefectDojo</strong> as one product: SARIF reimports
+  into long-lived tests with automatic closure of fixed findings, a stale-run guard so an older
+  build can&rsquo;t reopen what a newer one fixed, and SonarQube pulled in through its API import.</li>
+<li><strong>Case study — credentials in process arguments.</strong> Found Vault AppRole secrets, tokens and
+  database passwords being passed to <code>curl</code> as command-line arguments (readable by any process
+  via <code>/proc/&lt;pid&gt;/cmdline</code>) across 28 scripts and pipelines. Fixed all of them (stdin and
+  process substitution instead of argv; CI secret variables mapped through <code>env:</code> instead of
+  inlined), verified against live Vault, and turned the rule into a <strong>CI gate</strong> so it can&rsquo;t
+  regress.</li>
+<li><strong>Pipeline credential model</strong> — HashiCorp Vault AppRole per pipeline with single-path,
+  read-only policies; secret IDs bound to the agent&rsquo;s address; deploy access through
+  <strong>forced-command SSH keys</strong> (one key can run exactly one allow-listed installer script).</li>
+<li><strong>App deploy pipelines</strong> — deploy/teardown for an EHR demo stack, FHIR/DICOM services, a ledger
+  API service and sports-analytics apps, each logging in to Vault with its own narrow role.</li>
+<li><strong>Backup &amp; recovery</strong> — nightly fleet backups via ZFS snapshot + incremental send with a
+  bounded window and a carryover queue; daily logical dumps of every PostgreSQL and MariaDB
+  database (read-only dump accounts); everything <strong>age-encrypted to a hardware-key recipient</strong>,
+  shipped off-box to a NAS and checksum-verified; a status dashboard over the job history.</li>
+</ul>
+<h2>Skills — evidenced vs. actively building</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Evidenced (projects above)</th>
+<th>Actively building</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MLOps</strong></td>
+<td>MLflow registry, champion/challenger, staged promotion + rollback, drift detection, Marquez lineage, LLM-as-judge eval, GenAI datasets</td>
+<td>production-scale operation; Prefect/Dagster pipelines</td>
+</tr>
+<tr>
+<td><strong>Agentic AI</strong></td>
+<td>provider-agnostic orchestration, VS Code broker extension, MCP/A2A services, RAG (Qdrant), guardrails (llm-guard), garak red-teaming</td>
+<td>LangGraph multi-agent; agentic RAG</td>
+</tr>
+<tr>
+<td><strong>AI security / governance</strong></td>
+<td>garak triage app, remediation library, guardrail-aware scans, SOX/ITGC rigor applied to AI</td>
+<td>NIST AI RMF / EU AI Act mapping; eval-gated release in CI</td>
+</tr>
+<tr>
+<td><strong>Infra / platform</strong></td>
+<td>Incus fleet, k3s, Slurm, GlusterFS, GPU passthrough, ZFS, segmented networking, Caddy, Vault</td>
+<td>Terraform; GitOps (ArgoCD/Flux)</td>
+</tr>
+<tr>
+<td><strong>Observability</strong></td>
+<td>Prometheus, Grafana, Loki, Pyroscope, OTel collector, custom metrics proxy, Langfuse</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Cloud</strong></td>
+<td>AWS SA-Associate + AI Practitioner; Azure Solutions Architect Expert; multi-account AWS Organization (project 6), Landing Zones, Well-Architected</td>
+<td>deeper hands-on breadth on both</td>
+</tr>
+<tr>
+<td><strong>Data</strong></td>
+<td>Spark 3.5, MinIO/S3A, Qdrant, Postgres; MLflow on Postgres</td>
+<td>Iceberg/Delta lakehouse + catalog</td>
+</tr>
+<tr>
+<td><strong>Languages</strong></td>
+<td>Python, Bash, PowerShell</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Enterprise delivery</strong></td>
+<td>M&amp;A integration ×4, identity modernization (~1,800 users), SOX program lead, Copilot rollout, lead-by-influence</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>Certifications &amp; education</h2>
+<ul>
+<li><strong>AWS</strong> <em>(all current)</em><strong>:</strong> Solutions Architect – Associate (2026, exp. 2029) · AI
+  Practitioner (2025, exp. 2028) · Cloud Practitioner (2024, exp. 2029)</li>
+<li><strong>Microsoft</strong> <em>(active through 2027)</em><strong>:</strong> Azure Solutions Architect Expert · Azure
+  Administrator Associate · Azure Fundamentals (2019) · <strong>AI-102 Azure AI Engineer
+  Associate — in progress</strong></li>
+<li><strong>Post Graduate Program in AI &amp; Machine Learning: Business Applications</strong> — McCombs School
+  of Business, The University of Texas at Austin (conferred July 2025)</li>
+<li><strong>A.A.S., Information Technology — CIT: Network Administration &amp; Support</strong> — Dallas County
+  Community College District (now Dallas College)</li>
+<li>U.S. patent (2014 Microsoft hackathon project, placed 25th worldwide)</li>
+</ul>
+<hr />
+<h2>Honest scope statement</h2>
+<p>Two separate evidence bases, never blurred:</p>
+<ul>
+<li><strong>Independent R&amp;D</strong> is personal work, not a production system with a user base — it
+  demonstrates architecture judgment, integration breadth, and knowledge of failure modes. The
+  sandbox is a <strong>single-host reference platform</strong> (projects 1, 3, 4); the AWS landing zone is a
+  control-plane build with intentionally unpopulated workload OUs (project 6).</li>
+<li><strong>&ldquo;At scale / in production&rdquo; evidence</strong> comes from the <strong>work</strong> at my current employer: four
+  M&amp;A integrations, identity modernization for ~1,800 users, a 60+-control SOX program, and an
+  org-wide Copilot rollout. The agent-platform projects built on top of that experience —
+  Script Portal, the SOX evidence agents, and the spend portal — are <strong>pilots</strong> ahead of formal
+  rollout. Projects 2, 5, 7.</li>
+</ul>
+<hr />
+<h2>Verification</h2>
+<p>Issuer-hosted records, verifiable without an account:</p>
+<ul>
+<li><strong>Microsoft Certified: Azure Solutions Architect Expert</strong> — <a href="https://learn.microsoft.com/api/credentials/share/en-us/DebnamBryan-0771/9CE5F1B1F5EE4BF?sharingId=3CD650BEC1A4B731">verify on Microsoft
+  Learn</a>
+  · earned Nov 18, 2019, expires Nov 19, 2027 · certification number ABA961-E2X9C0</li>
+<li><strong>Microsoft Certified: Azure Administrator Associate</strong> — <a href="https://learn.microsoft.com/api/credentials/share/en-us/DebnamBryan-0771/2A541EB9D2212380?sharingId=3CD650BEC1A4B731">verify on Microsoft
+  Learn</a>
+  · earned Apr 24, 2019, expires Oct 25, 2027 · certification number 628584-CT21D1</li>
+<li><strong>AWS certifications</strong> — <a href="https://www.credly.com/users/bryan-debnam.158b6f96">Credly badge
+  wall</a> · Solutions Architect – Associate
+  (earned Jan 4, 2026, expires Jan 4, 2029), AI Practitioner (earned Nov 2, 2025, expires Nov 2,
+  2028), Cloud Practitioner (earned Aug 15, 2024, expires Jan 4, 2029)</li>
+<li><strong>Post Graduate Program in AI &amp; Machine Learning: Business Applications</strong>, McCombs School of
+  Business, UT Austin — <a href="https://vrfy.digital/index.php?key=onsxllql">verify</a> · conferred July
+  2025, 9.5 CEUs</li>
+</ul>
+<footer>Built from <code>portfolio.md</code>. Updated 2026-10-06.</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+  "mimeTypes": {
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Content-Security-Policy": "default-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'"
+  },
+  "routes": [
+    {
+      "route": "/resume/*",
+      "headers": { "Cache-Control": "public, max-age=3600" }
+    }
+  ],
+  "responseOverrides": {
+    "404": { "rewrite": "/index.html", "statusCode": 404 }
+  }
+}

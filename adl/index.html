@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calibrating an LLM Judge — Bryan Debnam</title>
+<meta name="description" content="Measuring whether a local LLM judge can be trusted to grade a coding agent's output: rubric, model and reasoning-effort results, with charts.">
+<link rel="canonical" href="https://bryandebnam.com/adl/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bryan Debnam">
+<meta property="og:title" content="Calibrating an LLM judge for a self-hosted coding agent">
+<meta property="og:description" content="The original judge was a coin flip (AUC 0.49). A new rubric fixed it, and less reasoning made it reliable and 12× faster.">
+<meta property="og:url" content="https://bryandebnam.com/adl/">
+<meta name="twitter:card" content="summary">
+<style>
+:root {
+  --bg: #ffffff; --fg: #1b1f24; --muted: #5b6570; --accent: #1f4e9c;
+  --rule: #d8dee6; --card: #f6f8fa; --code-bg: #eef1f5;
+  /* chart roles (validated: light surface #ffffff) */
+  --pass: #2a78d6; --fail: #eb6834;
+  --grid: #e6e9ee; --axis: #c3c9d1; --ink-2: #5b6570; --ink-3: #7d8691;
+  --connector: #c3c9d1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1319; --fg: #e6e9ee; --muted: #9aa5b1; --accent: #7aa7ee;
+    --rule: #263040; --card: #161c25; --code-bg: #1b222c;
+    /* validated: dark surface #0f1319 */
+    --pass: #3987e5; --fail: #d95926;
+    --grid: #1f2733; --axis: #354152; --ink-2: #9aa5b1; --ink-3: #7d8896;
+    --connector: #3a4556;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.62 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 48px 22px 80px; }
+.crumb { font-size: 0.9rem; margin: 0 0 18px; }
+h1 { font-size: 2.1rem; line-height: 1.15; margin: 0 0 6px; letter-spacing: -0.4px; }
+h1 + p { color: var(--muted); margin: 0 0 6px; font-size: 1.05rem; }
+h2 {
+  font-size: 1.32rem; margin: 44px 0 14px; padding-bottom: 7px;
+  border-bottom: 2px solid var(--accent); color: var(--accent);
+}
+h3 { font-size: 1.06rem; margin: 28px 0 8px; }
+p, li { margin: 8px 0; }
+ul, ol { padding-left: 22px; }
+a { color: var(--accent); }
+strong { color: var(--fg); }
+em { color: var(--muted); }
+code {
+  background: var(--code-bg); padding: 1px 5px; border-radius: 3px;
+  font: 0.88em/1.4 "SF Mono", Consolas, monospace;
+}
+.meta { color: var(--muted); font-size: 0.9rem; }
+.tablewrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th, td { border: 1px solid var(--rule); padding: 6px 9px; text-align: left; }
+th { background: var(--card); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.sources li { font-size: 0.9rem; }
+footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
+         color: var(--muted); font-size: 0.85rem; }
+
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 26px 0 8px; }
+.tile { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
+.tile .label { color: var(--muted); font-size: 0.85rem; }
+.tile .value { font-size: 1.7rem; font-weight: 600; line-height: 1.2; margin-top: 4px; }
+.tile .from { color: var(--muted); font-size: 0.85rem; }
+
+/* figures */
+figure { margin: 22px 0 30px; }
+figcaption .title { font-weight: 600; }
+figcaption .sub { color: var(--muted); font-size: 0.9rem; margin: 2px 0 8px; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font: 12px -apple-system, "Segoe UI", Arial, sans-serif; fill: var(--ink-2); }
+.chart text.val { fill: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart text.tick { fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+.chart .grid { stroke: var(--grid); stroke-width: 1; }
+.chart .axis { stroke: var(--axis); stroke-width: 1; }
+.chart .ref { stroke: var(--ink-3); stroke-width: 1; }
+.chart .hit { fill: transparent; cursor: default; outline: none; }
+.chart .hit:hover + .mark, .chart .hit:focus + .mark { opacity: 0.75; }
+.chart .hit:focus-visible { stroke: var(--accent); stroke-width: 1.5; }
+.legend { display: flex; gap: 16px; font-size: 0.85rem; color: var(--ink-2); margin: 0 0 6px; flex-wrap: wrap; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  margin-right: 6px; vertical-align: -1px; background: var(--c); }
+.legend span.ring::before { background: transparent; border: 1.5px solid var(--ink-3); width: 8px; height: 8px; }
+.multiples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.multiples h4 { margin: 0 0 4px; font-size: 0.9rem; font-weight: 600; }
+details { margin-top: 6px; font-size: 0.88rem; }
+summary { color: var(--accent); cursor: pointer; }
+#tip {
+  position: fixed; pointer-events: none; z-index: 10; display: none;
+  background: var(--bg); color: var(--fg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 7px 10px; font-size: 0.82rem; line-height: 1.4; box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  max-width: 260px;
+}
+#tip b { font-size: 0.95rem; }
+#tip .k { display: inline-block; width: 12px; height: 2px; vertical-align: middle; margin-right: 6px; }
+@media (max-width: 700px) {
+  .multiples { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 30px 16px 60px; }
+  h1 { font-size: 1.7rem; }
+  .tiles { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="crumb"><a href="/">← Bryan Debnam</a></p>
+
+<h1>Calibrating an LLM judge for a self-hosted coding agent</h1>
+<p>The original judge was a coin flip. A better rubric fixed that, and <em>less</em> reasoning made it reliable and 12× faster.</p>
+<p class="meta">September 2026 · Independent R&amp;D · Reference build (single environment, small sample)</p>
+
+<div class="tiles">
+  <div class="tile"><div class="label">Judge accuracy (AUC)</div><div class="value">0.80</div><div class="from">from 0.49 (coin flip)</div></div>
+  <div class="tile"><div class="label">Time per judge call</div><div class="value">10 s</div><div class="from">from 123 s</div></div>
+  <div class="tile"><div class="label">Empty judge answers</div><div class="value">0%</div><div class="from">from 38% of calls</div></div>
+</div>
+<p class="meta">Last two tiles: gpt-oss:20b on the new rubric, default reasoning effort → low.</p>
+
+<h2>The objective</h2>
+<p>The <strong>Agentic Dev Loop</strong> is a coding agent that runs entirely on local models (Ollama behind a LiteLLM proxy, with MLflow and Langfuse for tracking). It plans, writes code, runs frozen acceptance tests in a throwaway container and reviews the result, repeating until the tests pass.</p>
+<p>Passing tests only proves the code satisfies the tests, not the whole spec. So a final <strong>LLM judge</strong> scores every passing build 0–10 on how faithfully it implements the spec. That score goes onto the pull request and into experiment tracking.</p>
+<p>The objective was to find out whether that score could be trusted, and to fix it if not.</p>
+
+<h2>Method</h2>
+<p>I built a calibration harness that takes code from 17 past agent runs where it's already known whether the tests passed (11 passing, 6 failing), across three target projects. Each candidate judge scores every sample twice, and the harness measures:</p>
+<ul>
+  <li><strong>AUC:</strong> how reliably the judge ranks passing code above failing code on the same target. 0.5 is a coin flip, 1.0 is perfect.</li>
+  <li><strong>The gap</strong> between average scores for passing and failing code.</li>
+  <li><strong>Repeat spread:</strong> how much the score changes when the judge sees the same code twice.</li>
+  <li><strong>Empty answers:</strong> calls where a reasoning model spends its whole token budget thinking and never gives a score.</li>
+  <li><strong>Seconds per call.</strong></li>
+</ul>
+
+<h2>Findings</h2>
+
+<h3>1. The original prompt was a coin flip</h3>
+<p>The first judge prompt told the model the tests had <em>already passed</em>, then asked it to rate quality. The judge assumed the code was correct and scored nearly everything 9–10. gpt-oss:20b on that prompt scored an AUC of 0.49.</p>
+<p>The new rubric doesn't say whether the tests passed. It makes the judge list every requirement in the spec, mark each as met, partial or missing, and deduct fixed points: −2 per missing requirement, −1 per partial one, −1 per mishandled edge case.</p>
+
+<figure>
+  <figcaption><div class="title">Judge accuracy by configuration</div>
+  <div class="sub">AUC: chance that a passing build outscores a failing one on the same target. Line at 0.5 = coin flip.</div></figcaption>
+  <div class="chart" id="auc"></div>
+  <details><summary>Table view</summary><div class="tablewrap" id="auc-table"></div></details>
+</figure>
+
+<h3>2. No model won outright</h3>
+<p>On the new rubric, gpt-oss:20b and Gemma 4 31B tied at AUC 0.71, for different reasons. In that run gpt-oss was the harshest on bad code, pushing failing builds down to 5.2 on average, but it returned no score on 38% of calls. (A second, identical run later scored failing code at 7.4; see finding 3.) Gemma answered every time and gave almost the same score on repeats, but it rated failing code too kindly (7.6).</p>
+<p>A Gemma 4 mixture-of-experts variant ran out of tokens on 28 of 34 calls and was dropped. A community agent-tuned 30B model was the least accurate and the slowest, at nearly 4 minutes per call.</p>
+
+<figure>
+  <figcaption><div class="title">Average score for passing vs failing code</div>
+  <div class="sub">A good judge puts a wide gap between the two dots. Scores are 0–10.</div></figcaption>
+  <div class="legend"><span style="--c:var(--pass)">Passing code</span><span style="--c:var(--fail)">Failing code</span></div>
+  <div class="chart" id="gap"></div>
+  <details><summary>Table view</summary><div class="tablewrap" id="gap-table"></div></details>
+</figure>
+
+<h3>3. Less reasoning made the judge reliable and fast</h3>
+<p>gpt-oss lets you set how much it reasons before answering: low, medium or high. When no level is set, its chat template uses medium.<sup><a href="#src-gptoss">[1]</a></sup> I ran medium twice (once without setting a level, once setting it explicitly) and low once:</p>
+<ul>
+  <li><strong>Low</strong> never came back empty and took about 10 seconds per call. Its median answer used 436 output tokens. It also had the highest AUC (0.80).</li>
+  <li><strong>Medium</strong> ran out of tokens on 29–38% of calls and took 107–123 seconds per call. Its median answer used 10,600 tokens, and some hit the 20,000-token cap.</li>
+  <li><strong>The two medium runs disagreed a lot.</strong> Same model, prompt and samples: AUC 0.71 vs 0.67, and failing code averaged 5.2 in one run and 7.4 in the other. That's how noisy a 17-sample test is. Low's AUC lead is within that noise; its reliability and speed are not.</li>
+</ul>
+
+<figure>
+  <figcaption><div class="title">gpt-oss:20b at low vs medium reasoning</div>
+  <div class="sub">Same rubric and samples. Medium was run twice; run 1 set no level, which the model treats as medium.</div></figcaption>
+  <div class="multiples">
+    <div><h4>AUC (higher is better)</h4><div class="chart" id="m-auc"></div></div>
+    <div><h4>Empty answers, % of calls</h4><div class="chart" id="m-err"></div></div>
+    <div><h4>Seconds per call</h4><div class="chart" id="m-sec"></div></div>
+  </div>
+  <details><summary>Table view</summary><div class="tablewrap" id="m-table"></div></details>
+</figure>
+
+<h3>4. The catch: low effort squeezes the scores together</h3>
+<p>AUC only measures ranking. At low effort gpt-oss still ranks failing code below passing code, but failing code averaged 7.4, so the gap between the two is small. The chart below shows every score for every sample. At low effort, nearly every passing build scores 10, while failing builds are spread from 2 to 10.</p>
+
+<figure>
+  <figcaption><div class="title">Every judge score, per sample</div>
+  <div class="sub">Each row is one past build; each dot is one of the judge's two scores. The line at 9 is the pass mark now used in production. A hollow ring means the call came back empty.</div></figcaption>
+  <div class="legend"><span style="--c:var(--pass)">Passing code</span><span style="--c:var(--fail)">Failing code</span><span class="ring">Empty answer</span></div>
+  <div class="multiples">
+    <div><h4>Medium, run 1</h4><div class="chart" id="s-default"></div></div>
+    <div><h4>Low effort (chosen)</h4><div class="chart" id="s-low"></div></div>
+    <div><h4>Medium, run 2</h4><div class="chart" id="s-medium"></div></div>
+  </div>
+  <details><summary>Table view</summary><div class="tablewrap" id="s-table"></div></details>
+</figure>
+
+<h2>What changed in production</h2>
+<ul>
+  <li>The judge is <strong>gpt-oss:20b at low reasoning effort</strong> on the new per-requirement rubric.</li>
+  <li>Each passing build is judged <strong>twice</strong> and the <strong>average</strong> is used, because single scores at low effort can swing several points.</li>
+  <li>The pass mark is <strong>9</strong>, not 7. A build below 9 still passes and still gets a pull request, but the run and the PR title are flagged for closer review. The judge advises; it doesn't block the build.</li>
+  <li>The judge step went from about 2 minutes to about 20 seconds per run.</li>
+  <li>The reasoning level, repeat count and pass mark are each one config setting, and the calibration harness stays in the repo so the choice can be re-tested.</li>
+</ul>
+
+<h2>Caveats</h2>
+<ul>
+  <li><strong>The sample is small:</strong> 17 builds, only 6 of them failing. Treat this as a first measurement, not a final answer.</li>
+  <li><strong>The pass mark isn't enough on its own.</strong> Two failing builds from one target scored 10/10 and 10/8 at low effort, so they'd pass a mark of 9. The flag narrows what a human needs to review; it doesn't replace review.</li>
+  <li><strong>Run-to-run noise is large.</strong> Two identical medium runs differed by 2.2 points on the failing-code average. Differences smaller than that between configurations shouldn't be trusted without more runs.</li>
+  <li>AUC is computed per target and then averaged, so a target that's simply harder can't pass for judging skill. With so few failing builds per target, a single sample moves the number.</li>
+</ul>
+
+<h2>Takeaways</h2>
+<ol>
+  <li><strong>Measure the judge before trusting its scores.</strong> Past runs where you already know whether the tests passed make a free labelled dataset.</li>
+  <li><strong>Don't tell the judge what you want it to find out.</strong> "The tests already passed" was enough to make every model lenient.</li>
+  <li><strong>More reasoning isn't always better.</strong> Check for empty answers and token use, not just scores.</li>
+  <li><strong>Run it twice before believing a difference.</strong> An identical re-run is the cheapest way to learn how noisy your measurement is.</li>
+  <li><strong>Ranking and the pass mark are separate problems.</strong> A judge can rank well while squeezing scores together, so set the pass mark from the data.</li>
+</ol>
+
+<h2 id="sources">Sources</h2>
+<ol class="sources">
+  <li id="src-gptoss">OpenAI, <a href="https://huggingface.co/openai/gpt-oss-20b">gpt-oss-20b model card</a>: configurable reasoning effort (low, medium, high); the chat template defaults to medium. Local copy: <a href="https://ollama.com/library/gpt-oss">Ollama library, gpt-oss</a>.</li>
+  <li>LiteLLM, <a href="https://docs.litellm.ai/docs/reasoning_content">reasoning content and <code>reasoning_effort</code></a>: how the proxy passes the reasoning level to the model.</li>
+  <li>Zheng et al., <a href="https://arxiv.org/abs/2306.05685">Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</a> (2023): background on LLM judges and their biases.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">Receiver operating characteristic</a>: AUC as the probability that a positive outranks a negative.</li>
+  <li>Models tested, via the Ollama library: <a href="https://ollama.com/library/gemma4">Gemma 4</a>, <a href="https://ollama.com/library/qwen3.6">Qwen 3.6</a>, <a href="https://ollama.com/library/qwen3.8">Qwen 3.8</a>, <a href="https://ollama.com/library/qwen3-coder">Qwen3-Coder</a>. Muse Glimmer 30B background: <a href="https://fastino.ai/blog/best-open-weight-models-2026">Fastino, Best Open Weight Models of Summer 2026</a>.</li>
+  <li>Stack: <a href="https://ollama.com">Ollama</a>, <a href="https://github.com/BerriAI/litellm">LiteLLM</a>, <a href="https://mlflow.org">MLflow</a>, <a href="https://langfuse.com">Langfuse</a>.</li>
+</ol>
+
+<footer>
+  Bryan Debnam · <a href="/">bryandebnam.com</a> · Charts are drawn from the calibration harness's raw results.
+</footer>
+</div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const tip = document.getElementById("tip");
+  const el = (tag, attrs = {}, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const text = (parent, x, y, s, attrs = {}) => { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; };
+
+  // tooltip: value leads, label follows; built with textContent only
+  function showTip(evt, lines) {
+    tip.replaceChildren();
+    lines.forEach(([val, label, color], i) => {
+      const row = document.createElement("div");
+      if (color) { const k = document.createElement("span"); k.className = "k"; k.style.background = color; row.appendChild(k); }
+      const b = document.createElement("b"); b.textContent = val; row.appendChild(b);
+      if (label) row.appendChild(document.createTextNode("  " + label));
+      tip.appendChild(row);
+    });
+    tip.style.display = "block";
+    const r = evt.target.getBoundingClientRect();
+    const x = evt.clientX ?? (r.left + r.width / 2), y = evt.clientY ?? r.top;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(window.innerWidth - w - 8, Math.max(8, x + 12)) + "px";
+    tip.style.top = (y - h - 12 < 8 ? y + 16 : y - h - 12) + "px";
+  }
+  const hideTip = () => { tip.style.display = "none"; };
+  function hit(parent, attrs, lines) {
+    const h = el("rect", { class: "hit", tabindex: 0, ...attrs }, parent);
+    h.setAttribute("aria-label", lines.map(l => `${l[1] || ""} ${l[0]}`.trim()).join(", "));
+    h.addEventListener("pointermove", e => showTip(e, lines));
+    h.addEventListener("pointerleave", hideTip);
+    h.addEventListener("focus", e => showTip(e, lines));
+    h.addEventListener("blur", hideTip);
+    return h;
+  }
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function table(id, head, rows) {
+    const t = document.createElement("table");
+    const tr = t.createTHead().insertRow();
+    head.forEach(h => { const th = document.createElement("th"); th.textContent = h; tr.appendChild(th); });
+    const tb = t.createTBody();
+    rows.forEach(r => { const row = tb.insertRow(); r.forEach((c, i) => { const td = row.insertCell(); td.textContent = c; if (i) td.className = "num"; }); });
+    document.getElementById(id).appendChild(t);
+  }
+  // horizontal bar path: square at baseline (x0), 4px rounded data-end
+  function hbar(x0, y, w, h, r = 4) {
+    r = Math.min(r, w, h / 2);
+    return `M${x0},${y}H${x0 + w - r}Q${x0 + w},${y} ${x0 + w},${y + r}V${y + h - r}Q${x0 + w},${y + h} ${x0 + w - r},${y + h}H${x0}Z`;
+  }
+
+  // ---- data (from the calibration harness) ----
+  const configs = [
+    { name: "gpt-oss:20b · old prompt", auc: 0.49, pass: 8.64, fail: 7.17, err: 0, sec: 24.3 },
+    { name: "Agent-tuned 30B · new rubric", auc: 0.61, pass: 9.50, fail: 7.17, err: 2, sec: 225.5 },
+    { name: "gpt-oss:20b · medium, run 2", auc: 0.67, pass: 9.27, fail: 7.42, err: 10, sec: 107.4 },
+    { name: "gpt-oss:20b · medium, run 1", auc: 0.71, pass: 9.38, fail: 5.20, err: 13, sec: 122.6 },
+    { name: "Gemma 4 31B · new rubric", auc: 0.71, pass: 9.68, fail: 7.58, err: 0, sec: 134.2 },
+    { name: "gpt-oss:20b · low effort", auc: 0.80, pass: 9.82, fail: 7.42, err: 0, sec: 10.2, chosen: true },
+  ];
+  const CALLS = 34;
+
+  // wide charts draw at the container's real width so text stays 12px on phones
+  const fluid = [];
+  function responsive(id, draw) {
+    const box = document.getElementById(id);
+    const run = () => { box.replaceChildren(); draw(box, Math.max(320, box.clientWidth || 760)); };
+    fluid.push(run); run();
+  }
+  // widest rendered label, so the label column never clips
+  function labelCol(svg, names) {
+    let w = 0;
+    names.forEach(n => { const t = text(svg, 0, -100, n, { class: "val" }); w = Math.max(w, t.getComputedTextLength()); t.remove(); });
+    return Math.ceil(w) + 12;
+  }
+  let rt;
+  window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => fluid.forEach(f => f()), 150); });
+
+  // ---- Fig 1: AUC bars ----
+  // wide: label column on the left; narrow (< 560px): label on its own line above the mark
+  responsive("auc", (box, W) => {
+    const stack = W < 560, rowH = stack ? 44 : 34, top = 22, right = 84, H = top + configs.length * rowH + 28;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Bar chart of judge AUC by configuration" }, box);
+    const left = stack ? 1 : labelCol(svg, configs.map(c => c.name));
+    const x = v => left + v * (W - left - right);
+    (stack ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1]).forEach(v => {
+      el("line", { class: "grid", x1: x(v), x2: x(v), y1: top, y2: H - 22 }, svg);
+      text(svg, x(v), H - 6, v.toFixed(2), { class: "tick", "text-anchor": v === 0 && stack ? "start" : "middle" });
+    });
+    configs.forEach((c, i) => {
+      const y = top + i * rowH, bh = 18, by = stack ? y + rowH - bh - 4 : y + (rowH - bh) / 2;
+      const lab = { ...(c.chosen ? { class: "val" } : {}) };
+      if (stack) text(svg, 0, by - 5, c.name, lab);
+      else text(svg, left - 10, by + 13, c.name, { "text-anchor": "end", ...lab });
+      hit(svg, { x: 0, y, width: W, height: rowH }, [[c.auc.toFixed(2), "AUC · " + c.name, css("--pass")]]);
+      el("path", { class: "mark", d: hbar(x(0), by, x(c.auc) - x(0), bh), fill: "var(--pass)" }, svg);
+      text(svg, x(c.auc) + 6, by + 13, c.auc.toFixed(2) + (c.chosen ? "  chosen" : ""), { class: "val" });
+    });
+    el("line", { class: "axis", x1: x(0), x2: x(0), y1: top, y2: H - 22 }, svg);
+    el("line", { class: "ref", x1: x(0.5), x2: x(0.5), y1: top - 16, y2: H - 22 }, svg);
+    text(svg, x(0.5) + 5, top - 8, "coin flip", { class: "tick" });
+  });
+  table("auc-table", ["Configuration", "AUC"], configs.map(c => [c.name, c.auc.toFixed(2)]));
+
+  // ---- Fig 2: dumbbell pass vs fail ----
+  responsive("gap", (box, W) => {
+    const stack = W < 560, rowH = stack ? 44 : 34, top = 8, right = 16, H = top + configs.length * rowH + 28;
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Dumbbell chart of average score for passing and failing code" }, box);
+    const left = stack ? 8 : labelCol(svg, configs.map(c => c.name));
+    const x = v => left + v * (W - left - right) / 10;
+    (stack ? [0, 5, 10] : [0, 2, 4, 6, 8, 10]).forEach(v => {
+      el("line", { class: "grid", x1: x(v), x2: x(v), y1: top, y2: H - 22 }, svg);
+      text(svg, x(v), H - 6, v, { class: "tick", "text-anchor": "middle" });
+    });
+    configs.forEach((c, i) => {
+      const y = top + i * rowH, cy = stack ? y + rowH - 12 : y + rowH / 2;
+      const lab = { ...(c.chosen ? { class: "val" } : {}) };
+      if (stack) text(svg, 0, cy - 12, c.name, lab);
+      else text(svg, left - 10, cy + 4, c.name, { "text-anchor": "end", ...lab });
+      hit(svg, { x: 0, y, width: W, height: rowH }, [
+        [c.pass.toFixed(2), "passing code", css("--pass")],
+        [c.fail.toFixed(2), "failing code", css("--fail")],
+        [(c.pass - c.fail).toFixed(2), "gap"],
+      ]);
+      el("line", { class: "mark", x1: x(c.fail), x2: x(c.pass), y1: cy, y2: cy, stroke: "var(--connector)", "stroke-width": 2 }, svg);
+      el("circle", { cx: x(c.fail), cy, r: 5.5, fill: "var(--fail)", stroke: "var(--bg)", "stroke-width": 2 }, svg);
+      el("circle", { cx: x(c.pass), cy, r: 5.5, fill: "var(--pass)", stroke: "var(--bg)", "stroke-width": 2 }, svg);
+      // direct-label the widest gap only
+      if (i === 3) text(svg, (x(c.fail) + x(c.pass)) / 2, cy + 18, "gap " + (c.pass - c.fail).toFixed(1), { class: "val", "text-anchor": "middle" });
+    });
+  });
+  table("gap-table", ["Configuration", "Passing", "Failing", "Gap"],
+        configs.map(c => [c.name, c.pass.toFixed(2), c.fail.toFixed(2), (c.pass - c.fail).toFixed(2)]));
+
+  // ---- Fig 3: small multiples, gpt-oss effort levels ----
+  (function () {
+    const lv = [
+      { name: "Low", c: configs[5] }, { name: "Medium 1", c: configs[3] }, { name: "Medium 2", c: configs[2] },
+    ];
+    const panels = [
+      { id: "m-auc", get: c => c.auc, max: 1, fmt: v => v.toFixed(2), unit: "AUC" },
+      { id: "m-err", get: c => 100 * c.err / CALLS, max: 50, fmt: v => Math.round(v) + "%", unit: "empty" },
+      { id: "m-sec", get: c => c.sec, max: 140, fmt: v => Math.round(v) + " s", unit: "per call" },
+    ];
+    panels.forEach(p => {
+      const W = 260, rowH = 34, top = 4, left = 64, right = 46, H = top + lv.length * rowH + 4;
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": p.id }, document.getElementById(p.id));
+      const x = v => left + (v / p.max) * (W - left - right);
+      el("line", { class: "axis", x1: x(0), x2: x(0), y1: top, y2: H - 4 }, svg);
+      lv.forEach((l, i) => {
+        const v = p.get(l.c), bh = 16, by = top + i * rowH + (rowH - bh) / 2;
+        text(svg, left - 8, by + 12, l.name, { "text-anchor": "end" });
+        hit(svg, { x: 0, y: top + i * rowH, width: W, height: rowH }, [[p.fmt(v), p.unit + " · " + l.name, css("--pass")]]);
+        if (v > 0) el("path", { class: "mark", d: hbar(x(0), by, Math.max(x(v) - x(0), 2), bh), fill: "var(--pass)" }, svg);
+        text(svg, x(v) + 6, by + 12, p.fmt(v), { class: "val" });
+      });
+    });
+    table("m-table", ["Effort", "AUC", "Empty answers", "Seconds per call"],
+          lv.map(l => [l.name, l.c.auc.toFixed(2), `${l.c.err} of ${CALLS}`, l.c.sec.toFixed(1)]));
+  })();
+
+  // ---- Fig 4: per-sample strip plots ----
+  (function () {
+    // [target, passed, scores, empty-count] in harness order
+    const runs = {
+      default: [["sandbox-supervisor",1,[],2],["incus-inventory",0,[6],1],["fleet-inventory",1,[],2],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10],1],["fleet-inventory",1,[8],1],["fleet-inventory",0,[],2],["fleet-inventory",0,[10],1],["sandbox-supervisor",1,[],2],["sandbox-supervisor",1,[10,10],0],["sandbox-supervisor",1,[7],1],["sandbox-supervisor",0,[5,1],0],["sandbox-supervisor",0,[4,0],0],["sandbox-supervisor",0,[8,2],0],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,10],0]],
+      low: [["sandbox-supervisor",1,[10,10],0],["incus-inventory",0,[2,8],0],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,8],0],["fleet-inventory",1,[9,10],0],["fleet-inventory",0,[10,8],0],["fleet-inventory",0,[10,10],0],["sandbox-supervisor",1,[10,10],0],["sandbox-supervisor",1,[10,10],0],["sandbox-supervisor",1,[10,10],0],["sandbox-supervisor",0,[7,7],0],["sandbox-supervisor",0,[4,8],0],["sandbox-supervisor",0,[7,8],0],["fleet-inventory",1,[9,10],0],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,10],0]],
+      medium: [["sandbox-supervisor",1,[10],1],["incus-inventory",0,[9],1],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10],1],["fleet-inventory",1,[10],1],["fleet-inventory",0,[10],1],["fleet-inventory",0,[10],1],["sandbox-supervisor",1,[10],1],["sandbox-supervisor",1,[7],1],["sandbox-supervisor",1,[3,7],0],["sandbox-supervisor",0,[6],1],["sandbox-supervisor",0,[2,4],0],["sandbox-supervisor",0,[7,6],0],["fleet-inventory",1,[10],1],["fleet-inventory",1,[10,10],0],["fleet-inventory",1,[10,10],0]],
+    };
+    // same row order in every panel: failing first, then passing, grouped by target
+    const order = runs.low.map((r, i) => i).sort((a, b) =>
+      (runs.low[a][1] - runs.low[b][1]) || runs.low[a][0].localeCompare(runs.low[b][0]) || a - b);
+    const short = { "sandbox-supervisor": "supervisor", "fleet-inventory": "fleet", "incus-inventory": "inventory" };
+    const nFail = order.filter(i => !runs.low[i][1]).length;
+
+    Object.entries(runs).forEach(([key, rows]) => {
+      const W = 260, rowH = 15, top = 16, headH = 18, left = 70, right = 52, bottom = 22;
+      const H = top + order.length * rowH + 2 * headH + bottom;
+      const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": `Per-sample scores, ${key} effort` }, document.getElementById("s-" + key));
+      const x = v => left + v * (W - left - right) / 10;
+      const emptyX = W - 20;
+      [0, 5, 10].forEach(v => {
+        el("line", { class: "grid", x1: x(v), x2: x(v), y1: top, y2: H - bottom }, svg);
+        text(svg, x(v), H - 6, v, { class: "tick", "text-anchor": "middle" });
+      });
+      text(svg, emptyX, H - 6, "empty", { class: "tick", "text-anchor": "middle" });
+      el("line", { class: "ref", x1: x(9), x2: x(9), y1: top - 4, y2: H - bottom }, svg);
+      text(svg, x(9), top - 7, "pass mark 9", { class: "tick", "text-anchor": "middle" });
+      order.forEach((idx, r) => {
+        const [target, passed, scores, empty] = rows[idx];
+        const cy = top + r * rowH + rowH / 2 + headH + (passed ? headH : 0);
+        if (r === 0 || r === nFail) text(svg, 0, cy - rowH / 2 - 5, passed ? "Passing code" : "Failing code", { class: "val" });
+        text(svg, left - 8, cy + 4, short[target], { "text-anchor": "end", class: "tick" });
+        const color = passed ? "var(--pass)" : "var(--fail)";
+        const lines = [[scores.length ? scores.join(", ") : "no score", `${short[target]} · ${passed ? "passing" : "failing"} code`, css(passed ? "--pass" : "--fail")]];
+        if (empty) lines.push([String(empty), empty === 1 ? "empty answer" : "empty answers"]);
+        hit(svg, { x: left - 60, y: cy - rowH / 2, width: W - left + 60, height: rowH }, lines);
+        // jitter identical repeats so both dots stay visible
+        scores.forEach((s, j) => {
+          const dup = scores.length === 2 && scores[0] === scores[1];
+          el("circle", { cx: x(s) + (dup ? (j ? 3.5 : -3.5) : 0), cy, r: 4, fill: color, stroke: "var(--bg)", "stroke-width": 2 }, svg);
+        });
+        for (let e = 0; e < empty; e++)
+          el("circle", { cx: emptyX + (empty === 2 ? (e ? 5 : -5) : 0), cy, r: 3.5, fill: "none", stroke: "var(--ink-3)", "stroke-width": 1.5 }, svg);
+      });
+    });
+    table("s-table", ["Target", "Code", "Medium, run 1", "Low", "Medium, run 2"],
+      order.map(i => [runs.low[i][0], runs.low[i][1] ? "passing" : "failing",
+        ...["default", "low", "medium"].map(k => {
+          const [, , s, e] = runs[k][i];
+          return [s.join(", "), e ? `${e} empty` : ""].filter(Boolean).join(" · ") || "—";
+        })]));
+  })();
+})();
+</script>
+</body>
+</html>

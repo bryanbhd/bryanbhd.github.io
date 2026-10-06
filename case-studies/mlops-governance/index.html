@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study: AI Governance &amp; MLOps Lifecycle — Bryan Debnam</title>
+<meta name="description" content="A real champion/challenger promotion cycle that caught and fixed a scoring defect in a 7-agent LLM system, with rollback and drift detection.">
+<link rel="canonical" href="https://bryandebnam.com/case-studies/mlops-governance/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bryan Debnam">
+<meta property="og:title" content="Case Study: AI Governance & MLOps Lifecycle">
+<meta property="og:description" content="A real champion/challenger promotion cycle that caught and fixed a scoring defect in a 7-agent LLM system, with rollback and drift detection.">
+<meta property="og:url" content="https://bryandebnam.com/case-studies/mlops-governance/">
+<meta name="twitter:card" content="summary">
+<style>
+:root {
+  --bg: #ffffff; --fg: #1b1f24; --muted: #5b6570; --accent: #1f4e9c;
+  --rule: #d8dee6; --card: #f6f8fa; --code-bg: #eef1f5;
+  --pass: #1a7f4b; --fail: #b3261e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1319; --fg: #e6e9ee; --muted: #9aa5b1; --accent: #7aa7ee;
+    --rule: #263040; --card: #161c25; --code-bg: #1b222c;
+    --pass: #4fbf85; --fail: #e5847d;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.62 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 780px; margin: 0 auto; padding: 40px 22px 80px; }
+.back { display: inline-block; margin-bottom: 18px; font-size: 0.92rem; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--accent); }
+.eyebrow {
+  display: inline-block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.scope-line { color: var(--muted); font-size: 0.95rem; margin: 0 0 6px; font-style: italic; }
+h1 { font-size: 1.9rem; line-height: 1.18; margin: 0 0 10px; letter-spacing: -0.4px; }
+h2 {
+  font-size: 1.22rem; margin: 40px 0 12px; padding-bottom: 6px;
+  border-bottom: 2px solid var(--accent); color: var(--accent);
+}
+p, li { margin: 8px 0; }
+ul { padding-left: 22px; }
+a { color: var(--accent); }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 30px 0; }
+strong { color: var(--fg); }
+em { color: var(--muted); }
+code {
+  background: var(--code-bg); padding: 1px 5px; border-radius: 3px;
+  font: 0.88em/1.4 "SF Mono", Consolas, monospace;
+}
+.tablewrap { overflow-x: auto; margin: 16px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; min-width: 420px; }
+th, td { border: 1px solid var(--rule); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--card); }
+.pass { color: var(--pass); font-weight: 600; }
+.fail { color: var(--fail); font-weight: 700; }
+.note {
+  background: var(--card); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 14px 16px; margin: 16px 0; font-size: 0.95rem;
+}
+.note strong:first-child { color: var(--accent); }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule);
+         color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 600px) {
+  .wrap { padding: 26px 16px 60px; }
+  h1 { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="../../">← Back to portfolio</a>
+<div class="eyebrow">Case Study</div>
+<h1>AI Governance &amp; MLOps Lifecycle</h1>
+<p class="scope-line">Independent R&amp;D · Reference build · single-operator scale</p>
+
+<h2>Problem</h2>
+<p>A 7-agent LLM system (a resume-processing pipeline: job-fit scoring, formatting, grammar,
+keyword extraction, condensing, cover-letter drafting, and critique) had no gate between
+&ldquo;someone edited a model&rsquo;s system prompt&rdquo; and &ldquo;that model is live.&rdquo; An edit could silently
+regress a model&rsquo;s behavior — including in ways the author&rsquo;s own testing wouldn&rsquo;t catch, because
+the author is the one who introduced the mental model the regression fits.</p>
+<p>The lifecycle built to close that gap needed to answer four questions before any promotion:
+does the candidate actually perform better than what&rsquo;s live, is what&rsquo;s live still what was
+approved, can a bad promotion be undone without guesswork, and is the evaluation itself
+trustworthy — not just fast.</p>
+
+<h2>Architecture</h2>
+<ul>
+<li><strong>Model registry &amp; staged promotion</strong> (MLflow, Postgres-backed) — a candidate is built to a
+  staged tag (<code>prm-&lt;sha&gt;</code>), never overwriting <code>:latest</code> directly.</li>
+<li><strong>Champion/challenger A/B gate</strong> — the staged candidate is evaluated head-to-head against
+  the live champion on the same testset before any cutover is allowed.</li>
+<li><strong>Preflight + rollback</strong> — promotion requires a prior <code>@validated</code> pass; the pre-promotion
+  model is preserved as a <code>pre-&lt;digest&gt;</code> snapshot, and a rollback path restores it bit-for-bit
+  on failure.</li>
+<li><strong>Automated drift detection</strong> — a weekly cron compares each live model&rsquo;s Modelfile against
+  its registered <code>@production</code> version.</li>
+<li><strong>LLM-as-judge evaluation</strong> — a registered judge model scores each agent&rsquo;s output on
+  substance (accuracy, completeness, absence of fabrication), not surface grammar; testsets are
+  logged as MLflow GenAI datasets so a scoring change is auditable against a fixed rubric.</li>
+<li><strong>Data lineage</strong> (Marquez/OpenLineage) across the MLflow ↔ Ollama pipeline, so every model
+  version, eval run, and promotion decision traces back to its inputs.</li>
+</ul>
+
+<h2>Implementation notes — where the design met reality</h2>
+<p>Two hardening passes came directly from the lifecycle catching problems in itself, not just in
+the agents it was gating:</p>
+<ul>
+<li><strong>A silent-no-op footgun.</strong> The underlying model tool (<code>ollama create</code>) can return success
+  without actually replacing a model&rsquo;s live system prompt. The promotion script now diffs the
+  live digest before and after every promotion and aborts cleanly — leaving the staged tag and
+  snapshot recoverable — if nothing actually changed.</li>
+<li><strong>A false-positive in the drift checker itself.</strong> The first version flagged three agents as
+  drifted because it compared raw Modelfile text, which is sensitive to harmless parameter
+  reordering. It was rewritten to canonicalize parameter order before comparing, validated
+  against both a true-negative (reordering only) and a true-positive (a real prompt change)
+  case. A governance system that produces false alarms trains people to ignore it — this fix
+  mattered as much as the gate itself.</li>
+</ul>
+
+<h2>Measured result</h2>
+<p>A real promotion cycle, not a simulated one, run against all 7 agents against a 0.70 pass
+threshold:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Agent</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>grammar, formatting, resume-critic, keyword, condense</td><td class="pass">PASS, 1.000</td></tr>
+<tr><td>cover-letter</td><td class="pass">PASS, 0.900</td></tr>
+<tr><td><strong>job-fit</strong></td><td class="fail">FAILED, 0.667</td></tr>
+</tbody>
+</table></div>
+<p>The gate correctly withheld <code>job-fit-agent</code>: it was scoring a mismatched candidate/role
+pairing 95/100 while its own generated reasoning said the candidate didn&rsquo;t meet the role&rsquo;s
+requirements — an arithmetic self-contradiction inflating its own output score. Root-caused to
+the scoring prompt computing a fabricated total instead of reporting sub-scores; rebuilt to emit
+Accuracy/Completeness/Clarity independently and compute the average downstream. Re-evaluated at
+a mean of <strong class="pass">0.967 — PASS</strong> — and promoted through the same staged/snapshot path as
+any other change.</p>
+
+<h2>Evidence</h2>
+<div class="note">
+<strong>Not just a claim.</strong> The pre-fix model version is still present in the live model
+registry today as a named, dated artifact (<code>job-fit-agent:pre-&lt;digest&gt;</code>), produced
+automatically by the promotion script&rsquo;s own snapshot step — the registry state and the decision
+record corroborate each other.
+</div>
+<p>A separate rollback was independently exercised and verified bit-identical against its
+pre-rollback digest, confirming the recovery path works, not just that it exists on paper.</p>
+
+<h2>Limitations</h2>
+<p>This is a single-operator, single-host reference build, not a production system with concurrent
+users or a multi-environment promotion path — the honest comparison is to a well-instrumented
+personal MLOps pipeline, not an enterprise platform team&rsquo;s. The lifecycle has been exercised
+through one real full gate-fail-fix-promote cycle described above; it has not yet been measured
+at volume (aggregate pass rates, mean time to detect drift across many cycles), and that
+aggregate data would need to come from the live tracking system directly rather than from this
+writeup.</p>
+
+<footer>Part of the <a href="../../">Bryan Debnam portfolio</a>.</footer>
+</div>
+</body>
+</html>
