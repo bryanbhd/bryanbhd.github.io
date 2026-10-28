@@ -97,8 +97,10 @@ tbody tr:hover td{background:var(--surface2);}
   <p>I had both NVIDIA Blackwell workstation cards in my home lab simultaneously and wanted real numbers before committing.
   After 38 benchmark runs across 21 models — 8B to 480B — <strong>I kept the RTX PRO 6000 Max-Q and passed the PRO 5000 to a friend.</strong>
   The deciding factor: at the 70B tier the PRO 5000 hit 97% VRAM utilisation and fell to <strong>5.9 tok/s</strong>;
-  the 6000's 24 GB headroom kept the same model at <strong>27.6 tok/s</strong> — nearly 5× — and it's the only option that fits
-  qwen3:235b (142 GB) entirely in VRAM. For ≤32B models the gap is only 10–20%, so the 5000 is a solid card; it just
+  the 6000's 24 GB headroom kept the same model at <strong>27.6 tok/s</strong> — nearly 5× — and it's the only option that can
+  run qwen3:235b (142 GB) at all: llama.cpp splits the model across 96 GB VRAM and ~46 GB system RAM, which is slow (6.8 tok/s)
+  but usable. The PRO 5000 at 72 GB would spill even more and hit PCIe bandwidth limits that make it impractical.
+  For ≤32B models the gap is only 10–20%, so the 5000 is a solid card; it just
   couldn't hold the 70B reasoning models I actually use.</p>
 </div>
 
@@ -201,7 +203,7 @@ tbody tr:hover td{background:var(--surface2);}
   <div class="cbox"><div id="evalChart"></div></div>
   <div class="call"><strong>deepseek-r1:70b — the decision point:</strong> 5.9 vs 27.6 tok/s on the PRO 5000 vs 6000. The 5000 hit 97% VRAM utilisation (71 / 73.4 GB), forcing the KV cache into system RAM. The 6000's 24 GB headroom ran the same model fully in VRAM at nearly 5× the speed.</div>
   <div class="call b" style="margin-top:8px"><strong>qwen3-coder:480b-iq1m (6000 only):</strong> 9.9 tok/s at IQ1_M quantisation — 149 GB model, ~53 GB spilled to system RAM. Prompt prefill still fast at 1977 tok/s (MoE: only 22B active params per forward pass).</div>
-  <div class="call" style="margin-top:8px"><strong>qwen3:235b (6000 only):</strong> 6.8 tok/s — 142 GB Q4_K_M MoE, fits entirely in 96 GB VRAM. Cannot run on the 5000 at all.</div>
+  <div class="call" style="margin-top:8px"><strong>qwen3:235b (6000 only):</strong> 6.8 tok/s — 142 GB Q4_K_M MoE. llama.cpp splits it across 96 GB VRAM and ~46 GB system RAM; slow but usable. The PRO 5000 at 72 GB spills even more and hits PCIe bandwidth limits that make it impractical.</div>
 </section>
 
 <!-- Prompt chart -->
