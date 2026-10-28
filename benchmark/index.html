@@ -9,6 +9,7 @@
   --gpu6:#58A6FF;--gpu6a:rgba(88,166,255,0.18);
   --gpu5:#3FB950;--gpu5a:rgba(63,185,80,0.18);
   --warn:#E3B341;--warna:rgba(227,179,65,0.12);
+  --badge-fg:#0D1117;
   color-scheme:dark;
 }
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
@@ -16,14 +17,16 @@
   --fg:#1F2328;--muted:#636C76;--dim:#9198A1;
   --gpu6:#0550AE;--gpu6a:rgba(5,80,174,0.10);
   --gpu5:#116329;--gpu5a:rgba(17,99,41,0.10);
-  --warn:#9A6700;--warna:rgba(154,103,0,0.10);color-scheme:light;
+  --warn:#9A6700;--warna:rgba(154,103,0,0.10);
+  --badge-fg:#fff;color-scheme:light;
 }}
 :root[data-theme="light"]{
   --bg:#F6F8FA;--surface:#fff;--surface2:#F0F2F5;--border:#D0D7DE;
   --fg:#1F2328;--muted:#636C76;--dim:#9198A1;
   --gpu6:#0550AE;--gpu6a:rgba(5,80,174,0.10);
   --gpu5:#116329;--gpu5a:rgba(17,99,41,0.10);
-  --warn:#9A6700;--warna:rgba(154,103,0,0.10);color-scheme:light;
+  --warn:#9A6700;--warna:rgba(154,103,0,0.10);
+  --badge-fg:#fff;color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--fg);font-family:'Syne',system-ui,sans-serif;font-size:14px;line-height:1.6;
@@ -76,7 +79,7 @@ tbody tr:last-child td{border-bottom:none;}
 tbody tr:hover td{background:var(--surface2);}
 .mn{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;}
 .bd{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;letter-spacing:.05em;}
-.b6{background:var(--gpu6);color:#0D1117;}.b5{background:var(--gpu5);color:#0D1117;}
+.b6{background:var(--gpu6);color:var(--badge-fg);}.b5{background:var(--gpu5);color:var(--badge-fg);}
 .nr{text-align:right;}.hi{font-weight:700;}.lo{color:var(--warn);font-weight:700;}
 .gr td{background:var(--surface2);font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:5px 10px;}
 </style>
@@ -230,6 +233,24 @@ tbody tr:hover td{background:var(--surface2);}
     <div class="li"><div class="ls" style="background:var(--gpu5)"></div>RTX PRO 5000</div>
   </div>
   <div class="cbox"><div id="powerChart"></div></div>
+</section>
+
+<!-- Scatter: GPU comparison -->
+<section class="sec">
+  <div class="sec-h"><h2>Head-to-Head: PRO 6000 vs PRO 5000 — Eval Speed</h2><p>Each dot is one model tested on both cards. Points above the diagonal = PRO 6000 faster; on the diagonal = equal speed. Hover for exact numbers.</p></div>
+  <div class="cbox"><div id="scatterComp"></div></div>
+  <div class="call" style="margin-top:10px"><strong>deepseek-r1:70b</strong> is the strongest outlier: PRO 5000 at 5.9 tok/s vs PRO 6000 at 27.6 tok/s — 97% VRAM utilisation on the 5000 spilled the KV cache to system RAM. Everything else in the 8B–35B range sits close to the diagonal, meaning the 5000 is competitive there.</div>
+</section>
+
+<!-- Scatter: VRAM efficiency -->
+<section class="sec">
+  <div class="sec-h"><h2>VRAM Footprint vs Eval Speed</h2><p>Efficiency frontier: generation speed relative to VRAM consumed. MoE models tend toward the upper-right — large footprint but fast output from sparse expert activation.</p></div>
+  <div class="leg">
+    <div class="li"><div class="ls" style="background:var(--gpu6)"></div>RTX PRO 6000 (96 GB)</div>
+    <div class="li"><div class="ls" style="background:var(--gpu5)"></div>RTX PRO 5000 (72 GB)</div>
+  </div>
+  <div class="cbox"><div id="scatterVram"></div></div>
+  <div class="call b" style="margin-top:10px"><strong>ornith-1.5:35b-32k</strong> stands out: 259 tok/s at only ~28 GB VRAM — best tok/s-per-GB ratio in the dataset. <strong>gpt-oss:120b</strong> is the MoE outlier: 65 GB footprint but 155 tok/s, faster than any dense 32B model.</div>
 </section>
 
 <!-- Production config -->
@@ -397,6 +418,63 @@ function barSVG(containerId, labels, d6, d5, xMax, unit, capLines) {
   });
 }
 
+function scatterSVG(containerId, pts, opts) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const W=660, H=420, L=52, R=20, T=16, B=46;
+  const PW=W-L-R, PH=H-T-B;
+  const sx=v=>(v/opts.xMax)*PW, sy=v=>PH-(v/opts.yMax)*PH;
+
+  // grid
+  let g='';
+  [0,.25,.5,.75,1].forEach(t=>{
+    const gx=L+t*PW, gy=T+t*PH;
+    const vx=(t*opts.xMax).toFixed(0), vy=((1-t)*opts.yMax).toFixed(0);
+    g+=`<line x1="${gx}" y1="${T}" x2="${gx}" y2="${T+PH}" stroke="${GRID()}" stroke-width="1"/>
+    <text x="${gx}" y="${T+PH+14}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="middle">${vx}</text>
+    <line x1="${L}" y1="${gy}" x2="${L+PW}" y2="${gy}" stroke="${GRID()}" stroke-width="1"/>
+    <text x="${L-5}" y="${gy+3}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="end">${vy}</text>`;
+  });
+
+  // diagonal parity line
+  let diag='';
+  if(opts.diagonal){
+    const dm=Math.min(opts.xMax,opts.yMax);
+    diag=`<line x1="${L+sx(0)}" y1="${T+sy(0)}" x2="${L+sx(dm)}" y2="${T+sy(dm)}" stroke="${TXT()}" stroke-width="1" stroke-dasharray="5,3" opacity=".4"/>
+    <text x="${L+sx(dm)-4}" y="${T+sy(dm)-5}" font-size="8" font-family="'JetBrains Mono',monospace" fill="${TXT()}" opacity=".4" text-anchor="end">parity</text>`;
+  }
+
+  // points
+  let circles='', labels='';
+  pts.forEach(p=>{
+    const cx=L+sx(p.x), cy=T+sy(p.y);
+    const col=p.gpu===6?C6():p.gpu===5?C5():'currentColor';
+    circles+=`<circle class="spt" cx="${cx}" cy="${cy}" r="5" fill="${col}" fill-opacity=".8" stroke="${BG()}" stroke-width="1.5"
+      data-lbl="${p.label}" data-x="${p.x.toFixed(1)}" data-y="${p.y.toFixed(1)}" data-xlbl="${opts.xLabel}" data-ylbl="${opts.yLabel}"/>`;
+    if(p.annotate){
+      const ax=cx+(p.x>opts.xMax*.7?-8:8), ay=cy+(p.y>opts.yMax*.7?12:-8);
+      const anch=p.x>opts.xMax*.7?'end':'start';
+      labels+=`<text x="${ax}" y="${ay}" font-size="8" font-family="'Syne',sans-serif" font-weight="600" fill="${col}" text-anchor="${anch}">${p.label}</text>`;
+    }
+  });
+
+  // axis labels
+  const axX=`<text x="${L+PW/2}" y="${H-4}" font-size="10" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="middle">${opts.xLabel}</text>`;
+  const axY=`<text x="10" y="${T+PH/2}" font-size="10" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="middle" transform="rotate(-90,10,${T+PH/2})">${opts.yLabel}</text>`;
+
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}${diag}${circles}${labels}${axX}${axY}</svg>`;
+  el.querySelectorAll('.spt').forEach(c=>{
+    c.addEventListener('mouseenter',()=>{
+      tip.innerHTML=`<div class="tt-model">${c.dataset.lbl}</div>
+        <div class="tt-row"><span class="tt-lbl">${c.dataset.xlbl}</span><span class="tt-val">${c.dataset.x} tok/s</span></div>
+        <div class="tt-row"><span class="tt-lbl">${c.dataset.ylbl}</span><span class="tt-val">${c.dataset.y}${c.dataset.ylbl.includes('GB')?'':' tok/s'}</span></div>`;
+      tip.style.opacity='1';
+    });
+    c.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-28)+'px';});
+    c.addEventListener('mouseleave',()=>{tip.style.opacity='0';});
+  });
+}
+
 function renderAll(){
   const all=[...ROWS,...EXCL6];
   const evalR=[...all].sort((a,b)=>b[2]-a[2]);
@@ -408,6 +486,27 @@ function renderAll(){
     [{val:96,color:isDk()?'#58A6FF':'#0550AE',label:'6000 cap'},{val:72,color:isDk()?'#3FB950':'#116329',label:'5000 cap'}]);
   const pwR=[...all].sort((a,b)=>b[8]-a[8]);
   barSVG('powerChart',pwR.map(r=>r[0]),pwR.map(r=>r[8]),pwR.map(r=>r[9]),330,'W');
+
+  // scatter: GPU comparison (shared models only)
+  const compPts=ROWS.filter(r=>r[3]!=null).map(r=>({
+    label:r[0], x:r[3], y:r[2], gpu:6,
+    annotate:r[3]<10||r[2]>240||r[2]>r[3]*1.8
+  }));
+  scatterSVG('scatterComp', compPts, {
+    xLabel:'PRO 5000 eval tok/s', yLabel:'PRO 6000 eval tok/s',
+    xMax:270, yMax:270, diagonal:true
+  });
+
+  // scatter: VRAM vs eval tok/s (all models with non-null VRAM)
+  const vramPts=[
+    ...ROWS.filter(r=>r[6]!=null&&r[6]>0).map(r=>({label:r[0],x:r[6],y:r[2],gpu:6,annotate:r[2]>200||r[6]>60||r[2]<15})),
+    ...ROWS.filter(r=>r[7]!=null&&r[7]>0).map(r=>({label:r[0],x:r[7],y:r[3],gpu:5,annotate:false})),
+    ...EXCL6.filter(r=>r[6]!=null&&r[6]>0).map(r=>({label:r[0],x:r[6],y:r[2],gpu:6,annotate:r[6]>85||r[2]>60})),
+  ];
+  scatterSVG('scatterVram', vramPts, {
+    xLabel:'Peak VRAM GB', yLabel:'Eval tok/s',
+    xMax:105, yMax:270, diagonal:false
+  });
 }
 
 function buildTable(){
