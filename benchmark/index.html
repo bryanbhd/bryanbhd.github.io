@@ -1,0 +1,451 @@
+<title>GPU Benchmark Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root {
+  --bg:#0D1117;--surface:#161B22;--surface2:#21262D;--border:#30363D;
+  --fg:#E6EDF3;--muted:#7D8590;--dim:#484F58;
+  --gpu6:#58A6FF;--gpu6a:rgba(88,166,255,0.18);
+  --gpu5:#3FB950;--gpu5a:rgba(63,185,80,0.18);
+  --warn:#E3B341;--warna:rgba(227,179,65,0.12);
+  color-scheme:dark;
+}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#F6F8FA;--surface:#fff;--surface2:#F0F2F5;--border:#D0D7DE;
+  --fg:#1F2328;--muted:#636C76;--dim:#9198A1;
+  --gpu6:#0550AE;--gpu6a:rgba(5,80,174,0.10);
+  --gpu5:#116329;--gpu5a:rgba(17,99,41,0.10);
+  --warn:#9A6700;--warna:rgba(154,103,0,0.10);color-scheme:light;
+}}
+:root[data-theme="light"]{
+  --bg:#F6F8FA;--surface:#fff;--surface2:#F0F2F5;--border:#D0D7DE;
+  --fg:#1F2328;--muted:#636C76;--dim:#9198A1;
+  --gpu6:#0550AE;--gpu6a:rgba(5,80,174,0.10);
+  --gpu5:#116329;--gpu5a:rgba(17,99,41,0.10);
+  --warn:#9A6700;--warna:rgba(154,103,0,0.10);color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--fg);font-family:'Syne',system-ui,sans-serif;font-size:14px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:28px 56px;}
+.wrap{max-width:1100px;margin:0 auto;}
+.hdr{padding-bottom:22px;border-bottom:1px solid var(--border);margin-bottom:28px;position:relative;}
+.eyebrow{font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+h1{font-size:clamp(20px,4vw,30px);font-weight:800;letter-spacing:-.03em;text-wrap:balance;line-height:1.2;margin-bottom:5px;}
+.sub{color:var(--muted);font-size:12px;}
+.tbtn{position:absolute;top:0;right:0;background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Syne',sans-serif;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:28px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.card--6{border-top:2px solid var(--gpu6);}.card--5{border-top:2px solid var(--gpu5);}.card--s{border-top:2px solid var(--dim);}
+.clbl{font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.card--6 .clbl{color:var(--gpu6);}.card--5 .clbl{color:var(--gpu5);}.card--s .clbl{color:var(--muted);}
+.cname{font-size:13px;font-weight:700;margin-bottom:12px;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sv{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1;}
+.sk{font-size:10px;color:var(--muted);margin-top:2px;}
+.dec{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gpu6);border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:28px;}
+.dec h3{font-size:13px;font-weight:700;color:var(--gpu6);margin-bottom:6px;}
+.dec p{font-size:12px;color:var(--muted);line-height:1.65;}
+.dec strong{color:var(--fg);}
+.sec{margin-bottom:38px;}
+.sec-h{margin-bottom:14px;}
+.sec-h h2{font-size:15px;font-weight:700;letter-spacing:-.01em;}
+.sec-h p{font-size:11px;color:var(--muted);margin-top:2px;}
+.leg{display:flex;gap:16px;margin-bottom:10px;flex-wrap:wrap;}
+.li{display:flex;align-items:center;gap:6px;font-size:11px;}
+.ls{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.cbox{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 22px;overflow-x:auto;}
+.cbox svg{display:block;max-width:100%;height:auto;}
+.tooltip{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:11px;font-family:'JetBrains Mono',monospace;pointer-events:none;z-index:999;opacity:0;transition:opacity .1s;min-width:160px;}
+.tt-model{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;}
+.tt-row{display:flex;justify-content:space-between;gap:16px;font-variant-numeric:tabular-nums;}
+.tt-lbl{color:var(--muted);}.tt-val{font-weight:600;}
+.call{background:var(--warna);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:0 8px 8px 0;padding:10px 14px;font-size:12px;line-height:1.5;margin-top:12px;}
+.call strong{color:var(--warn);}.call.g{--warn:var(--gpu5);--warna:var(--gpu5a);}.call.b{--warn:var(--gpu6);--warna:var(--gpu6a);}
+.arch{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;overflow-x:auto;margin-bottom:28px;}
+.arch svg{max-width:100%;height:auto;display:block;margin:0 auto;}
+figcaption{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;}
+.tbox{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.tscroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:11px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;min-width:640px;}
+th{text-align:left;padding:9px 10px;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface2);white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--surface2);}
+.mn{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;}
+.bd{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;letter-spacing:.05em;}
+.b6{background:var(--gpu6);color:#0D1117;}.b5{background:var(--gpu5);color:#0D1117;}
+.nr{text-align:right;}.hi{font-weight:700;}.lo{color:var(--warn);font-weight:700;}
+.gr td{background:var(--surface2);font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:5px 10px;}
+</style>
+
+<div class="wrap">
+<header class="hdr">
+  <div class="eyebrow">Self-hosted AI lab · October 2026 · 38 runs · 21 models on 6000 · 17 on 5000</div>
+  <h1>GPU Benchmark Report</h1>
+  <p class="sub">RTX PRO 6000 Max-Q (96 GB) vs RTX PRO 5000 (72 GB) — 17 shared models, 4 exclusive, isolated single-GPU containers, Ollama 0.40.6</p>
+  <button class="tbtn" onclick="toggleTheme()">☀ / ☾</button>
+</header>
+
+<div class="dec">
+  <h3>Why I ran this</h3>
+  <p>I had both NVIDIA Blackwell workstation cards in my home lab simultaneously and wanted real numbers before committing.
+  After 38 benchmark runs across 21 models — 8B to 480B — <strong>I kept the RTX PRO 6000 Max-Q and passed the PRO 5000 to a friend.</strong>
+  The deciding factor: at the 70B tier the PRO 5000 hit 97% VRAM utilisation and fell to <strong>5.9 tok/s</strong>;
+  the 6000's 24 GB headroom kept the same model at <strong>27.6 tok/s</strong> — nearly 5× — and it's the only option that fits
+  qwen3:235b (142 GB) entirely in VRAM. For ≤32B models the gap is only 10–20%, so the 5000 is a solid card; it just
+  couldn't hold the 70B reasoning models I actually use.</p>
+</div>
+
+<div class="cards">
+  <div class="card card--6">
+    <div class="clbl">RTX PRO 6000 Max-Q</div>
+    <div class="cname">Blackwell · 96 GB VRAM · kept</div>
+    <div class="sgrid">
+      <div><div class="sv">21</div><div class="sk">Models run</div></div>
+      <div><div class="sv">259.4</div><div class="sk">Peak eval tok/s</div></div>
+      <div><div class="sv">829.6</div><div class="sk">Peak prompt tok/s</div></div>
+      <div><div class="sv">480B</div><div class="sk">Largest model fit</div></div>
+    </div>
+  </div>
+  <div class="card card--5">
+    <div class="clbl">RTX PRO 5000</div>
+    <div class="cname">Blackwell · 72 GB VRAM · passed on</div>
+    <div class="sgrid">
+      <div><div class="sv">17</div><div class="sk">Models run</div></div>
+      <div><div class="sv">244.0</div><div class="sk">Peak eval tok/s</div></div>
+      <div><div class="sv">536.1</div><div class="sk">Peak prompt tok/s</div></div>
+      <div><div class="sv">70B</div><div class="sk">Largest model fit</div></div>
+    </div>
+  </div>
+  <div class="card card--s">
+    <div class="clbl">Test Setup</div>
+    <div class="cname">Isolated containers · shared model store</div>
+    <div class="sgrid">
+      <div><div class="sv" style="font-size:15px">Ollama</div><div class="sk">0.40.6 · inference</div></div>
+      <div><div class="sv" style="font-size:15px">MLflow</div><div class="sk">Run tracking</div></div>
+      <div><div class="sv" style="font-size:15px">1.9 TB</div><div class="sk">Model store pool</div></div>
+      <div><div class="sv" style="font-size:15px">bench.py</div><div class="sk">Custom harness</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<section class="sec">
+  <div class="sec-h"><h2>Benchmark Architecture</h2><p>Each GPU ran in its own isolated container with exclusive PCI passthrough — no resource contention. Models stored on a shared volume so every model was available to both without re-downloading.</p></div>
+  <figure class="arch">
+    <svg viewBox="0 0 860 280" role="img" aria-label="Two isolated containers, one per GPU, each running bench.py and connected to shared model storage, MLflow and ClickHouse">
+      <defs>
+        <marker id="a6" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="#58A6FF"/></marker>
+        <marker id="a5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="#3FB950"/></marker>
+        <marker id="am" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="currentColor" opacity=".3"/></marker>
+      </defs>
+      <rect x="2" y="28" width="548" height="195" rx="7" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="12" y="20" font-size="9" font-family="'JetBrains Mono',monospace" letter-spacing=".08em" fill="currentColor" opacity=".35">ISOLATED CONTAINERS · EXCLUSIVE PCI GPU PASSTHROUGH</text>
+      <rect x="22" y="40" width="200" height="75" rx="6" fill="#58A6FF" fill-opacity=".07" stroke="#58A6FF" stroke-width="1.5"/>
+      <text x="122" y="59" font-size="11" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">GPU container A</text>
+      <text x="122" y="74" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">bench.py · Ollama :11434 · 21 models</text>
+      <text x="122" y="88" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">2× cold + warm run per model</text>
+      <rect x="22" y="133" width="200" height="55" rx="6" fill="#58A6FF" fill-opacity=".12" stroke="#58A6FF" stroke-width="1"/>
+      <text x="122" y="152" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">RTX PRO 6000 Max-Q</text>
+      <text x="122" y="167" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".6" text-anchor="middle">96 GB VRAM · Blackwell · 300 W TDP</text>
+      <text x="122" y="181" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4" text-anchor="middle">CUDA compute 12.0</text>
+      <line x1="122" y1="115" x2="122" y2="127" stroke="#58A6FF" stroke-width="1.5" marker-end="url(#a6)"/>
+      <rect x="330" y="40" width="200" height="75" rx="6" fill="#3FB950" fill-opacity=".07" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="430" y="59" font-size="11" font-family="'Syne',sans-serif" font-weight="700" fill="#3FB950" text-anchor="middle">GPU container B</text>
+      <text x="430" y="74" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">bench.py · Ollama :11434 · 17 models</text>
+      <text x="430" y="88" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">2× cold + warm run per model</text>
+      <rect x="330" y="133" width="200" height="55" rx="6" fill="#3FB950" fill-opacity=".12" stroke="#3FB950" stroke-width="1"/>
+      <text x="430" y="152" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#3FB950" text-anchor="middle">RTX PRO 5000</text>
+      <text x="430" y="167" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".6" text-anchor="middle">72 GB VRAM · Blackwell · 300 W TDP</text>
+      <text x="430" y="181" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4" text-anchor="middle">CUDA compute 12.0</text>
+      <line x1="430" y1="115" x2="430" y2="127" stroke="#3FB950" stroke-width="1.5" marker-end="url(#a5)"/>
+      <rect x="130" y="210" width="290" height="28" rx="5" fill="none" stroke="currentColor" stroke-opacity=".2" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="275" y="224" font-size="9" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".5" text-anchor="middle">Shared model store · 1.9 TB pool</text>
+      <text x="275" y="238" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">pulled once — no re-download between cards</text>
+      <line x1="122" y1="188" x2="200" y2="210" stroke="currentColor" stroke-opacity=".2" stroke-width="1" marker-end="url(#am)"/>
+      <line x1="430" y1="188" x2="360" y2="210" stroke="currentColor" stroke-opacity=".2" stroke-width="1" marker-end="url(#am)"/>
+      <text x="598" y="20" font-size="9" font-family="'JetBrains Mono',monospace" letter-spacing=".07em" fill="currentColor" opacity=".35">OBSERVABILITY</text>
+      <rect x="585" y="28" width="266" height="195" rx="7" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="598" y="40" width="112" height="50" rx="5" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="1"/>
+      <text x="654" y="59" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="currentColor" opacity=".8" text-anchor="middle">MLflow</text>
+      <text x="654" y="73" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">run tracking</text>
+      <text x="654" y="84" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">experiments + metrics</text>
+      <rect x="726" y="40" width="112" height="50" rx="5" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="1"/>
+      <text x="782" y="59" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="currentColor" opacity=".8" text-anchor="middle">ClickHouse</text>
+      <text x="782" y="73" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">38 rows persisted</text>
+      <text x="782" y="84" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">eval + prompt + power</text>
+      <rect x="598" y="105" width="240" height="50" rx="5" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="1"/>
+      <text x="718" y="124" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="currentColor" opacity=".7" text-anchor="middle">bench.py harness</text>
+      <text x="718" y="138" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4" text-anchor="middle">GpuPeak thread · nvidia-smi 1s poll</text>
+      <text x="718" y="149" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4" text-anchor="middle">warm run reported · 2048 tok limit</text>
+      <line x1="222" y1="68" x2="592" y2="58" stroke="currentColor" stroke-opacity=".15" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#am)"/>
+      <line x1="530" y1="78" x2="722" y2="65" stroke="currentColor" stroke-opacity=".15" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#am)"/>
+    </svg>
+    <figcaption>PCI passthrough ensures each card had exclusive access — no shared VRAM, no scheduling contention. Warm run numbers reported (model already loaded into VRAM).</figcaption>
+  </figure>
+</section>
+
+<!-- Eval chart -->
+<section class="sec">
+  <div class="sec-h"><h2>Evaluation Speed — tok/s</h2><p>Generation throughput (warm run, model already in VRAM). Sorted by PRO 6000 descending. Higher = better.</p></div>
+  <div class="leg">
+    <div class="li"><div class="ls" style="background:var(--gpu6)"></div>RTX PRO 6000 (96 GB)</div>
+    <div class="li"><div class="ls" style="background:var(--gpu5)"></div>RTX PRO 5000 (72 GB)</div>
+  </div>
+  <div class="cbox"><div id="evalChart"></div></div>
+  <div class="call"><strong>deepseek-r1:70b — the decision point:</strong> 5.9 vs 27.6 tok/s on the PRO 5000 vs 6000. The 5000 hit 97% VRAM utilisation (71 / 73.4 GB), forcing the KV cache into system RAM. The 6000's 24 GB headroom ran the same model fully in VRAM at nearly 5× the speed.</div>
+  <div class="call b" style="margin-top:8px"><strong>qwen3-coder:480b-iq1m (6000 only):</strong> 9.9 tok/s at IQ1_M quantisation — 149 GB model, ~53 GB spilled to system RAM. Prompt prefill still fast at 1977 tok/s (MoE: only 22B active params per forward pass).</div>
+  <div class="call" style="margin-top:8px"><strong>qwen3:235b (6000 only):</strong> 6.8 tok/s — 142 GB Q4_K_M MoE, fits entirely in 96 GB VRAM. Cannot run on the 5000 at all.</div>
+</section>
+
+<!-- Prompt chart -->
+<section class="sec">
+  <div class="sec-h"><h2>Prompt Processing Speed — tok/s</h2><p>Prefill / input ingestion speed. Models with prompt ≥ 90 tok/s shown. MoE models gain from sparse expert activation during prefill.</p></div>
+  <div class="leg">
+    <div class="li"><div class="ls" style="background:var(--gpu6)"></div>RTX PRO 6000 (96 GB)</div>
+    <div class="li"><div class="ls" style="background:var(--gpu5)"></div>RTX PRO 5000 (72 GB)</div>
+  </div>
+  <div class="cbox"><div id="promptChart"></div></div>
+  <div class="call b" style="margin-top:8px"><strong>llama4:scout 829.6 tok/s prefill (PRO 6000):</strong> 109B MoE with only 17B active params per token. The GPU skips inactive experts during prefill, yielding very high throughput. 55% advantage over the 5000 (829 vs 536) reflects the 6000's wider memory bus.</div>
+</section>
+
+<!-- VRAM chart -->
+<section class="sec">
+  <div class="sec-h"><h2>Peak VRAM Usage — GB</h2><p>Maximum observed during inference. Capacity lines at 96 GB (6000) and 72 GB (5000). Models where the API reported 0 VRAM excluded.</p></div>
+  <div class="leg">
+    <div class="li"><div class="ls" style="background:var(--gpu6)"></div>PRO 6000 · 96 GB cap</div>
+    <div class="li"><div class="ls" style="background:var(--gpu5)"></div>PRO 5000 · 72 GB cap</div>
+  </div>
+  <div class="cbox"><div id="vramChart"></div></div>
+</section>
+
+<!-- Power chart -->
+<section class="sec">
+  <div class="sec-h"><h2>Average Power Draw — Watts</h2><p>Mean GPU power during active inference. TDP ~300 W for both cards; Max-Q variant throttles more aggressively under sustained load.</p></div>
+  <div class="leg">
+    <div class="li"><div class="ls" style="background:var(--gpu6)"></div>RTX PRO 6000 Max-Q</div>
+    <div class="li"><div class="ls" style="background:var(--gpu5)"></div>RTX PRO 5000</div>
+  </div>
+  <div class="cbox"><div id="powerChart"></div></div>
+</section>
+
+<!-- Production config -->
+<section class="sec">
+  <div class="sec-h"><h2>Final Setup — Three Ollama Lanes on 96 GB</h2><p>After benchmarking I kept the PRO 6000 and configured three independent Ollama instances on the same card, each serving a different client group. Because they all share one pool of VRAM, what matters is the total resident weight, not the per-lane limit.</p></div>
+  <div class="cbox" style="overflow:hidden">
+    <svg viewBox="0 0 820 220" style="width:100%;height:auto;display:block" role="img" aria-label="Three Ollama lanes on port 11434, 11435 and 11436, all sharing 96 GB VRAM, with VRAM budget examples">
+      <defs>
+        <marker id="la" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="currentColor" opacity=".35"/></marker>
+      </defs>
+      <text x="10" y="16" font-size="9" font-family="'JetBrains Mono',monospace" letter-spacing=".08em" fill="currentColor" opacity=".35">FINAL SETUP · RTX PRO 6000 MAX-Q · 96 GB VRAM · ALL LANES AUTO-PINNED TO SAME GPU</text>
+      <rect x="10" y="22" width="155" height="80" rx="6" fill="#58A6FF" fill-opacity=".07" stroke="#58A6FF" stroke-width="1.5"/>
+      <text x="87" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">Main · :11434</text>
+      <text x="87" y="55" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">MAX_LOADED_MODELS=3</text>
+      <text x="87" y="68" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">NUM_PARALLEL=4</text>
+      <text x="87" y="81" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">CTX 65K · KA 30m</text>
+      <text x="87" y="94" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">editor · chat · big models</text>
+      <rect x="175" y="22" width="155" height="80" rx="6" fill="#58A6FF" fill-opacity=".05" stroke="#58A6FF" stroke-width="1"/>
+      <text x="252" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">Agents · :11435</text>
+      <text x="252" y="55" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">MAX_LOADED_MODELS=2</text>
+      <text x="252" y="68" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">NUM_PARALLEL=4</text>
+      <text x="252" y="81" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">CTX 65K · KA 30m</text>
+      <text x="252" y="94" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">coding agents · evals · batch</text>
+      <rect x="340" y="22" width="155" height="80" rx="6" fill="#58A6FF" fill-opacity=".05" stroke="#58A6FF" stroke-width="1"/>
+      <text x="417" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">GPU0 · :11436</text>
+      <text x="417" y="55" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">MAX_LOADED_MODELS=2</text>
+      <text x="417" y="68" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">NUM_PARALLEL=4</text>
+      <text x="417" y="81" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">CTX 65K · KA 30m</text>
+      <text x="417" y="94" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">IDE extensions · guards · LAN</text>
+      <line x1="87" y1="102" x2="87" y2="130" stroke="#58A6FF" stroke-width="1.5" marker-end="url(#la)"/>
+      <line x1="252" y1="102" x2="252" y2="130" stroke="#58A6FF" stroke-width="1.5" marker-end="url(#la)"/>
+      <line x1="417" y1="102" x2="417" y2="130" stroke="#58A6FF" stroke-width="1.5" marker-end="url(#la)"/>
+      <rect x="10" y="130" width="485" height="40" rx="6" fill="#58A6FF" fill-opacity=".12" stroke="#58A6FF" stroke-width="1.5"/>
+      <text x="252" y="147" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">RTX PRO 6000 Max-Q · 96 GB shared VRAM pool</text>
+      <text x="252" y="161" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".5" text-anchor="middle">7 model slots across all lanes — capped only by the total weight resident at once</text>
+      <text x="530" y="35" font-size="9" font-family="'Syne',sans-serif" font-weight="700" fill="currentColor" opacity=".7">Example VRAM budgets</text>
+      <text x="530" y="52" font-size="8" font-family="'JetBrains Mono',monospace" fill="#3FB950">✓  3× 27B (~23 GB each) = 69 GB</text>
+      <text x="530" y="65" font-size="8" font-family="'JetBrains Mono',monospace" fill="#3FB950">✓  4× 8B (~9 GB) + 20B (~14 GB) = 50 GB</text>
+      <text x="530" y="78" font-size="8" font-family="'JetBrains Mono',monospace" fill="#3FB950">✓  27B + 70B (~60 GB) = 83 GB</text>
+      <text x="530" y="92" font-size="8" font-family="'JetBrains Mono',monospace" fill="#E3B341">⚠  27B + 120B MoE (~88 GB) = 111 GB → evict</text>
+      <text x="530" y="116" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4">FLASH_ATTENTION=1 · KV q8_0 · KEEP_ALIVE 30m</text>
+      <text x="530" y="128" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4">GPU auto-detected at lane start · no UUID hard-code</text>
+      <text x="530" y="140" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4">CPU fallback detection every 2 min via health guard</text>
+    </svg>
+  </div>
+  <div class="call b" style="margin-top:10px"><strong>Why three queues, not one?</strong> Ollama processes one forward pass at a time per instance. Three instances give three independent queues — an 8-second 70B generation on the agents lane doesn't block the IDE extension waiting on :11436. NUM_PARALLEL=4 per lane adds continuous batching up to 4 in-flight requests per queue; 3 × 4 = 12 theoretical concurrent slots, all VRAM-permitting.</div>
+</section>
+
+<!-- Table -->
+<section class="sec">
+  <div class="sec-h"><h2>Full Results</h2><p>All 38 runs. Bold = faster of pair. Orange = anomaly (&lt;50% of rival, typically VRAM pressure).</p></div>
+  <div class="tbox"><div class="tscroll">
+    <table>
+      <thead><tr>
+        <th>GPU</th><th>Model</th><th>Params</th>
+        <th class="nr">Eval tok/s</th><th class="nr">Prompt tok/s</th>
+        <th class="nr">Peak VRAM GB</th><th class="nr">Avg Power W</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div></div>
+</section>
+</div>
+<div class="tooltip" id="tip"></div>
+
+<script>
+const ROWS = [
+  ["hermes3:8b",           "8B",          200.9, 170.8,    4.0,    4.1,  21.6,  21.4,  89,  85],
+  ["qwen3:8b",             "8B",          163.4, 149.1,    3.6,    3.6,  11.4,  11.1, 199, 220],
+  ["gpt-oss:20b",          "20B",         256.8, 210.9,    5.0,    5.0,  16.3,  16.1, 110, 132],
+  ["qwen2.5-coder:14b",    "14B",         126.4, 107.3, 18498, 16250,    null,  null, 304, 301],
+  ["gemma3:27b",           "27B",          65.5,  57.0,  1530,  1487,    null,  null, 302, 304],
+  ["tinyrickfixed",        "27B",          55.6,  47.9,  221.6, 239.0,  27.1,  26.3, 219, 236],
+  ["tinyrickfixed:64k",    "27B/64K",      60.1,  51.8,  226.8, 210.7,  22.8,  22.6, 280, 284],
+  ["tinyrickfixed:64k-code","27B/64K",     60.9,  53.1,  230.5, 216.1,  22.8,  22.6, 283, 289],
+  ["Qwen3.6-27B Q4",       "27B",          60.8,  53.3,  233.8, 244.1,  34.4,  34.2, 283, 288],
+  ["ornith-1.5:35b",       "35B",         242.0, 232.4,  217.6, 192.6,  27.7,  27.4, 246, 223],
+  ["ornith-1.5:35b-32k",   "35B/32K",     259.4, 244.0,  2950,  2929,   null,  null, 267, 258],
+  ["deepseek-r1:32b",      "32B",          59.1,  50.6,  8488,  7038,   null,  null, 302, 301],
+  ["qwen3:32b",            "32B",          57.1,  50.0,  8813,  7278,   null,  null, 301, 302],
+  ["qwen2.5-coder:32b",    "32B",          58.5,  51.8,  9791,  8450,   null,  null, 304, 301],
+  ["gpt-oss:120b",         "120B MoE",    154.5, 155.8,  332.5, 327.7,  65.4,  65.0, 141, 135],
+  ["llama4:scout",         "109B MoE",     81.3,  41.7,  829.6, 536.1,  76.5,  70.2, 120, 165],
+  ["deepseek-r1:70b",      "70B",          27.6,   5.9,    6.4,   4.9,  80.0,  69.4, 235, 130],
+];
+const EXCL6 = [
+  ["mixtral:8x22b Q3",     "141B MoE",    54.4,  null,  8478,  null,  null,  null, 302, null],
+  ["batiai/llama4-scout:q6","109B MoE Q6",68.2,  null,  179.7, null,  89.6,  null, 127, null],
+  ["qwen3-coder:480b-iq1m","480B IQ1_M",  9.9,   null,  1977,  null,  99.5,  null, 118, null],
+  ["qwen3:235b",           "235B A22B",   6.8,   null,  1341,  null,  null,  null, 106, null],
+];
+
+const isDk = () => {
+  const dt = document.documentElement.getAttribute('data-theme');
+  if (dt==='dark') return true; if (dt==='light') return false;
+  return window.matchMedia('(prefers-color-scheme:dark)').matches;
+};
+const C6 = () => isDk() ? '#58A6FF' : '#0550AE';
+const C5 = () => isDk() ? '#3FB950' : '#116329';
+const GRID = () => isDk() ? 'rgba(48,54,61,0.7)' : 'rgba(208,215,222,0.8)';
+const TXT  = () => isDk() ? '#7D8590' : '#636C76';
+const FG   = () => isDk() ? '#E6EDF3' : '#1F2328';
+const BG   = () => isDk() ? '#161B22' : '#ffffff';
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur==='light' ? 'dark' : 'light');
+  renderAll();
+}
+
+const tip = document.getElementById('tip');
+
+function barSVG(containerId, labels, d6, d5, xMax, unit, capLines) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const BAR=14, GAP=4, GPAD=14, LEFT=220, RIGHT=60, TOP=10, BOT=28;
+  const n = labels.length;
+  const H = TOP + n*(2*BAR+GAP+GPAD) + BOT;
+  const W = 800, CW = W-LEFT-RIGHT;
+  const sc = v => v==null ? 0 : Math.max(0,(v/xMax)*CW);
+
+  let g = [0,.25,.5,.75,1].map(t=>{
+    const x=LEFT+t*CW, val=(t*xMax).toFixed(0);
+    return `<line x1="${x}" y1="${TOP}" x2="${x}" y2="${H-BOT}" stroke="${GRID()}" stroke-width="1"/>
+    <text x="${x}" y="${H-BOT+14}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="middle">${val}</text>`;
+  }).join('');
+
+  let caps = '';
+  if (capLines) capLines.forEach(({val,color,label})=>{
+    const x=LEFT+sc(val);
+    caps+=`<line x1="${x}" y1="${TOP}" x2="${x}" y2="${H-BOT}" stroke="${color}" stroke-width="1" stroke-dasharray="4,3" opacity=".6"/>
+    <text x="${x+3}" y="${TOP+10}" font-size="8" font-family="'JetBrains Mono',monospace" fill="${color}" opacity=".7">${label}</text>`;
+  });
+
+  let bars = '';
+  labels.forEach((lbl,i)=>{
+    const y0=TOP+i*(2*BAR+GAP+GPAD);
+    const v6=d6[i], v5=d5?d5[i]:null;
+    const w6=sc(v6), w5=sc(v5);
+    bars+=`<text x="${LEFT-8}" y="${y0+BAR-2}" font-size="11" font-family="'Syne',sans-serif" fill="${FG()}" text-anchor="end" dominant-baseline="middle">${lbl}</text>`;
+    if (v6!=null){
+      bars+=`<rect class="bar-rect" data-lbl="${lbl}" data-gpu="PRO 6000" data-val="${v6.toFixed(1)} ${unit}" x="${LEFT}" y="${y0}" width="${w6}" height="${BAR}" rx="${Math.min(3,w6>0?3:0)}" fill="${C6()}" fill-opacity=".85"/>`;
+      if (w6>35) bars+=`<text x="${LEFT+w6-4}" y="${y0+BAR/2}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${BG()}" text-anchor="end" dominant-baseline="middle" font-weight="600">${v6.toFixed(1)}</text>`;
+      else if(w6>0) bars+=`<text x="${LEFT+w6+4}" y="${y0+BAR/2}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="start" dominant-baseline="middle">${v6.toFixed(1)}</text>`;
+    }
+    if (v5!=null){
+      bars+=`<rect class="bar-rect" data-lbl="${lbl}" data-gpu="PRO 5000" data-val="${v5.toFixed(1)} ${unit}" x="${LEFT}" y="${y0+BAR+GAP}" width="${w5}" height="${BAR}" rx="${Math.min(3,w5>0?3:0)}" fill="${C5()}" fill-opacity=".85"/>`;
+      if(w5>35) bars+=`<text x="${LEFT+w5-4}" y="${y0+BAR+GAP+BAR/2}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${BG()}" text-anchor="end" dominant-baseline="middle" font-weight="600">${v5.toFixed(1)}</text>`;
+      else if(w5>0) bars+=`<text x="${LEFT+w5+4}" y="${y0+BAR+GAP+BAR/2}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="start" dominant-baseline="middle">${v5.toFixed(1)}</text>`;
+    } else if(d5){
+      bars+=`<text x="${LEFT+4}" y="${y0+BAR+GAP+BAR/2}" font-size="9" font-family="'JetBrains Mono',monospace" fill="${TXT()}" opacity=".4" dominant-baseline="middle">6000 only</text>`;
+    }
+  });
+
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}${caps}${bars}
+    <text x="${LEFT+CW/2}" y="${H}" font-size="10" font-family="'JetBrains Mono',monospace" fill="${TXT()}" text-anchor="middle">${unit}</text>
+  </svg>`;
+  el.querySelectorAll('.bar-rect').forEach(r=>{
+    r.addEventListener('mouseenter',()=>{
+      tip.innerHTML=`<div class="tt-model">${r.dataset.lbl}</div><div class="tt-row"><span class="tt-lbl">${r.dataset.gpu}</span><span class="tt-val">${r.dataset.val}</span></div>`;
+      tip.style.opacity='1';
+    });
+    r.addEventListener('mousemove',e=>{tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-28)+'px';});
+    r.addEventListener('mouseleave',()=>{tip.style.opacity='0';});
+  });
+}
+
+function renderAll(){
+  const all=[...ROWS,...EXCL6];
+  const evalR=[...all].sort((a,b)=>b[2]-a[2]);
+  barSVG('evalChart',evalR.map(r=>r[0]),evalR.map(r=>r[2]),evalR.map(r=>r[3]),280,'tok/s');
+  const pR=ROWS.filter(r=>(r[4]||0)>90||(r[5]||0)>90).sort((a,b)=>b[4]-a[4]);
+  barSVG('promptChart',pR.map(r=>r[0]),pR.map(r=>r[4]),pR.map(r=>r[5]),20000,'tok/s');
+  const vR=[...all].filter(r=>r[6]!=null&&r[6]>0).sort((a,b)=>a[6]-b[6]);
+  barSVG('vramChart',vR.map(r=>r[0]),vR.map(r=>r[6]),vR.map(r=>r[7]),110,'GB',
+    [{val:96,color:isDk()?'#58A6FF':'#0550AE',label:'6000 cap'},{val:72,color:isDk()?'#3FB950':'#116329',label:'5000 cap'}]);
+  const pwR=[...all].sort((a,b)=>b[8]-a[8]);
+  barSVG('powerChart',pwR.map(r=>r[0]),pwR.map(r=>r[8]),pwR.map(r=>r[9]),330,'W');
+}
+
+function buildTable(){
+  const grps=[
+    {lbl:'8B',             rows:ROWS.filter(r=>r[1]==='8B')},
+    {lbl:'14B',            rows:ROWS.filter(r=>r[1]==='14B')},
+    {lbl:'20B',            rows:ROWS.filter(r=>r[1]==='20B')},
+    {lbl:'27B',            rows:ROWS.filter(r=>r[1].startsWith('27B'))},
+    {lbl:'32B',            rows:ROWS.filter(r=>r[1]==='32B')},
+    {lbl:'35B',            rows:ROWS.filter(r=>r[1].startsWith('35B'))},
+    {lbl:'70B',            rows:ROWS.filter(r=>r[1]==='70B')},
+    {lbl:'109–141B MoE',   rows:ROWS.filter(r=>r[1].startsWith('109B')||r[1]==='120B MoE')},
+    {lbl:'6000 exclusive — 109–480B (too large for PRO 5000)',rows:EXCL6},
+  ];
+  let h='';
+  grps.forEach(g=>{
+    h+=`<tr class="gr"><td colspan="7">${g.lbl}</td></tr>`;
+    g.rows.forEach(r=>{
+      const[lbl,par,e6,e5,p6,p5,v6,v5,pw6,pw5]=r;
+      const td=(v,rival,fmt)=>{
+        if(v==null) return `<td class="nr" style="color:var(--dim)">—</td>`;
+        const lo=rival!=null&&v<rival*0.5, hi=rival!=null&&v>rival;
+        return `<td class="nr ${lo?'lo':hi?'hi':''}">${fmt(v)}</td>`;
+      };
+      const f1=v=>v.toFixed(1), fi=v=>Math.round(v), fp=v=>v>999?(v/1000).toFixed(1)+'k':v.toFixed(0);
+      h+=`<tr><td><span class="bd b6">PRO 6000</span></td><td class="mn">${lbl}</td>
+        <td style="font-size:10px;color:var(--muted)">${par}</td>
+        ${td(e6,e5,f1)}${td(p6,null,fp)}${td(v6,null,f1)}${td(pw6,null,fi)}</tr>`;
+      if(e5!=null) h+=`<tr><td><span class="bd b5">PRO 5000</span></td>
+        <td class="mn" style="color:var(--muted)">${lbl}</td>
+        <td style="font-size:10px;color:var(--dim)">${par}</td>
+        ${td(e5,e6,f1)}${td(p5,null,fp)}${td(v5,null,f1)}${td(pw5,null,fi)}</tr>`;
+    });
+  });
+  document.getElementById('tbody').innerHTML=h;
+}
+
+renderAll();
+buildTable();
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',renderAll);
+</script>
