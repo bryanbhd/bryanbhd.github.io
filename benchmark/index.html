@@ -9,6 +9,8 @@
   --gpu6:#58A6FF;--gpu6a:rgba(88,166,255,0.18);
   --gpu5:#3FB950;--gpu5a:rgba(63,185,80,0.18);
   --warn:#E3B341;--warna:rgba(227,179,65,0.12);
+  --pool:#BC8CFF;--poola:rgba(188,140,255,0.16);
+  --g30:#F0883E;--g30a:rgba(240,136,62,0.16);
   --badge-fg:#0D1117;
   color-scheme:dark;
 }
@@ -18,6 +20,8 @@
   --gpu6:#0550AE;--gpu6a:rgba(5,80,174,0.10);
   --gpu5:#116329;--gpu5a:rgba(17,99,41,0.10);
   --warn:#9A6700;--warna:rgba(154,103,0,0.10);
+  --pool:#8250DF;--poola:rgba(130,80,223,0.10);
+  --g30:#BC4C00;--g30a:rgba(188,76,0,0.10);
   --badge-fg:#fff;color-scheme:light;
 }}
 :root[data-theme="light"]{
@@ -26,8 +30,19 @@
   --gpu6:#0550AE;--gpu6a:rgba(5,80,174,0.10);
   --gpu5:#116329;--gpu5a:rgba(17,99,41,0.10);
   --warn:#9A6700;--warna:rgba(154,103,0,0.10);
+  --pool:#8250DF;--poola:rgba(130,80,223,0.10);
+  --g30:#BC4C00;--g30a:rgba(188,76,0,0.10);
   --badge-fg:#fff;color-scheme:light;
 }
+:root[data-theme="dark"]{color-scheme:dark;}
+.card--p{border-top:2px solid var(--pool);}.card--p .clbl{color:var(--pool);}
+.card--3{border-top:2px solid var(--g30);}.card--3 .clbl{color:var(--g30);}
+.call.p{--warn:var(--pool);--warna:var(--poola);}
+.bp{background:var(--pool);color:var(--badge-fg);}.b3{background:var(--g30);color:var(--badge-fg);}
+.subh{font-size:13px;font-weight:700;margin:26px 0 4px;}
+.subp{font-size:11px;color:var(--muted);margin-bottom:12px;}
+.na{color:var(--dim);}
+.ftn{font-size:10px;color:var(--muted);padding:8px 12px;border-top:1px solid var(--border);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--fg);font-family:'Syne',system-ui,sans-serif;font-size:14px;line-height:1.6;
   padding-left:max(16px,env(safe-area-inset-left,0px));
@@ -88,26 +103,27 @@ tbody tr:hover td{background:var(--surface2);}
 <header class="hdr">
   <div class="eyebrow">Self-hosted AI lab · October 2026 · 38 runs · 21 models on 6000 · 17 on 5000</div>
   <h1>GPU Benchmark Report</h1>
-  <p class="sub">RTX PRO 6000 Max-Q (96 GB) vs RTX PRO 5000 (72 GB) — 17 shared models, 4 exclusive, isolated single-GPU containers, Ollama 0.40.6</p>
+  <p class="sub">RTX PRO 6000 Max-Q (96 GB) vs RTX PRO 5000 (72 GB) — 17 shared models, 4 exclusive, isolated single-GPU containers, Ollama 0.40.6 · plus pooled 6000 + 5000 (168 GB) and 5000 + 3090 (96 GB)</p>
   <button class="tbtn" onclick="toggleTheme()">☀ / ☾</button>
 </header>
 
 <div class="dec">
-  <h3>Why I ran this</h3>
-  <p>I had both NVIDIA Blackwell workstation cards in my home lab simultaneously and wanted real numbers before committing.
-  After 38 benchmark runs across 21 models — 8B to 480B — <strong>I kept the RTX PRO 6000 Max-Q and passed the PRO 5000 to a friend.</strong>
-  The deciding factor: at the 70B tier the PRO 5000 hit 97% VRAM utilisation and fell to <strong>5.9 tok/s</strong>;
-  the 6000's 24 GB headroom kept the same model at <strong>27.6 tok/s</strong> — nearly 5× — and it's the only option that can
-  run qwen3:235b (142 GB) at all: llama.cpp splits the model across 96 GB VRAM and ~46 GB system RAM, which is slow (6.8 tok/s)
-  but usable. The PRO 5000 at 72 GB would spill even more and hit PCIe bandwidth limits that make it impractical.
-  For ≤32B models the gap is only 10–20%, so the 5000 is a solid card; it just
-  couldn't hold the 70B reasoning models I actually use.</p>
+  <h3>Why I ran this — and where it landed</h3>
+  <p>I had both NVIDIA Blackwell workstation cards in my home lab at the same time and wanted real numbers before committing.
+  The first pass (38 runs, 21 models, 8B to 480B, default settings) favoured the 6000: at the 70B tier the PRO 5000 hit 97% VRAM
+  and fell to <strong>5.9 tok/s</strong> while the 6000 held <strong>27.6 tok/s</strong>.</p>
+  <p style="margin-top:8px">A second, tuned pass changed the picture. With flash attention, a q8_0 KV cache and a sensible context,
+  the same 70B model runs at <strong>25.0 tok/s on the 5000 vs 28.2 on the 6000</strong>: the earlier gap was a KV cache spilling
+  out of VRAM, not the card. Across the same models the 6000 is about <strong>+16% faster</strong>, roughly what its extra
+  memory bandwidth predicts.</p>
+  <p style="margin-top:8px"><strong>Decision: I'm returning the RTX PRO 6000.</strong> A second PRO 5000 is on order, for
+  2 × 72 GB = 144 GB. The alternative is to keep running the 5000 with an RTX 3090 (96 GB pooled, measured below) until the 5500 ships.</p>
 </div>
 
 <div class="cards">
   <div class="card card--6">
     <div class="clbl">RTX PRO 6000 Max-Q</div>
-    <div class="cname">Blackwell · 96 GB VRAM · kept</div>
+    <div class="cname">Blackwell · 96 GB VRAM · returning</div>
     <div class="sgrid">
       <div><div class="sv">21</div><div class="sk">Models run</div></div>
       <div><div class="sv">259.4</div><div class="sk">Peak eval tok/s</div></div>
@@ -117,7 +133,7 @@ tbody tr:hover td{background:var(--surface2);}
   </div>
   <div class="card card--5">
     <div class="clbl">RTX PRO 5000</div>
-    <div class="cname">Blackwell · 72 GB VRAM · passed on</div>
+    <div class="cname">Blackwell · 72 GB VRAM · kept · second on order</div>
     <div class="sgrid">
       <div><div class="sv">17</div><div class="sk">Models run</div></div>
       <div><div class="sv">244.0</div><div class="sk">Peak eval tok/s</div></div>
@@ -201,7 +217,7 @@ tbody tr:hover td{background:var(--surface2);}
     <div class="li"><div class="ls" style="background:var(--gpu5)"></div>RTX PRO 5000 (72 GB)</div>
   </div>
   <div class="cbox"><div id="evalChart"></div></div>
-  <div class="call"><strong>deepseek-r1:70b — the decision point:</strong> 5.9 vs 27.6 tok/s on the PRO 5000 vs 6000. The 5000 hit 97% VRAM utilisation (71 / 73.4 GB), forcing the KV cache into system RAM. The 6000's 24 GB headroom ran the same model fully in VRAM at nearly 5× the speed.</div>
+  <div class="call"><strong>deepseek-r1:70b — out-of-box settings:</strong> 5.9 vs 27.6 tok/s on the PRO 5000 vs 6000. The 5000 hit 97% VRAM utilisation (71 / 73.4 GB), forcing the KV cache into system RAM. With flash attention and a q8_0 KV cache the model fits the 5000 and runs at 25.0 vs 28.2 tok/s (see <a href="#pooled" style="color:inherit">Pooled cards</a>).</div>
   <div class="call b" style="margin-top:8px"><strong>qwen3-coder:480b-iq1m (6000 only):</strong> 9.9 tok/s at IQ1_M quantisation — 149 GB model, ~53 GB spilled to system RAM. Prompt prefill still fast at 1977 tok/s (MoE: only 22B active params per forward pass).</div>
   <div class="call" style="margin-top:8px"><strong>qwen3:235b (6000 only):</strong> 6.8 tok/s — 142 GB Q4_K_M MoE. llama.cpp splits it across 96 GB VRAM and ~46 GB system RAM; slow but usable. The PRO 5000 at 72 GB spills even more and hits PCIe bandwidth limits that make it impractical.</div>
 </section>
@@ -241,7 +257,7 @@ tbody tr:hover td{background:var(--surface2);}
 <section class="sec">
   <div class="sec-h"><h2>Head-to-Head: PRO 6000 vs PRO 5000 — Eval Speed</h2><p>Each dot is one model tested on both cards. Points above the diagonal = PRO 6000 faster; on the diagonal = equal speed. Hover for exact numbers.</p></div>
   <div class="cbox"><div id="scatterComp"></div></div>
-  <div class="call" style="margin-top:10px"><strong>deepseek-r1:70b</strong> is the strongest outlier: PRO 5000 at 5.9 tok/s vs PRO 6000 at 27.6 tok/s — 97% VRAM utilisation on the 5000 spilled the KV cache to system RAM. Everything else in the 8B–35B range sits close to the diagonal, meaning the 5000 is competitive there.</div>
+  <div class="call" style="margin-top:10px"><strong>deepseek-r1:70b</strong> is the strongest outlier: PRO 5000 at 5.9 tok/s vs PRO 6000 at 27.6 tok/s — 97% VRAM utilisation on the 5000 spilled the KV cache to system RAM (a settings problem: tuned, it runs at 25.0 tok/s). Everything else in the 8B–35B range sits close to the diagonal, meaning the 5000 is competitive there.</div>
 </section>
 
 <!-- Scatter: VRAM efficiency -->
@@ -255,15 +271,59 @@ tbody tr:hover td{background:var(--surface2);}
   <div class="call b" style="margin-top:10px"><strong>ornith-1.5:35b-32k</strong> stands out: 259 tok/s at only ~28 GB VRAM — best tok/s-per-GB ratio in the dataset. (This model has since been rebuilt at 64K context; the benchmark numbers were measured at 32K.) <strong>gpt-oss:120b</strong> is the MoE outlier: 65 GB footprint but 155 tok/s, faster than any dense 32B model.</div>
 </section>
 
-<!-- Production config -->
+<!-- Initial setup -->
 <section class="sec">
-  <div class="sec-h"><h2>Final Setup — Three Ollama Lanes on 96 GB</h2><p>After benchmarking I kept the PRO 6000 and configured three independent Ollama instances on the same card, each serving a different client group. Because they all share one pool of VRAM, what matters is the total resident weight, not the per-lane limit.</p></div>
+  <div class="sec-h"><h2>Initial Setup — Two RTX 3090s (48 GB)</h2><p>Where this started: two 24 GB RTX 3090s in one server and three Ollama lanes. The largest coding model was split by layers across both cards, which pools VRAM but does not make a single request faster: the cards take turns on every token.</p></div>
+  <div class="cbox" style="overflow:hidden">
+    <svg viewBox="0 0 820 220" style="width:100%;height:auto;display:block" role="img" aria-label="Initial setup: three Ollama lanes on two RTX 3090 cards; the main lane splits one model across both cards over PCIe with no peer-to-peer link">
+      <defs>
+        <marker id="ia" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="currentColor" opacity=".35"/></marker>
+      </defs>
+      <text x="10" y="16" font-size="9" font-family="'JetBrains Mono',monospace" letter-spacing=".08em" fill="currentColor" opacity=".35">INITIAL SETUP · 2× RTX 3090 · 48 GB TOTAL · 310 W CAP EACH</text>
+      <rect x="10" y="22" width="155" height="70" rx="6" fill="#F0883E" fill-opacity=".07" stroke="#F0883E" stroke-width="1.5"/>
+      <text x="87" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#F0883E" text-anchor="middle">Main · :11434</text>
+      <text x="87" y="56" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">30B coder · 128K ctx</text>
+      <text x="87" y="69" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">layer split ~18 + 17 GB</text>
+      <text x="87" y="82" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">editor · chat</text>
+      <rect x="175" y="22" width="155" height="70" rx="6" fill="#F0883E" fill-opacity=".05" stroke="#F0883E" stroke-width="1"/>
+      <text x="252" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#F0883E" text-anchor="middle">Agents · :11435</text>
+      <text x="252" y="56" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">pinned to card 2</text>
+      <text x="252" y="82" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">coding agents · evals</text>
+      <rect x="340" y="22" width="155" height="70" rx="6" fill="#F0883E" fill-opacity=".05" stroke="#F0883E" stroke-width="1"/>
+      <text x="417" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#F0883E" text-anchor="middle">GPU0 · :11436</text>
+      <text x="417" y="56" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">pinned to card 1</text>
+      <text x="417" y="82" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".35" text-anchor="middle">chatbot · guards · LAN</text>
+      <line x1="60" y1="92" x2="60" y2="130" stroke="#F0883E" stroke-width="1.5" marker-end="url(#ia)"/>
+      <line x1="115" y1="92" x2="300" y2="130" stroke="#F0883E" stroke-width="1.5" marker-end="url(#ia)"/>
+      <line x1="252" y1="92" x2="380" y2="130" stroke="#F0883E" stroke-width="1.5" marker-end="url(#ia)"/>
+      <line x1="417" y1="92" x2="150" y2="130" stroke="#F0883E" stroke-width="1.5" marker-end="url(#ia)"/>
+      <rect x="10" y="130" width="235" height="50" rx="6" fill="#F0883E" fill-opacity=".12" stroke="#F0883E" stroke-width="1.5"/>
+      <text x="127" y="150" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#F0883E" text-anchor="middle">RTX 3090 #1 · 24 GB</text>
+      <text x="127" y="166" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".5" text-anchor="middle">sits in #2's exhaust · peaks 86–89 °C</text>
+      <rect x="260" y="130" width="235" height="50" rx="6" fill="#F0883E" fill-opacity=".12" stroke="#F0883E" stroke-width="1.5"/>
+      <text x="377" y="150" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#F0883E" text-anchor="middle">RTX 3090 #2 · 24 GB</text>
+      <text x="377" y="166" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".5" text-anchor="middle">open-air cooler · exhausts into case</text>
+      <text x="252" y="200" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".45" text-anchor="middle">PCIe x16 each · no NVLink · no peer-to-peer (traffic via host bridge)</text>
+      <text x="530" y="35" font-size="9" font-family="'Syne',sans-serif" font-weight="700" fill="currentColor" opacity=".7">Why it had to change</text>
+      <text x="530" y="52" font-size="8" font-family="'JetBrains Mono',monospace" fill="#F0883E">✗  24 GB per card: no 70B or 120B in VRAM</text>
+      <text x="530" y="65" font-size="8" font-family="'JetBrains Mono',monospace" fill="#F0883E">✗  card 1 throttles in card 2's exhaust</text>
+      <text x="530" y="78" font-size="8" font-family="'JetBrains Mono',monospace" fill="#F0883E">✗  ~620 W of GPU heat dumped in the chassis</text>
+      <text x="530" y="91" font-size="8" font-family="'JetBrains Mono',monospace" fill="#F0883E">✗  layer split = more VRAM, not more speed</text>
+      <text x="530" y="116" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4">every measured workload peaked under 18 GB</text>
+      <text x="530" y="128" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".4">on card 1; card 2 sat mostly idle</text>
+    </svg>
+  </div>
+</section>
+
+<!-- 6000 lane config -->
+<section class="sec">
+  <div class="sec-h"><h2>Tested Setup — Three Ollama Lanes on the 6000 (96 GB)</h2><p>While the PRO 6000 was in, I ran three independent Ollama instances on the one card, each serving a different client group. Because they all share one pool of VRAM, what matters is the total resident weight, not the per-lane limit. The same lane layout carries over to the PRO 5000s.</p></div>
   <div class="cbox" style="overflow:hidden">
     <svg viewBox="0 0 820 220" style="width:100%;height:auto;display:block" role="img" aria-label="Three Ollama lanes on port 11434, 11435 and 11436, all sharing 96 GB VRAM, with VRAM budget examples">
       <defs>
         <marker id="la" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0,0 6,3 0,6" fill="currentColor" opacity=".35"/></marker>
       </defs>
-      <text x="10" y="16" font-size="9" font-family="'JetBrains Mono',monospace" letter-spacing=".08em" fill="currentColor" opacity=".35">FINAL SETUP · RTX PRO 6000 MAX-Q · 96 GB VRAM · ALL LANES AUTO-PINNED TO SAME GPU</text>
+      <text x="10" y="16" font-size="9" font-family="'JetBrains Mono',monospace" letter-spacing=".08em" fill="currentColor" opacity=".35">TESTED SETUP · RTX PRO 6000 MAX-Q · 96 GB VRAM · ALL LANES AUTO-PINNED TO SAME GPU</text>
       <rect x="10" y="22" width="155" height="80" rx="6" fill="#58A6FF" fill-opacity=".07" stroke="#58A6FF" stroke-width="1.5"/>
       <text x="87" y="41" font-size="10" font-family="'Syne',sans-serif" font-weight="700" fill="#58A6FF" text-anchor="middle">Main · :11434</text>
       <text x="87" y="55" font-size="8" font-family="'JetBrains Mono',monospace" fill="currentColor" opacity=".55" text-anchor="middle">MAX_LOADED_MODELS=3</text>
@@ -299,6 +359,77 @@ tbody tr:hover td{background:var(--surface2);}
     </svg>
   </div>
   <div class="call b" style="margin-top:10px"><strong>Why three queues, not one?</strong> Ollama processes one forward pass at a time per instance. Three instances give three independent queues — an 8-second 70B generation on the agents lane doesn't block the IDE extension waiting on :11436. NUM_PARALLEL=2 per lane gives 2 concurrent KV cache slots per queue; 3 × 2 = 6 total KV slots across all lanes, all VRAM-permitting. (NUM_PARALLEL was briefly set to 4 during testing but caused VRAM saturation at 96.4/97.9 GB on the 96 GB card — the pre-allocated KV headroom alone exceeded available VRAM with two large models resident.)</div>
+</section>
+
+<!-- Pooled -->
+<section class="sec" id="pooled">
+  <div class="sec-h"><h2>Pooled Cards — 6000 + 5000 (168 GB) and 5000 + 3090 (96 GB)</h2><p>One Ollama server over two cards. Measured with a second, tuned harness (flash attention, q8_0 KV cache, cards switched by profile, nothing else on the GPUs, judge on a separate PC). Its numbers are not directly comparable to the first-pass charts above.</p></div>
+
+  <div class="cards">
+    <div class="card card--p">
+      <div class="clbl">Pooled · measured</div>
+      <div class="cname">RTX PRO 6000 + PRO 5000 · 168 GB</div>
+      <div class="sgrid">
+        <div><div class="sv">×1.00</div><div class="sk">vs 6000 alone (median, 25 runs)</div></div>
+        <div><div class="sv">57.8</div><div class="sk">tok/s, 480B IQ1_M (150 GB)</div></div>
+        <div><div class="sv">52 W</div><div class="sk">idle, both cards</div></div>
+        <div><div class="sv">0.18</div><div class="sk">tokens per joule</div></div>
+      </div>
+    </div>
+    <div class="card card--3">
+      <div class="clbl">Pooled · measured · option B</div>
+      <div class="cname">RTX PRO 5000 + RTX 3090 · 96 GB</div>
+      <div class="sgrid">
+        <div><div class="sv">−11%</div><div class="sk">vs 5000 alone (geo. mean)</div></div>
+        <div><div class="sv">13.8</div><div class="sk">tok/s, 72B Q8 (77 GB)</div></div>
+        <div><div class="sv">95 W</div><div class="sk">idle, both cards</div></div>
+        <div><div class="sv">0.11</div><div class="sk">tokens per joule</div></div>
+      </div>
+    </div>
+    <div class="card card--5">
+      <div class="clbl">Next · option A · not yet measured</div>
+      <div class="cname">2× RTX PRO 5000 · 144 GB</div>
+      <div class="sgrid">
+        <div><div class="sv">144</div><div class="sk">GB VRAM, two equal cards</div></div>
+        <div><div class="sv">1.34</div><div class="sk">TB/s each, no slow card</div></div>
+        <div><div class="sv">2 × 300</div><div class="sk">W, blower coolers</div></div>
+        <div><div class="sv">2nd</div><div class="sk">card on order</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbox"><div class="tscroll">
+    <table>
+      <thead><tr>
+        <th>Model</th><th class="nr">Size GB</th>
+        <th class="nr"><span class="bd b6">6000</span></th>
+        <th class="nr"><span class="bd b5">5000</span></th>
+        <th class="nr"><span class="bd bp">6000 + 5000</span></th>
+        <th class="nr"><span class="bd b3">5000 + 3090</span></th>
+        <th>What the pool did</th>
+      </tr></thead>
+      <tbody>
+        <tr class="gr"><td colspan="7">Generation tok/s · coding prompt · tuned setting</td></tr>
+        <tr><td class="mn">gpt-oss:20b</td><td class="nr">13.8</td><td class="nr hi">242.2</td><td class="nr">185.7</td><td class="nr">241.6</td><td class="nr">207.9<sup>o</sup></td><td style="font-family:'Syne',sans-serif">fits one card: stays on it</td></tr>
+        <tr><td class="mn">ornith-1.5:35b</td><td class="nr">22.6</td><td class="nr">249.7</td><td class="nr">228.6</td><td class="nr hi">253.1</td><td class="nr">245.4<sup>o</sup></td><td style="font-family:'Syne',sans-serif">fits one card: stays on it</td></tr>
+        <tr><td class="mn">deepseek-r1:70b</td><td class="nr">42.5</td><td class="nr">28.2</td><td class="nr">25.0</td><td class="nr hi">28.5</td><td class="nr">21.7<sup>o</sup></td><td style="font-family:'Syne',sans-serif">5000 + 3090: part placed on the 3090</td></tr>
+        <tr><td class="mn">gpt-oss:120b</td><td class="nr">65.4</td><td class="nr hi">175.6</td><td class="nr">149.1</td><td class="nr hi">175.6</td><td class="nr">133.1</td><td style="font-family:'Syne',sans-serif">fits the 5000, still split: −11%</td></tr>
+        <tr><td class="mn">llama4:scout</td><td class="nr">67.4</td><td class="nr hi">90.8</td><td class="nr">76.7</td><td class="nr">90.1</td><td class="nr">68.3</td><td style="font-family:'Syne',sans-serif">split onto the 3090: −11%</td></tr>
+        <tr><td class="mn">mixtral:8x22b q3</td><td class="nr">67.8</td><td class="nr hi">55.0</td><td class="nr">47.9</td><td class="nr">52.1</td><td class="nr na">—</td><td style="font-family:'Syne',sans-serif">not run on 5000 + 3090</td></tr>
+        <tr><td class="mn">qwen2.5:72b Q8</td><td class="nr">77.3</td><td class="nr na">—</td><td class="nr na">too big</td><td class="nr na">—</td><td class="nr hi">13.8</td><td style="font-family:'Syne',sans-serif">only runs fully on GPU when pooled</td></tr>
+        <tr><td class="mn">qwen3-coder:480b IQ1_M</td><td class="nr">149.7</td><td class="nr na">too big</td><td class="nr na">too big</td><td class="nr hi">57.8</td><td class="nr na">too big</td><td style="font-family:'Syne',sans-serif">needs &gt;144 GB: only the 168 GB pool</td></tr>
+        <tr class="gr"><td colspan="7">Prompt processing tok/s · ~32K-token prompt · tuned setting</td></tr>
+        <tr><td class="mn">gpt-oss:120b</td><td class="nr">65.4</td><td class="nr">7,485</td><td class="nr">4,905</td><td class="nr hi">7,520</td><td class="nr">7,006</td><td style="font-family:'Syne',sans-serif">the 3090 share helps long-prompt prefill</td></tr>
+        <tr><td class="mn">llama4:scout</td><td class="nr">67.4</td><td class="nr hi">2,558</td><td class="nr">1,756</td><td class="nr">2,552</td><td class="nr">1,924</td><td style="font-family:'Syne',sans-serif"></td></tr>
+      </tbody>
+    </table>
+    <div class="ftn"><sup>o</sup> out-of-box server setting (the tuned setting was run on 5000 + 3090 only for the three largest models). Medians of repeats. "too big" = model file larger than 1.2× the card's VRAM, so it was skipped.</div>
+  </div></div>
+
+  <div class="call p" style="margin-top:12px"><strong>6000 + 5000: pooling only pays when a model does not fit one card.</strong> Ollama keeps a model on a single card when it fits, so 25 pooled runs landed at ×1.00 of the 6000 alone (range ×0.95–×1.03). When a model really was split across both cards it ran at ×0.87–×1.04 of the 6000 alone: splitting costs little, spilling to system RAM costs a lot. The 150 GB qwen3-coder:480b IQ1_M ran only here, at 57.8 tok/s, against 9.9 tok/s on the 6000 alone when ~53 GB spilled to RAM.</div>
+  <div class="call" style="margin-top:8px;--warn:var(--g30);--warna:var(--g30a)"><strong>5000 + 3090: a 24 GB overflow, with a speed tax.</strong> It runs 72–90 GB models fully on GPU (qwen2.5:72b Q8 at 13.8 tok/s) and rescues untuned big models (Scout ×1.8, deepseek-r1:70b ×3.3 vs the 5000 alone). But Ollama also puts part of models that would fit the 5000 onto the slower 3090 (936 GB/s vs 1,344 GB/s), and that share costs 5–20% (gpt-oss:120b 149 → 133 tok/s). Small models stay on the 5000 and the 3090 idles.</div>
+  <div class="call g" style="margin-top:8px"><strong>Thermals and power on 5000 + 3090.</strong> 10 minutes of back-to-back requests: 207 → 208 tok/s, 0 of 120 requests throttled, the 5000 peaked at 90 °C then settled at 88 °C. Capped at 250 W: −4% speed (208 → 199 tok/s), −48 W, fan 83% → 69%. The 3090 logged brief thermal slowdown at a 63 °C core, which points at its GDDR6X memory. Case airflow is the fix, not a blower 3090.</div>
+  <div class="call b" style="margin-top:8px"><strong>2× PRO 5000 (144 GB), untested:</strong> each model stays on one card when it fits, so it runs at PRO 5000 speed. 72–140 GB models split across two equal 1.34 TB/s cards, with no slow card for the fast one to wait on, so it should split at least as well as 6000 + 5000 did (×0.87–×1.04). The one thing it can't hold is the 150 GB 480B IQ1_M. I'll rerun the same harness when the second card arrives.</div>
 </section>
 
 <!-- Table -->
