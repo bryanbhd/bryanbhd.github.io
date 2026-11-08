@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Claude Privacy and Ownership: A Plain Guide</title>
-<meta name="description" content="A plain-language guide to chat privacy settings, data retention and who owns the work when you use a personal Claude plan, plus a check for hidden watermarks."/>
+<meta name="description" content="A plain-language guide to Claude privacy settings, data handling, ownership, and the limits of a structural scan for hidden tracking."/>
 <style>
 :root{--bg:#F6F8F9;--card:#fff;--ink:#1f2a33;--muted:#5d6b75;--line:#dde5e8;--accent:#0E7490;--ok:#3F6212;--okbg:#ECFCCB;--warn:#92400E;--warnbg:#FEF3C7}
 @media (prefers-color-scheme:dark){:root{--bg:#0d1419;--card:#141d24;--ink:#e6edf1;--muted:#9fb0ba;--line:#26343d;--accent:#67d4ea;--ok:#bde37a;--okbg:#1f2c10;--warn:#f3c77a;--warnbg:#33260b}}
@@ -33,59 +33,47 @@ footer{margin-top:3rem;color:var(--muted);font-size:.875rem}
 <h1>Claude privacy and ownership: a plain guide</h1>
 <p class="lede">What happens to your chats and your code on a personal Claude plan, which switches matter, and what I checked for hidden tracking. Written for anyone, no technical background needed.</p>
 
-<div class="note"><p><strong>Unofficial, not legal advice.</strong> This is one user's reading of the public terms as of 2026-11-07. Terms change. For anything that matters, read the official <a href="https://www.anthropic.com/legal/consumer-terms">consumer terms</a> and <a href="https://www.anthropic.com/legal/privacy">privacy policy</a>, or ask a lawyer.</p></div>
+<div class="note"><p><strong>Unofficial, not legal advice.</strong> This is one user's reading of the public terms and privacy policy as of 2026-11-08. Terms change. For anything that matters, read the current official <a href="https://www.anthropic.com/legal/consumer-terms">consumer terms</a> and <a href="https://www.anthropic.com/legal/privacy">privacy policy</a>, or ask a lawyer.</p></div>
 
 <h2>The short version</h2>
 <ul>
-<li><strong>One switch decides most of it.</strong> In Settings, Privacy, there is a toggle that lets your chats be used to improve the models. Off means shorter retention and no training use. On means longer retention (the terms describe up to five years) and use for training.</li>
+<li><strong>The model-improvement setting has exceptions.</strong> Opting out generally excludes chats from model training, but Anthropic's terms allow use of materials you provide as feedback or that are flagged for safety review. Retention is a separate policy question.</li>
 <li><strong>Your content stays yours.</strong> The terms say you keep ownership of what you put in and, as between you and Anthropic, of what you get out. Check the current wording yourself.</li>
-<li><strong>Your own computer keeps a copy too.</strong> Coding tools save session transcripts locally, and that copy follows your computer's settings, not the cloud ones.</li>
-<li><strong>No hidden watermarks or GUIDs were detected</strong> in the generated code I checked (details and limits below).</li>
+<li><strong>A local copy may exist too.</strong> Some coding tools keep transcripts on your computer; their retention and deletion follow the tool's local settings, not the cloud settings.</li>
+<li><strong>No searched-for structural markers were detected</strong> in the files examined. That is not proof that no watermark exists.</li>
 </ul>
 
 <h2>1. Where your data lives</h2>
 <figure>
-<svg viewBox="0 0 720 220" role="img" aria-label="Diagram: your prompt goes to the cloud service, which keeps a copy for a period set by your privacy toggle; the coding tool also keeps a local transcript on your computer.">
+<svg viewBox="0 0 720 220" role="img" aria-label="Diagram: your prompt goes to the cloud service, where retention follows current policy; a model-improvement setting has exceptions; a coding tool may also keep a local transcript.">
 <rect x="20" y="70" width="150" height="80" rx="12" fill="#CFFAFE" stroke="#0E7490" stroke-width="2"/>
 <text x="95" y="105" text-anchor="middle" font-size="16" font-weight="700" fill="#155E75">You</text>
 <text x="95" y="128" text-anchor="middle" font-size="13" fill="#155E75">prompt + code</text>
 <rect x="285" y="20" width="190" height="80" rx="12" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
 <text x="380" y="55" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">Cloud service</text>
-<text x="380" y="78" text-anchor="middle" font-size="13" fill="#1e293b">kept 30 days or longer</text>
+<text x="380" y="78" text-anchor="middle" font-size="13" fill="#1e293b">retention varies</text>
 <rect x="285" y="125" width="190" height="80" rx="12" fill="#FEF3C7" stroke="#92400E" stroke-width="2"/>
 <text x="380" y="160" text-anchor="middle" font-size="16" font-weight="700" fill="#78350f">Your computer</text>
 <text x="380" y="183" text-anchor="middle" font-size="13" fill="#78350f">local transcript files</text>
 <rect x="550" y="70" width="150" height="80" rx="12" fill="#ECFCCB" stroke="#3F6212" stroke-width="2"/>
 <text x="625" y="105" text-anchor="middle" font-size="16" font-weight="700" fill="#365314">Training</text>
-<text x="625" y="128" text-anchor="middle" font-size="13" fill="#365314">only if toggle is on</text>
+<text x="625" y="128" text-anchor="middle" font-size="13" fill="#365314">setting + exceptions</text>
 <path d="M170 100 L285 62" stroke="#475569" stroke-width="2" fill="none"/>
 <path d="M170 120 L285 163" stroke="#475569" stroke-width="2" fill="none"/>
 <path d="M475 62 L550 100" stroke="#475569" stroke-width="2" stroke-dasharray="6 5" fill="none"/>
 </svg>
-<figcaption>Two copies exist: one in the cloud, one on your machine. Only the cloud copy is affected by the training toggle.</figcaption>
+<figcaption>Cloud and local copies can coexist. Cloud handling follows Anthropic's current policy; local files follow the coding tool's settings.</figcaption>
 </figure>
 
-<h2>2. The privacy switch</h2>
+<h2>2. The model-improvement setting</h2>
 <div class="card">
 <p>In Settings, Privacy, look for the option about helping improve Claude with your chats.</p>
 <ul>
-<li><strong>Off:</strong> chats are kept for a short window (the terms describe about 30 days) and are not used for training.</li>
-<li><strong>On:</strong> chats can be used for training and kept much longer (the terms describe up to five years).</li>
+<li><strong>Opt out:</strong> Anthropic says it will not use your materials for model training unless you provide feedback or your materials are flagged for safety review.</li>
+<li><strong>Opt in:</strong> Anthropic may use your materials for model improvement, including training, as described in the current terms.</li>
 </ul>
-<p>Flagged or policy-violating conversations may be kept longer under either setting. Turning it off later does not recall anything already used.</p>
+<p>Retention periods and exceptions are governed by Anthropic's current privacy policy; do not infer a fixed retention duration from this setting alone. For previously submitted materials or deletion requests, check the current terms and policy.</p>
 </div>
-
-<figure>
-<svg viewBox="0 0 720 150" role="img" aria-label="Timeline comparing retention: toggle off is about 30 days, toggle on is up to five years.">
-<text x="20" y="40" font-size="14" font-weight="700" fill="currentColor">Toggle off</text>
-<rect x="140" y="22" width="30" height="24" rx="5" fill="#65A30D"/>
-<text x="180" y="40" font-size="13" fill="currentColor">about 30 days</text>
-<text x="20" y="100" font-size="14" font-weight="700" fill="currentColor">Toggle on</text>
-<rect x="140" y="82" width="560" height="24" rx="5" fill="#D97706"/>
-<text x="150" y="99" font-size="13" fill="#ffffff">up to five years, and eligible for training</text>
-</svg>
-<figcaption>Bar lengths are illustrative, not to scale.</figcaption>
-</figure>
 
 <h2>3. Who owns the work</h2>
 <div class="card">
@@ -98,10 +86,10 @@ footer{margin-top:3rem;color:var(--muted);font-size:.875rem}
 </div>
 
 <h2>5. Hidden watermarks and tracking IDs: what I checked</h2>
-<div class="note ok"><p><strong>No hidden watermarks or GUID-shaped identifiers were detected</strong> in the code I scanned.</p></div>
+<div class="note ok"><p><strong>No matching structural indicators were detected</strong> in the files I scanned. This does not establish that the files contain no watermark.</p></div>
 <ul>
 <li>I scanned two sets of generated files (89 and 82 files) for zero-width and other invisible characters, unusual whitespace patterns, and GUID/UUID-shaped strings that did not belong to the code.</li>
-<li>Findings: nothing hidden. Any identifiers present were ordinary ones the code itself needed.</li>
+<li>No indicators matching those checks were found. Any identifiers present were ordinary ones the code itself needed.</li>
 </ul>
 <div class="note">
 <p><strong>Limits of this check.</strong></p>
@@ -113,7 +101,7 @@ footer{margin-top:3rem;color:var(--muted);font-size:.875rem}
 </div>
 
 <figure>
-<svg viewBox="0 0 720 130" role="img" aria-label="Checklist of what was scanned: invisible characters, odd whitespace, GUID-shaped strings, each with result none found.">
+<svg viewBox="0 0 720 130" role="img" aria-label="Checklist of searched-for structural indicators: invisible characters, odd whitespace, GUID-shaped strings; no matches were found in the scanned files.">
 <rect x="20" y="20" width="200" height="90" rx="12" fill="#ECFCCB" stroke="#3F6212" stroke-width="2"/>
 <text x="120" y="55" text-anchor="middle" font-size="15" font-weight="700" fill="#365314">Invisible characters</text>
 <text x="120" y="82" text-anchor="middle" font-size="14" fill="#365314">none found</text>
@@ -128,8 +116,8 @@ footer{margin-top:3rem;color:var(--muted);font-size:.875rem}
 
 <h2>6. Removing your history</h2>
 <ul>
-<li><strong>Cloud:</strong> delete individual chats in the app. Deleted chats leave your history right away and are removed from backend storage on the schedule in the terms.</li>
-<li><strong>On your computer:</strong> coding-tool transcripts are plain files in your home folder. They are cleaned up automatically after a set number of days (a setting you can shorten), or you can delete them yourself.</li>
+<li><strong>Cloud:</strong> use Claude's deletion controls. Backend deletion timing and exceptions are governed by Anthropic's current privacy policy.</li>
+<li><strong>On your computer:</strong> if a coding tool stores local transcripts, use that tool's settings or file controls to manage or delete them. Cloud deletion controls do not necessarily remove local files.</li>
 <li><strong>Git history:</strong> removing a line from an old commit means rewriting history, which changes every later commit. Do it on your own unshared branches, keep a backup, and never rewrite history others depend on.</li>
 </ul>
 
@@ -146,12 +134,12 @@ footer{margin-top:3rem;color:var(--muted);font-size:.875rem}
 
 <h2>Sources</h2>
 <ol>
-<li><a href="https://www.anthropic.com/legal/consumer-terms">Anthropic consumer terms</a>, checked 2026-11-07 through search summaries rather than a full read, so verify the wording.</li>
-<li><a href="https://www.anthropic.com/legal/privacy">Anthropic privacy policy</a>, same caveat.</li>
+<li><a href="https://www.anthropic.com/legal/consumer-terms">Anthropic consumer terms</a>, consulted 2026-11-08; verify the current wording before relying on it.</li>
+<li><a href="https://www.anthropic.com/legal/privacy">Anthropic privacy policy</a>, consulted 2026-11-08; verify the current wording before relying on it.</li>
 <li>My own scan of generated files, described in section 5.</li>
 </ol>
 
-<footer>Last updated 2026-11-07. Unofficial personal write-up, not affiliated with Anthropic.</footer>
+<footer>Last updated 2026-11-08. Unofficial personal write-up, not affiliated with Anthropic.</footer>
 </main>
 </body>
 </html>

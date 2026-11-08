@@ -48,8 +48,8 @@ rigor to AI oversight.
 - **Champion/challenger A/B gate** — a staged candidate model is evaluated head-to-head against
   the live champion before any cutover.
 - **Automated drift detection** — weekly scheduled scanning, parameter-order-insensitive.
-  Caught a live defect in production: an arithmetic self-contradiction in a prompt-scoring agent
-  that was inflating its own output score.
+  Caught a live defect in my R&D production environment: an arithmetic self-contradiction in
+  a prompt-scoring agent that was inflating its own output score.
 - **Data lineage** (Marquez / OpenLineage) across the MLflow ↔ Ollama pipeline — every model
   version, eval run, and promotion decision is auditable.
 - **LLM-as-judge evaluation harness** — scores agents on substance (accuracy, completeness, no
