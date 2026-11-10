@@ -184,6 +184,8 @@ view of software spend and seat waste.
 The CI/CD, security-scanning and recovery layer behind project 3: every change to the platform
 repo goes through a multi-scanner security gate, and every finding lands in one tracked place.
 
+**Detail —** [Case study: patching and backup reliability](case-studies/patching-backup-reliability/)
+
 - **Security gate (Azure DevOps, self-hosted agent)** — five scanners, hard-gating on the
   serious tiers: **gitleaks** (secrets, full history), **checkov + trivy config** (IaC),
   **semgrep** (SAST), **trivy** (container-image CVEs), plus a custom **"no secrets on command

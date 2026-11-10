@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study: Patching and Backup Reliability — Bryan Debnam</title>
+<meta name="description" content="Lessons from patching drift, stale monitoring data, and backup verification in an independent enterprise sandbox.">
+<link rel="canonical" href="https://bryandebnam.com/case-studies/patching-backup-reliability/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Patching and Backup Reliability">
+<meta property="og:description" content="What a successful run and a dashboard count can—and cannot—tell you about operational risk.">
+<meta property="og:url" content="https://bryandebnam.com/case-studies/patching-backup-reliability/">
+<style>
+:root { --bg: #fff; --fg: #1b1f24; --muted: #5b6570; --accent: #1f4e9c; --rule: #d8dee6; --card: #f6f8fa; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f1319; --fg: #e6e9ee; --muted: #9aa5b1; --accent: #7aa7ee; --rule: #263040; --card: #161c25; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.62 -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 780px; margin: 0 auto; padding: 40px 22px 80px; }
+a { color: var(--accent); }
+.back { display: inline-block; margin-bottom: 18px; color: var(--muted); text-decoration: none; }
+.eyebrow { color: var(--accent); font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.scope { color: var(--muted); font-style: italic; }
+h1 { font-size: 1.9rem; line-height: 1.18; }
+h2 { color: var(--accent); border-bottom: 2px solid var(--accent); margin: 40px 0 12px; padding-bottom: 6px; font-size: 1.22rem; }
+p, li { margin: 8px 0; }
+.note { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .85rem; }
+@media (max-width: 600px) { main { padding: 26px 16px 60px; } h1 { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="../../">← Back to portfolio</a>
+<div class="eyebrow">Case study</div>
+<h1>Patching and backup reliability: what the dashboard missed</h1>
+<p class="scope">Independent R&amp;D · Reference build · single-operator enterprise sandbox · November 2026</p>
+
+<h2>The challenge</h2>
+<p>Running an enterprise sandbox means owning the whole stack: compute, storage, networking,
+patching, security and recovery. Over time, application images drift behind their upstream releases,
+agents stop checking in, and dashboards can accumulate old records. A reassuring count is only
+useful if it reflects the systems and data that still need protection.</p>
+
+<h2>Patching: drift, rollback and visibility</h2>
+<p>Several image-backed applications were behind their upstream releases. In the sandbox I could
+coordinate the updates in an evening: capture snapshots and application database backups, update
+the images, run health checks and retain rollback options. The checks confirmed that the tested
+web endpoints responded; they did not prove every application workflow was healthy.</p>
+<p>A separate patching dashboard showed one critical item from an endpoint whose management agent
+had not checked in for about two months. I changed the feed to distinguish agents unseen for
+seven days or more from recently reporting agents. The headline critical count fell from one to
+zero, while the stale critical item remained visible separately.</p>
+<div class="note"><strong>Important:</strong> zero reported critical items on recently reporting
+agents is not proof that the whole fleet is patched. An offline agent can hide a real exposure;
+its enrollment and the machine’s current update state still need investigation.</div>
+
+<h2>Backups: successful jobs are not restore tests</h2>
+<p>One nightly fleet run reported 131 successful items out of 131 attempted, with no reported
+failures. The dashboard also showed 39 stale backup records. An inventory comparison found 24
+matching stopped instances; 12 instance names did not match that inventory, and three records
+represented storage volumes that an instance list could not verify.</p>
+<p>Those records should not simply be relabeled as retired: stopped workloads can still hold
+valuable data, an unmatched name is not proof of deletion, and volumes need their own inventory
+check. The dashboard change to classify stale records needs further review before deployment.</p>
+<p>Further inspection found active workloads in projects outside the nightly runner's configured
+scope, with no matching success records in its dashboard. Whether another backup protects those
+workloads and their data remains to be verified. The fleet and storage reconciliation is ongoing.</p>
+<div class="note"><strong>Limit:</strong> no restore was performed for this assessment. A
+successful run shows what the job reported, not that every required system was covered or that
+the data can be recovered. This is work in progress: the next steps are to reconcile coverage,
+address any confirmed gaps, and test a database and container restore.</div>
+
+<h2>What this taught me about enterprise teamwork</h2>
+<p>I can move quickly in a sandbox because I own the decisions. At work, I am part of the team
+that handles the same concerns at enterprise scale. Security, development, operations and
+stakeholders coordinate urgency, testing, change windows and recovery plans. That coordination
+is a safeguard, not merely an obstacle to speed.</p>
+<p>Disk pressure, power, thermals, patching, firewalls and security all demand attention even
+when users never see the work. Owning the full stack has made me appreciate the combined effort
+of my teammates even more. IT teams are the unsung heroes who keep the enterprise running.</p>
+<footer>Details have been generalized. This is a dated assessment, not live fleet status.</footer>
+</main>
+</body>
+</html>
