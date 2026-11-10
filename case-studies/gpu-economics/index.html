@@ -37,11 +37,6 @@ code { overflow-wrap:anywhere; }
 .roi-low { background:#227a52; height:100%; }
 .payback-chart { background:var(--card); border:1px solid var(--rule); border-radius:8px; margin:24px 0; padding:16px; }
 .payback-chart h2 { border:0; margin:0 0 8px; padding:0; }
-.payback-row { margin:18px 0; }
-.payback-label { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; }
-.payback-track { background:var(--rule); border-radius:4px; height:12px; margin:6px 0; position:relative; }
-.payback-range { background:var(--accent); border-radius:4px; height:100%; position:absolute; }
-.payback-scale { color:var(--muted); display:flex; font-size:.8rem; justify-content:space-between; }
 footer { border-top:1px solid var(--rule); color:var(--muted); font-size:.85rem; margin-top:48px; padding-top:16px; }
 @media (max-width:600px) { main { padding:26px 16px 60px; } h1 { font-size:1.5rem; } }
 </style>
@@ -70,44 +65,31 @@ the figures below are selected aggregates from an earlier snapshot.</p>
 reports utilization-weighted hours. Busy GPU-hours are a useful signal—not proof that a provider
 would bill for exactly those hours. A cloud GPU may need to be reserved while idle, and short
 requests, missing samples, startup time or different performance can change the comparison.</p>
-<div class="note"><strong>Important:</strong> purchase price divided by estimated rental cost is
-a simple <em>gross payback proxy</em>, not full ROI or realized savings. It does not show profit,
-and it is only meaningful when the capacity being compared can meet the same workload requirements.</div>
+<div class="note"><strong>Important:</strong> the two local GPUs are already owned. A historical
+purchase-price comparison is not the same as a forward-looking choice: ongoing local costs and
+any extra cloud usage still matter. A gross payback calculation is not full ROI or realized savings.</div>
 
 <section class="payback-chart" aria-labelledby="usage-payback">
-  <h2 id="usage-payback">Usage vs. estimated payback</h2>
-  <p>Earlier scenario: $18,244 purchase input for two GPUs; assumed rental of $1.09–$2.18 per
-  GPU-hour. The blue segment shows the range of estimated years. <strong>These are scenarios,
-  not verified ROI or realized savings.</strong></p>
-  <div class="payback-row">
-    <div class="payback-label"><span>Batch only: 2.2 GPU-hours/day</span><strong>10.6–21.1 years</strong></div>
-    <div class="payback-track" aria-hidden="true"><div class="payback-range" style="left:49.5%;width:49.5%"></div></div>
-  </div>
-  <div class="payback-row">
-    <div class="payback-label"><span>One GPU reserved 24/7, plus separate batch</span><strong>11–21 months (0.9–1.8 years)</strong></div>
-    <div class="payback-track" aria-hidden="true"><div class="payback-range" style="left:4.2%;width:4.2%"></div></div>
-  </div>
-  <div class="payback-row">
-    <div class="payback-label"><span>Two GPUs reserved 24/7, plus separate batch</span><strong>6–11 months (0.5–0.9 years)</strong></div>
-    <div class="payback-track" aria-hidden="true"><div class="payback-range" style="left:2.2%;width:2.2%"></div></div>
-  </div>
-  <div class="payback-scale" aria-hidden="true"><span>0 years</span><span>10.5 years</span><span>21 years</span></div>
+  <h2 id="usage-payback">Usage and a cloud rental reference</h2>
+  <p>For a memory-comparable reference, Runpod lists an A100 PCIe with 80 GB at $1.79 per
+  GPU-hour on Secure Cloud. This is a different GPU architecture, not a performance-equivalent
+  quote for the owned 72 GB cards. Prices and availability can change; see the
+  <a href="https://www.runpod.io/gpu-models/a100-pcie">provider listing</a> (checked November 10, 2026).</p>
   <div class="table-wrap">
   <table>
-    <thead><tr><th>Usage scenario</th><th>Billed GPU-hours / day</th><th>Estimated rental / day</th><th>Estimated rental / month</th><th>Gross payback</th></tr></thead>
+    <thead><tr><th>Illustrative cloud usage</th><th>GPU-hours / day</th><th>Estimated GPU rental / day</th><th>Estimated GPU rental / 30 days</th><th>Historical gross payback proxy</th></tr></thead>
     <tbody>
-      <tr><td>Batch only</td><td>2.2</td><td>$2.40–$4.80</td><td>$72–$144</td><td>10.6–21.1 years</td></tr>
-      <tr><td>One 24/7 GPU + separate batch</td><td>26.2</td><td>$28.56–$57.12</td><td>$857–$1,713</td><td>11–21 months</td></tr>
-      <tr><td>Two 24/7 GPUs + separate batch</td><td>50.2</td><td>$54.72–$109.44</td><td>$1,642–$3,283</td><td>6–11 months</td></tr>
+      <tr><td>Earlier batch estimate</td><td>2.2</td><td>$3.94</td><td>$118.14</td><td>12.9 years</td></tr>
+      <tr><td>Example sustained demand</td><td>8</td><td>$14.32</td><td>$429.60</td><td>3.5 years</td></tr>
+      <tr><td>Example reserved capacity</td><td>24</td><td>$42.96</td><td>$1,288.80</td><td>1.2 years</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="roi-caption">Different availability assumptions, not the same service at different prices.
-  The batch input is affected by missing monitoring samples. The rental GPU class differs from the
-  owned cards; electricity, hosting and resale are excluded. Batch is assumed to require additional
-  rental time; charging it again would double-count if it can run on already-reserved capacity.
-  Daily GPU-hours are summed across GPUs, so they can exceed 24. Monthly costs assume 30 days;
-  rental prices and payback are rounded from the inputs above.</p>
+  <p class="roi-caption">Examples are GPU-only alternatives, not extra cloud spend or equivalent
+  performance. The 2.2-hour input is affected by missing samples; 8 and 24 hours are examples,
+  not measured demand. The proxy divides a historical $18,244 two-card purchase input by gross
+  rental cost. It excludes local operating costs, resale, cloud storage, transfer and other fees;
+  it is not ROI, a forecast, or proof of savings. Monthly costs assume 30 days.</p>
 </section>
 
 <h2>From GPU time to the whole platform</h2>
@@ -135,7 +117,8 @@ invoices, actual savings, or a full cost for every fleet component.</p>
 <p>The rental assumption in this snapshot uses a 96 GB GPU class, while the two installed
 cards have 72 GB each. That is not an equivalent-hardware quote. Prices, VM sizing, storage,
 networking and restore transfer are assumptions; they need provider quotes and a workload
-match before they can support a financial decision.</p>
+match before they can support a financial decision. The snapshot uses its original historical
+rates, not the newer 80 GB reference above.</p>
 <div class="note"><strong>Data-quality check:</strong> a separate November 10 check found roughly
 51% and 24% of expected five-minute samples for the two tracked GPUs over the preceding 15 days.
 The earlier snapshot's exact collection window has not been independently reconciled. Missing
@@ -147,25 +130,19 @@ A reserved GPU may be billed even while idle.</p>
 
 <h2>Why always-on availability changes the comparison</h2>
 <p>For a service expected to respond at any time, the question is not just how long a GPU is
-busy—it is how long capacity must remain available. An earlier scenario assumed 2.2 busy
-GPU-hours per day of separate batch work in addition to the reserved serving capacity. It used
-a two-GPU purchase input of $18,244 and the same $1.09–$2.18 per GPU-hour rental range.</p>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Rental scenario</th><th>Estimated GPU rental per month</th><th>Gross payback proxy</th></tr></thead>
-<tbody>
-<tr><td>Batch only, at 2.2 hours per day</td><td>$72–$144</td><td>About 10.6–21.1 years</td></tr>
-<tr><td>One always-on GPU plus separate batch work</td><td>$857–$1,713</td><td>About 11–21 months</td></tr>
-<tr><td>Two always-on GPUs plus separate batch work</td><td>$1,642–$3,283</td><td>About 6–11 months</td></tr>
-</tbody>
-</table>
-</div>
-<p>These are <strong>scenarios, not realized savings</strong>. They assume batch work needs
-additional rental time, rather than sharing capacity already reserved for serving; if it can
-share that capacity, adding those hours would double-count. The daily utilization input is
-affected by the monitoring gap above, and the two-GPU purchase input is compared with one
-reserved rental GPU in the middle row. Rental class, operating costs, resale and workload
-equivalence still need validation.</p>
+busy—it is how long capacity must remain available. Billing reserved time and billing only
+an interruptible batch are different service assumptions. Batch work that uses capacity
+already reserved for serving should not be counted a second time.</p>
+
+<h2>Local limits and cloud flexibility</h2>
+<p>The two owned GPUs have finite memory and compute capacity. Large models, concurrent
+requests and batch jobs can compete for that capacity, while heat and power can constrain
+sustained work. If demand exceeds local capacity or a workload needs more memory, cloud
+bursting may provide temporary headroom without another hardware purchase.</p>
+<p>Cloud bursting is an option, not something demonstrated by this assessment. It requires
+checking model fit, throughput, latency, data handling, capacity availability and transfer
+costs. Budget for the hours actually reserved and avoid counting the same work in both local
+and cloud scenarios.</p>
 
 <h2>Efficiency is more than a rental rate</h2>
 <p>In an initial two-stream-per-card clock test, the lower clock setting produced roughly
