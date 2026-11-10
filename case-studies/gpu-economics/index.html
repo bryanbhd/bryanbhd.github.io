@@ -37,6 +37,11 @@ code { overflow-wrap:anywhere; }
 .roi-low { background:#227a52; height:100%; }
 .payback-chart { background:var(--card); border:1px solid var(--rule); border-radius:8px; margin:24px 0; padding:16px; }
 .payback-chart h2 { border:0; margin:0 0 8px; padding:0; }
+.payback-row { margin:16px 0; }
+.payback-label { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; }
+.payback-track { background:var(--rule); border-radius:4px; height:12px; margin:6px 0; overflow:hidden; }
+.payback-bar { background:var(--accent); height:100%; }
+.payback-scale { color:var(--muted); display:flex; font-size:.8rem; justify-content:space-between; }
 footer { border-top:1px solid var(--rule); color:var(--muted); font-size:.85rem; margin-top:48px; padding-top:16px; }
 @media (max-width:600px) { main { padding:26px 16px 60px; } h1 { font-size:1.5rem; } }
 </style>
@@ -70,11 +75,26 @@ purchase-price comparison is not the same as a forward-looking choice: ongoing l
 any extra cloud usage still matter. A gross payback calculation is not full ROI or realized savings.</div>
 
 <section class="payback-chart" aria-labelledby="usage-payback">
-  <h2 id="usage-payback">Usage and a cloud rental reference</h2>
+  <h2 id="usage-payback">Usage vs. estimated payback</h2>
   <p>For a memory-comparable reference, Runpod lists an A100 PCIe with 80 GB at $1.79 per
   GPU-hour on Secure Cloud. This is a different GPU architecture, not a performance-equivalent
   quote for the owned 72 GB cards. Prices and availability can change; see the
   <a href="https://www.runpod.io/gpu-models/a100-pcie">provider listing</a> (checked November 10, 2026).</p>
+  <p>Historical gross payback proxy using the $18,244 purchase input for the two owned GPUs.
+  Bars show years—not verified savings or a like-for-like replacement.</p>
+  <div class="payback-row">
+    <div class="payback-label"><span>Earlier batch estimate: 2.2 GPU-hours/day</span><strong>12.9 years</strong></div>
+    <div class="payback-track" aria-hidden="true"><div class="payback-bar" style="width:99.23%"></div></div>
+  </div>
+  <div class="payback-row">
+    <div class="payback-label"><span>Example sustained demand: 8 GPU-hours/day</span><strong>3.5 years</strong></div>
+    <div class="payback-track" aria-hidden="true"><div class="payback-bar" style="width:26.92%"></div></div>
+  </div>
+  <div class="payback-row">
+    <div class="payback-label"><span>Example reserved capacity: 24 GPU-hours/day</span><strong>1.2 years</strong></div>
+    <div class="payback-track" aria-hidden="true"><div class="payback-bar" style="width:9.23%"></div></div>
+  </div>
+  <div class="payback-scale" aria-hidden="true"><span>0 years</span><span>6.5 years</span><span>13 years</span></div>
   <div class="table-wrap">
   <table>
     <thead><tr><th>Illustrative cloud usage</th><th>GPU-hours / day</th><th>Estimated GPU rental / day</th><th>Estimated GPU rental / 30 days</th><th>Historical gross payback proxy</th></tr></thead>
@@ -88,7 +108,9 @@ any extra cloud usage still matter. A gross payback calculation is not full ROI 
   <p class="roi-caption">Examples are GPU-only alternatives, not extra cloud spend or equivalent
   performance. The 2.2-hour input is affected by missing samples; 8 and 24 hours are examples,
   not measured demand. The proxy divides a historical $18,244 two-card purchase input by gross
-  rental cost. It excludes local operating costs, resale, cloud storage, transfer and other fees;
+  rental cost. The 24-hour row models one continuously rented GPU, not a proven replacement for
+  both owned GPUs; none of these rows establishes equivalent throughput or availability. It excludes
+  local operating costs, resale, cloud storage, transfer and other fees;
   it is not ROI, a forecast, or proof of savings. Monthly costs assume 30 days.</p>
 </section>
 
