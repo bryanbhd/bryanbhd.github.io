@@ -27,9 +27,20 @@ h2 { color: var(--accent); border-bottom: 2px solid var(--accent); margin: 40px 
 p, li { margin: 8px 0; }
 .note { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
 .hero { background: var(--card); border-left: 4px solid var(--accent); margin: 22px 0; padding: 14px 18px; font-size: 1.08rem; }
-.screenshot { margin: 24px 0; }
-.screenshot img { border: 1px solid var(--rule); border-radius: 8px; display: block; height: auto; width: 100%; }
-.screenshot figcaption { color: var(--muted); font-size: .85rem; margin-top: 8px; }
+.illustration { background: #f4f5f7; border: 1px solid var(--rule); border-radius: 8px; color: #151a21; margin: 24px 0; padding: 16px; }
+.illustration h3 { font-size: 1.05rem; margin: 0 0 4px; }
+.illustration-note { color: #5b6472; font-size: .85rem; }
+.illustration-grid { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(112px, 1fr)); margin: 14px 0; }
+.illustration-card { background: #fff; border: 1px solid #dde1e6; border-radius: 6px; padding: 10px; }
+.illustration-card strong { display: block; font-size: 1.35rem; }
+.illustration-card span { color: #5b6472; font-size: .75rem; }
+.illustration-panel { background: #fff; border: 1px solid #dde1e6; border-radius: 6px; margin-top: 10px; padding: 14px; }
+.illustration-panel h4 { font-size: .9rem; margin: 0 0 10px; }
+.illustration-status { display: flex; flex-wrap: wrap; gap: 22px; }
+.illustration-item { align-items: center; display: flex; gap: 10px; font-size: .8rem; }
+.illustration-ring { align-items: center; background: conic-gradient(#227a52 0 80%, #a8611c 80% 92%, #b3261e 92%); border-radius: 50%; display: flex; height: 64px; justify-content: center; width: 64px; }
+.illustration-ring span { align-items: center; background: white; border-radius: 50%; display: flex; height: 44px; justify-content: center; width: 44px; }
+.illustration svg { display: block; height: auto; width: 100%; }
 .dashboard { --dash-accent: #0e7c86; --dash-good: #227a52; --dash-warn: #a8611c; background: #f4f5f7; border: 1px solid var(--rule); border-radius: 8px; color: #151a21; margin: 20px 0; padding: 16px; }
 .dashboard-title { color: var(--dash-accent); font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; }
 .dashboard-caption { color: #5b6472; font-size: .85rem; margin: 0 0 14px; }
@@ -91,13 +102,39 @@ zero, while the stale critical item remained visible separately.</p>
 <div class="note"><strong>Important:</strong> zero reported critical items on recently reporting
 agents is not proof that the whole fleet is patched. An offline agent can hide a real exposure;
 its enrollment and the machine’s current update state still need investigation.</div>
-<figure class="screenshot">
-  <a href="patching-dashboard-sanitized.png"><img src="patching-dashboard-sanitized.png" width="1060" height="826" alt="Sanitized fleet patching dashboard with summary cards, operating-system and application-container charts, and a line chart showing security updates waiting declining from 394 to 6. One Windows agent is stale."></a>
-  <figcaption>The actual fleet dashboard, sanitized and captured on November 10. The line shows reported Linux security updates waiting over 88 recorded points; the Windows critical headline excludes one stale agent record. Select the image to enlarge it.</figcaption>
+<figure class="illustration">
+  <h3>Fleet patching: Linux and Windows</h3>
+  <div class="illustration-note"><strong>Illustrative example:</strong> fictional figures and trend; not live or actual fleet data.</div>
+  <div class="illustration-grid">
+    <div class="illustration-card"><strong>48</strong><span>Linux hosts</span></div>
+    <div class="illustration-card"><strong>12</strong><span>Security updates waiting</span></div>
+    <div class="illustration-card"><strong>20</strong><span>Updates waiting</span></div>
+    <div class="illustration-card"><strong>2</strong><span>Failed units</span></div>
+    <div class="illustration-card"><strong>6</strong><span>Containers need updates</span></div>
+    <div class="illustration-card"><strong>4 / 5</strong><span>Windows agents online</span></div>
+  </div>
+  <div class="illustration-panel">
+    <h4>Where things stand</h4>
+    <div class="illustration-status">
+      <div class="illustration-item"><div class="illustration-ring"><span>48</span></div><div>Linux hosts<br><span class="illustration-note">Example mix</span></div></div>
+      <div class="illustration-item"><div class="illustration-ring"><span>15</span></div><div>Application containers<br><span class="illustration-note">Example mix</span></div></div>
+      <div class="illustration-item"><div class="illustration-ring"><span>5</span></div><div>Windows agents<br><span class="illustration-note">1 offline</span></div></div>
+    </div>
+  </div>
+  <div class="illustration-panel">
+    <h4>Movement</h4>
+    <div class="illustration-note">Example security updates waiting over time</div>
+    <svg viewBox="0 0 600 145" role="img" aria-label="Illustrative line chart showing security updates waiting decreasing from 240 to 12 across five example periods.">
+      <g stroke="#dde1e6" stroke-width="1"><path d="M40 20H580 M40 48H580 M40 76H580 M40 104H580 M40 132H580"/></g>
+      <g fill="#5b6472" font-size="10"><text x="4" y="24">240</text><text x="4" y="80">120</text><text x="18" y="135">0</text><text x="40" y="144">Earlier</text><text x="545" y="144">Later</text></g>
+      <polyline points="40,20 100,34 160,28 220,58 280,72 340,94 400,110 460,119 520,124 580,126" fill="none" stroke="#b3261e" stroke-width="3"/>
+      <circle cx="580" cy="126" r="4" fill="#b3261e"/>
+    </svg>
+  </div>
+  <figcaption class="illustration-note">Recreated to resemble the dashboard; every figure is fictional.</figcaption>
 </figure>
-<p>The trend gives the work a shape: reported Linux security updates waiting fell from 394 to 6
-across the recorded period. That is meaningful progress, not a declaration of victory. A stale
-agent, failed units and remaining updates still deserve attention, and the graph alone cannot
+<p>Trends can make progress visible, but they are not a declaration of victory. A stale
+agent, failed units and remaining updates still deserve attention, and a graph alone cannot
 establish that every host or application is healthy.</p>
 <section class="dashboard" aria-labelledby="patch-snapshot">
   <h3 class="dashboard-title" id="patch-snapshot">Patching dashboard snapshot</h3>
