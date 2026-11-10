@@ -26,6 +26,26 @@ h1 { font-size: 1.9rem; line-height: 1.18; }
 h2 { color: var(--accent); border-bottom: 2px solid var(--accent); margin: 40px 0 12px; padding-bottom: 6px; font-size: 1.22rem; }
 p, li { margin: 8px 0; }
 .note { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
+.dashboard { --dash-accent: #0e7c86; --dash-good: #227a52; --dash-warn: #a8611c; background: #f4f5f7; border: 1px solid var(--rule); border-radius: 8px; color: #151a21; margin: 20px 0; padding: 16px; }
+.dashboard-title { color: var(--dash-accent); font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; }
+.dashboard-caption { color: #5b6472; font-size: .85rem; margin: 0 0 14px; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.dashboard-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 2px rgba(20,26,33,.08); padding: 14px; }
+.dashboard-label { color: #5b6472; font-size: .85rem; }
+.dashboard-value { color: var(--dash-good); font-size: 1.7rem; font-weight: 700; line-height: 1.25; }
+.dashboard-value.warn { color: var(--dash-warn); }
+.chart { margin-top: 12px; }
+.chart-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; font-size: .85rem; margin-top: 8px; }
+.chart-track { background: #eceef1; border-radius: 4px; grid-column: 1 / -1; height: 8px; overflow: hidden; }
+.chart-bar { background: var(--dash-accent); height: 100%; }
+.chart-bar.warn { background: var(--dash-warn); }
+.chart-bar.good { background: var(--dash-good); }
+@media (prefers-color-scheme: dark) {
+  .dashboard { --dash-accent: #4fc7ce; --dash-good: #4fbf8b; --dash-warn: #e0a256; background: #0e1216; color: #e8ebef; }
+  .dashboard-card { background: #161b21; }
+  .dashboard-label, .dashboard-caption { color: #a7afbb; }
+  .chart-track { background: #2a313b; }
+}
 footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .85rem; }
 @media (max-width: 600px) { main { padding: 26px 16px 60px; } h1 { font-size: 1.5rem; } }
 </style>
@@ -55,6 +75,21 @@ zero, while the stale critical item remained visible separately.</p>
 <div class="note"><strong>Important:</strong> zero reported critical items on recently reporting
 agents is not proof that the whole fleet is patched. An offline agent can hide a real exposure;
 its enrollment and the machine’s current update state still need investigation.</div>
+<section class="dashboard" aria-labelledby="patch-snapshot">
+  <h3 class="dashboard-title" id="patch-snapshot">Patching dashboard snapshot</h3>
+  <p class="dashboard-caption">Scrubbed aggregate figures, November 10, 2026. Not live data.</p>
+  <div class="dashboard-grid">
+    <div class="dashboard-card"><div class="dashboard-label">Recently reporting agents</div><div class="dashboard-value">3</div></div>
+    <div class="dashboard-card"><div class="dashboard-label">Stale agents</div><div class="dashboard-value warn">1</div></div>
+    <div class="dashboard-card"><div class="dashboard-label">Critical items on reporting agents</div><div class="dashboard-value">0</div></div>
+    <div class="dashboard-card"><div class="dashboard-label">Critical items on stale agents</div><div class="dashboard-value warn">1</div></div>
+  </div>
+  <div class="dashboard-card chart">
+    <div class="dashboard-label">Agent reporting freshness (4 tracked agents)</div>
+    <div class="chart-row"><span>Recently reporting</span><strong>3</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar good" style="width:75%"></div></div></div>
+    <div class="chart-row"><span>Stale</span><strong>1</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar warn" style="width:25%"></div></div></div>
+  </div>
+</section>
 
 <h2>Backups: successful jobs are not restore tests</h2>
 <p>One nightly fleet run reported 131 successful items out of 131 attempted, with no reported
@@ -71,6 +106,22 @@ workloads and their data remains to be verified. The fleet and storage reconcili
 successful run shows what the job reported, not that every required system was covered or that
 the data can be recovered. This is work in progress: the next steps are to reconcile coverage,
 address any confirmed gaps, and test a database and container restore.</div>
+<section class="dashboard" aria-labelledby="backup-snapshot">
+  <h3 class="dashboard-title" id="backup-snapshot">Backup dashboard snapshot</h3>
+  <p class="dashboard-caption">Scrubbed aggregate figures, November 10, 2026. Not live data.</p>
+  <div class="dashboard-grid">
+    <div class="dashboard-card"><div class="dashboard-label">Nightly items successful / attempted</div><div class="dashboard-value">131 / 131</div></div>
+    <div class="dashboard-card"><div class="dashboard-label">Nightly items failed</div><div class="dashboard-value">0</div></div>
+    <div class="dashboard-card"><div class="dashboard-label">Stale records</div><div class="dashboard-value warn">39</div></div>
+  </div>
+  <div class="dashboard-card chart">
+    <div class="dashboard-label">Stale records compared with instance inventory (39 total)</div>
+    <div class="chart-row"><span>Matched stopped instances</span><strong>24</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar" style="width:61.54%"></div></div></div>
+    <div class="chart-row"><span>Unmatched instance names</span><strong>12</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar warn" style="width:30.77%"></div></div></div>
+    <div class="chart-row"><span>Volume records</span><strong>3</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar" style="width:7.69%"></div></div></div>
+  </div>
+  <p class="dashboard-caption">Successful attempts do not prove fleet coverage or restoreability. Unmatched names are not proof of retirement.</p>
+</section>
 
 <h2>What this taught me about enterprise teamwork</h2>
 <p>I can move quickly in a sandbox because I own the decisions. At work, I am part of the team
