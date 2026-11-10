@@ -64,10 +64,13 @@ represented storage volumes that an instance list could not verify.</p>
 <p>Those records should not simply be relabeled as retired: stopped workloads can still hold
 valuable data, an unmatched name is not proof of deletion, and volumes need their own inventory
 check. The dashboard change to classify stale records needs further review before deployment.</p>
+<p>Further inspection found active workloads in projects outside the nightly runner's configured
+scope, with no matching success records in its dashboard. Whether another backup protects those
+workloads and their data remains to be verified. The fleet and storage reconciliation is ongoing.</p>
 <div class="note"><strong>Limit:</strong> no restore was performed for this assessment. A
 successful run shows what the job reported, not that every required system was covered or that
-the data can be recovered. The next steps are to reconcile coverage and test a database and
-container restore.</div>
+the data can be recovered. This is work in progress: the next steps are to reconcile coverage,
+address any confirmed gaps, and test a database and container restore.</div>
 
 <h2>What this taught me about enterprise teamwork</h2>
 <p>I can move quickly in a sandbox because I own the decisions. At work, I am part of the team
