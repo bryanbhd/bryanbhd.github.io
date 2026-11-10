@@ -40,11 +40,21 @@ p, li { margin: 8px 0; }
 .chart-bar { background: var(--dash-accent); height: 100%; }
 .chart-bar.warn { background: var(--dash-warn); }
 .chart-bar.good { background: var(--dash-good); }
+.dashboard-table-wrap { overflow-x: auto; }
+.dashboard-table { border-collapse: collapse; min-width: 430px; width: 100%; font-size: .85rem; }
+.dashboard-table th, .dashboard-table td { border-bottom: 1px solid #dde1e6; padding: 8px; text-align: left; }
+.dashboard-table th { background: #eceef1; color: #5b6472; }
+.dashboard-badge { background: #e5f4ec; border-radius: 4px; color: #227a52; display: inline-block; padding: 2px 6px; }
+.dashboard-badge.warn { background: #fbeee0; color: #a8611c; }
 @media (prefers-color-scheme: dark) {
   .dashboard { --dash-accent: #4fc7ce; --dash-good: #4fbf8b; --dash-warn: #e0a256; background: #0e1216; color: #e8ebef; }
   .dashboard-card { background: #161b21; }
   .dashboard-label, .dashboard-caption { color: #a7afbb; }
   .chart-track { background: #2a313b; }
+  .dashboard-table th { background: #1c222a; color: #a7afbb; }
+  .dashboard-table th, .dashboard-table td { border-color: #2a313b; }
+  .dashboard-badge { background: #122a20; color: #4fbf8b; }
+  .dashboard-badge.warn { background: #2e2013; color: #e0a256; }
 }
 footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .85rem; }
 @media (max-width: 600px) { main { padding: 26px 16px 60px; } h1 { font-size: 1.5rem; } }
@@ -77,7 +87,7 @@ agents is not proof that the whole fleet is patched. An offline agent can hide a
 its enrollment and the machine’s current update state still need investigation.</div>
 <section class="dashboard" aria-labelledby="patch-snapshot">
   <h3 class="dashboard-title" id="patch-snapshot">Patching dashboard snapshot</h3>
-  <p class="dashboard-caption">Scrubbed aggregate figures, November 10, 2026. Not live data.</p>
+  <p class="dashboard-caption">Sanitized snapshot, November 10, 2026. Endpoint names are pseudonyms; this is not live data.</p>
   <div class="dashboard-grid">
     <div class="dashboard-card"><div class="dashboard-label">Recently reporting agents</div><div class="dashboard-value">3</div></div>
     <div class="dashboard-card"><div class="dashboard-label">Stale agents</div><div class="dashboard-value warn">1</div></div>
@@ -88,6 +98,18 @@ its enrollment and the machine’s current update state still need investigation
     <div class="dashboard-label">Agent reporting freshness (4 tracked agents)</div>
     <div class="chart-row"><span>Recently reporting</span><strong>3</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar good" style="width:75%"></div></div></div>
     <div class="chart-row"><span>Stale</span><strong>1</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar warn" style="width:25%"></div></div></div>
+  </div>
+  <div class="dashboard-card chart">
+    <div class="dashboard-label">Managed endpoints</div>
+    <div class="dashboard-table-wrap"><table class="dashboard-table">
+      <thead><tr><th>Endpoint</th><th>Agent status</th><th>Pending updates</th><th>Critical items</th></tr></thead>
+      <tbody>
+        <tr><td>Endpoint 1</td><td><span class="dashboard-badge">Reporting</span></td><td>7</td><td>0</td></tr>
+        <tr><td>Endpoint 2</td><td><span class="dashboard-badge warn">Stale</span></td><td>5</td><td>1</td></tr>
+        <tr><td>Endpoint 3</td><td><span class="dashboard-badge">Reporting</span></td><td>5</td><td>0</td></tr>
+        <tr><td>Endpoint 4</td><td><span class="dashboard-badge">Reporting</span></td><td>7</td><td>0</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
 
@@ -108,7 +130,7 @@ the data can be recovered. This is work in progress: the next steps are to recon
 address any confirmed gaps, and test a database and container restore.</div>
 <section class="dashboard" aria-labelledby="backup-snapshot">
   <h3 class="dashboard-title" id="backup-snapshot">Backup dashboard snapshot</h3>
-  <p class="dashboard-caption">Scrubbed aggregate figures, November 10, 2026. Not live data.</p>
+  <p class="dashboard-caption">Sanitized snapshot, November 10, 2026. Workload names are pseudonyms; this is not live data.</p>
   <div class="dashboard-grid">
     <div class="dashboard-card"><div class="dashboard-label">Nightly items successful / attempted</div><div class="dashboard-value">131 / 131</div></div>
     <div class="dashboard-card"><div class="dashboard-label">Nightly items failed</div><div class="dashboard-value">0</div></div>
@@ -119,6 +141,22 @@ address any confirmed gaps, and test a database and container restore.</div>
     <div class="chart-row"><span>Matched stopped instances</span><strong>24</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar" style="width:61.54%"></div></div></div>
     <div class="chart-row"><span>Unmatched instance names</span><strong>12</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar warn" style="width:30.77%"></div></div></div>
     <div class="chart-row"><span>Volume records</span><strong>3</strong><div class="chart-track" aria-hidden="true"><div class="chart-bar" style="width:7.69%"></div></div></div>
+  </div>
+  <div class="dashboard-card chart">
+    <div class="dashboard-label">Pending queue: 0 &nbsp; | &nbsp; Permanently failed: 0</div>
+    <p class="dashboard-caption">As reported by the backup dashboard at the time of this assessment.</p>
+    <div class="dashboard-label">Recent activity (five sample records)</div>
+    <div class="dashboard-table-wrap"><table class="dashboard-table">
+      <thead><tr><th>Workload</th><th>Cadence</th><th>Reported status</th></tr></thead>
+      <tbody>
+        <tr><td>Workload 1</td><td>Nightly</td><td><span class="dashboard-badge">OK</span></td></tr>
+        <tr><td>Workload 2</td><td>Nightly</td><td><span class="dashboard-badge">OK</span></td></tr>
+        <tr><td>Workload 3</td><td>Nightly</td><td><span class="dashboard-badge">OK</span></td></tr>
+        <tr><td>Workload 4</td><td>Nightly</td><td><span class="dashboard-badge">OK</span></td></tr>
+        <tr><td>Workload 5</td><td>Nightly</td><td><span class="dashboard-badge">OK</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="dashboard-caption">Sample activity only; project names, exact timestamps, sizes, and detailed errors are omitted.</p>
   </div>
   <p class="dashboard-caption">Successful attempts do not prove fleet coverage or restoreability. Unmatched names are not proof of retirement.</p>
 </section>
