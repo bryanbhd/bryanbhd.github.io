@@ -102,6 +102,38 @@ derived rental estimates should be treated as verified complete.</div>
 purchase cost, dated quotes for equivalent hardware and a workload-specific availability model.
 A reserved GPU may be billed even while idle.</p>
 
+<h2>Why always-on availability changes the comparison</h2>
+<p>For a service expected to respond at any time, the question is not just how long a GPU is
+busy—it is how long capacity must remain available. An earlier scenario assumed 2.2 busy
+GPU-hours per day of separate batch work in addition to the reserved serving capacity. It used
+a two-GPU purchase input of $18,244 and the same $1.09–$2.18 per GPU-hour rental range.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Rental scenario</th><th>Estimated GPU rental per month</th><th>Gross payback proxy</th></tr></thead>
+<tbody>
+<tr><td>Batch only, at 2.2 hours per day</td><td>$73–$146</td><td>About 10–21 years</td></tr>
+<tr><td>One always-on GPU plus separate batch work</td><td>$868–$1,736</td><td>About 11–22 months</td></tr>
+<tr><td>Two always-on GPUs plus separate batch work</td><td>$1,663–$3,327</td><td>About 6–11 months</td></tr>
+</tbody>
+</table>
+</div>
+<p>These are <strong>scenarios, not realized savings</strong>. They assume batch work needs
+additional rental time, rather than sharing capacity already reserved for serving; if it can
+share that capacity, adding those hours would double-count. The daily utilization input is
+affected by the monitoring gap above, and the two-GPU purchase input is compared with one
+reserved rental GPU in the middle row. Rental class, operating costs, resale and workload
+equivalence still need validation.</p>
+
+<h2>Efficiency is more than a rental rate</h2>
+<p>In an initial two-stream-per-card clock test, the lower clock setting produced roughly
+148–152 tokens per second per card versus roughly 152 unlocked. Observed card power fell
+from 250 W to approximately 173–177 W, and temperatures fell by about 3–8 °C. These are
+preliminary results from one heavy-load test—not a guarantee for other models, request
+patterns or cooling conditions. Further clock settings and sustained testing are needed.</p>
+<p>Heat, power, responsiveness and system availability belong in the decision alongside
+the rental estimate. Shared fleet services, backups and networking also need equivalent
+scope and costs on both sides; they should not be assumed identical without checking.</p>
+
 <h2>What the quick calculation misses</h2>
 <ul>
 <li><strong>Ownership costs:</strong> electricity, cooling, host hardware, networking, maintenance,
