@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study: The Economics of a Self-Hosted GPU — Bryan Debnam</title>
+<meta name="description" content="A practical framework for comparing local GPU ownership with renting compute, with clearly labeled illustrative figures.">
+<link rel="canonical" href="https://bryandebnam.com/case-studies/gpu-economics/">
+<style>
+:root { --bg:#fff; --fg:#1b1f24; --muted:#5b6570; --accent:#1f4e9c; --rule:#d8dee6; --card:#f6f8fa; }
+@media (prefers-color-scheme: dark) { :root { --bg:#0f1319; --fg:#e6e9ee; --muted:#9aa5b1; --accent:#7aa7ee; --rule:#263040; --card:#161c25; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.62 -apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif; }
+main { max-width:780px; margin:0 auto; padding:40px 22px 80px; }
+a { color:var(--accent); }
+.back { color:var(--muted); text-decoration:none; }
+.eyebrow { color:var(--accent); font-size:.78rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+.scope, figcaption { color:var(--muted); font-size:.9rem; }
+h1 { font-size:1.9rem; line-height:1.18; }
+h2 { color:var(--accent); border-bottom:2px solid var(--accent); font-size:1.22rem; margin:40px 0 12px; padding-bottom:6px; }
+.hero, .note { background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:14px 16px; }
+.hero { border-left:4px solid var(--accent); font-size:1.08rem; }
+.table-wrap { overflow-x:auto; }
+table { border-collapse:collapse; min-width:560px; width:100%; }
+th, td { border-bottom:1px solid var(--rule); padding:10px 8px; text-align:left; vertical-align:top; }
+th { color:var(--muted); font-size:.9rem; }
+code { overflow-wrap:anywhere; }
+footer { border-top:1px solid var(--rule); color:var(--muted); font-size:.85rem; margin-top:48px; padding-top:16px; }
+@media (max-width:600px) { main { padding:26px 16px 60px; } h1 { font-size:1.5rem; } }
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="../../">← Back to portfolio</a>
+<p class="eyebrow">Case study</p>
+<h1>Is a self-hosted GPU worth it? Start with the workload.</h1>
+<p class="scope">Independent R&amp;D · Reference build · single-operator sandbox · November 2026</p>
+<p class="hero"><strong>A GPU is not a savings plan by itself.</strong> The useful question is
+what it costs to deliver the capacity and availability a workload actually needs—and what the
+comparison leaves out.</p>
+
+<h2>The question</h2>
+<p>For a self-hosted AI platform, I wanted a repeatable way to compare GPU ownership with renting
+similar capacity. Sticker price alone could not answer it: a lightly used card and an always-on
+service have very different rental alternatives.</p>
+<p>I built a local daily report that reads sampled GPU utilization from monitoring data, combines
+it with configurable rental-rate assumptions and a purchase-cost input, and keeps a daily history.
+It compares estimated busy-time rental with always-on scenarios. The report stays local rather
+than publishing the platform's usage or costs.</p>
+
+<h2>Measure first, then compare</h2>
+<p>The report counts a sampled interval as busy when utilization exceeds a threshold, and also
+reports utilization-weighted hours. Busy GPU-hours are a useful signal—not proof that a provider
+would bill for exactly those hours. A cloud GPU may need to be reserved while idle, and short
+requests, missing samples, startup time or different performance can change the comparison.</p>
+<div class="note"><strong>Important:</strong> purchase price divided by estimated rental cost is
+a simple <em>gross payback proxy</em>, not full ROI or realized savings. It does not show profit,
+and it is only meaningful when the capacity being compared can meet the same workload requirements.</div>
+
+<h2>An illustrative comparison</h2>
+<p><strong>Every figure below is fictional</strong> and is not a measurement, price quote or
+recommendation. Assume one GPU costs $4,000, a comparable rental costs $2 per GPU-hour, and a
+30-day month has 720 hours. The measured-use scenario assumes 8 busy hours a day; the always-on
+scenario assumes the rental must remain available all month.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Scenario</th><th>Estimated rental / month</th><th>Simple payback proxy</th></tr></thead>
+<tbody>
+<tr><td>8 busy hours per day</td><td>8 × 30 × $2 = $480</td><td>$4,000 ÷ $480 ≈ 8.3 months</td></tr>
+<tr><td>One GPU available all month</td><td>720 × $2 = $1,440</td><td>$4,000 ÷ $1,440 ≈ 2.8 months</td></tr>
+</tbody>
+</table>
+</div>
+<p>Those are two different availability assumptions, not two estimates of the same bill.
+Neither includes local operating costs. Actual rental prices, minimum billing periods,
+performance and utilization can change the result substantially.</p>
+
+<h2>What the quick calculation misses</h2>
+<ul>
+<li><strong>Ownership costs:</strong> electricity, cooling, host hardware, networking, maintenance,
+  downtime, financing, depreciation and eventual replacement.</li>
+<li><strong>Rental costs and constraints:</strong> storage, data transfer, minimum billing periods,
+  capacity availability and any required supporting services.</li>
+<li><strong>Real equivalence:</strong> model fit, memory, throughput, latency, concurrency,
+  availability and operational effort—not just a similar GPU label.</li>
+<li><strong>Alternatives:</strong> resale value, existing sunk costs and whether the workload
+  could use a smaller instance, API, shared service or a different schedule.</li>
+</ul>
+<p>The current report explicitly excludes power, hosting and resale from its simple comparison.
+It is a starting point for a fuller total-cost model, not a financial decision on its own.</p>
+
+<h2>The takeaway</h2>
+<p>Measure utilization, model the availability you actually need, and make the assumptions
+visible. Local compute can offer control and predictable capacity; rental can offer flexibility
+and avoid an upfront purchase. Neither wins automatically.</p>
+<p>For me, the value of the exercise is the discipline: turn a hardware debate into a
+workload-specific comparison, acknowledge the gaps, and revisit it as usage changes.</p>
+<footer>Details have been generalized. This is a dated independent R&amp;D case study, not financial advice or a live cost dashboard.</footer>
+</main>
+</body>
+</html>
