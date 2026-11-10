@@ -92,7 +92,8 @@ with least-privilege delegation.*
 A ~60-instance self-hosted platform on a single dual-GPU host — the environment projects 1 and 4 run in.
 
 **Detail —** [Architecture & infrastructure deck](architecture/) ·
-[AI service cards](model-cards/) for the on-prem model fleet
+[AI service cards](model-cards/) for the on-prem model fleet ·
+[Case study: self-hosted GPU economics](case-studies/gpu-economics/)
 
 - **Incus** (LXD-successor) fleet — ~60 containers/VMs across projects; a 3-master/3-worker
   k3s cluster; ZFS/Btrfs pools with snapshot rollback; four segmented bridge networks with
