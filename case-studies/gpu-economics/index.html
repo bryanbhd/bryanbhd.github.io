@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Case Study: The Economics of a Self-Hosted GPU — Bryan Debnam</title>
-<meta name="description" content="A practical framework for comparing local GPU ownership with renting compute, with clearly labeled illustrative figures.">
+<meta name="description" content="A practical look at GPU ownership versus renting compute, including the limits of an initial cost estimate.">
 <link rel="canonical" href="https://bryandebnam.com/case-studies/gpu-economics/">
 <style>
 :root { --bg:#fff; --fg:#1b1f24; --muted:#5b6570; --accent:#1f4e9c; --rule:#d8dee6; --card:#f6f8fa; }
@@ -57,23 +57,35 @@ requests, missing samples, startup time or different performance can change the 
 a simple <em>gross payback proxy</em>, not full ROI or realized savings. It does not show profit,
 and it is only meaningful when the capacity being compared can meet the same workload requirements.</div>
 
-<h2>An illustrative comparison</h2>
-<p><strong>Every figure below is fictional</strong> and is not a measurement, price quote or
-recommendation. Assume one GPU costs $4,000, a comparable rental costs $2 per GPU-hour, and a
-30-day month has 720 hours. The measured-use scenario assumes 8 busy hours a day; the always-on
-scenario assumes the rental must remain available all month.</p>
+<h2>What the first report showed</h2>
+<p>On November 10, the local report used a <strong>$18,244 purchase-cost input for two GPUs</strong>
+and a rental-rate assumption of <strong>$1.09–$2.18 per GPU-hour</strong>. It reported 1.6 busy
+GPU-hours per day over a 15-day window. These are historical report inputs and outputs, not a
+current provider quote or independently verified invoice.</p>
+<p>There is an important mismatch: the installed GPUs each have 72 GB of memory, while the
+report's rental tier describes a 96 GB GPU class. That is not an apples-to-apples comparison.
+The report's arithmetic is shown to illustrate its assumptions—not as a validated savings claim.</p>
 <div class="table-wrap">
 <table>
-<thead><tr><th>Scenario</th><th>Estimated rental / month</th><th>Simple payback proxy</th></tr></thead>
+<thead><tr><th>Report scenario</th><th>Estimated rental / month</th><th>Gross payback proxy</th></tr></thead>
 <tbody>
-<tr><td>8 busy hours per day</td><td>8 × 30 × $2 = $480</td><td>$4,000 ÷ $480 ≈ 8.3 months</td></tr>
-<tr><td>One GPU available all month</td><td>720 × $2 = $1,440</td><td>$4,000 ÷ $1,440 ≈ 2.8 months</td></tr>
+<tr><td>Reported busy time, two GPUs combined</td><td>$54–$108</td><td>About 170–339 months</td></tr>
+<tr><td>One rental GPU available for 720 hours</td><td>$785–$1,570</td><td>About 12–23 months</td></tr>
+<tr><td>Two rental GPUs available for 1,440 hours</td><td>$1,570–$3,139</td><td>About 6–12 months</td></tr>
 </tbody>
 </table>
 </div>
-<p>Those are two different availability assumptions, not two estimates of the same bill.
-Neither includes local operating costs. Actual rental prices, minimum billing periods,
-performance and utilization can change the result substantially.</p>
+<p>The rows use different availability assumptions, and the one-rental-GPU row divides the
+<em>two-GPU</em> purchase input by one GPU's estimated rental cost. It does not establish a
+payback for a single purchased card. None of the rows includes local operating costs.</p>
+<div class="note"><strong>Data-quality check:</strong> a later November 10 check found roughly
+51% and 24% of expected five-minute samples for the two tracked GPUs over the preceding 15 days.
+The missing observations cannot be treated as idle time; the reported daily busy average and
+any estimate derived from it are unreliable until coverage is reconciled.</div>
+<p>Before relying on this comparison, I need complete monitoring coverage, a verified net
+purchase cost, dated rental quotes for equivalent hardware, and an availability model that
+matches the workloads. Generic workloads include interactive inference and batch experiments;
+their latency and concurrency requirements may differ.</p>
 
 <h2>What the quick calculation misses</h2>
 <ul>
