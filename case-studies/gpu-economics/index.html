@@ -74,6 +74,37 @@ requests, missing samples, startup time or different performance can change the 
 purchase-price comparison is not the same as a forward-looking choice: ongoing local costs and
 any extra cloud usage still matter. A gross payback calculation is not full ROI or realized savings.</div>
 
+<section class="payback-chart" aria-labelledby="onprem-cloud-example">
+  <h2 id="onprem-cloud-example">On-premises vs. cloud: illustrative ROI</h2>
+  <p><strong>All figures in this example are fictional.</strong> They are not this platform's
+  actual costs, a provider quote, or a claim that two different GPUs deliver equivalent
+  performance. The example assumes both options meet the same workload and availability needs.</p>
+  <p>Assumptions: two locally owned GPUs with an illustrative historical purchase price of
+  $12,000; 500 W average combined GPU power, running 24/7 at $0.15/kWh; and $50/month in
+  additional local maintenance. The cloud alternative assumes two GPUs reserved for 720 hours
+  per month at $1.50/GPU-hour, plus $100/month for supporting services.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Illustrative cost</th><th>On-premises</th><th>Cloud</th></tr></thead>
+    <tbody>
+      <tr><td>Monthly operating cost</td><td>$104: $54 electricity + $50 maintenance</td><td>$2,260: $2,160 GPU + $100 services</td></tr>
+      <tr><td>36-month operating cost</td><td>$3,744</td><td>$81,360</td></tr>
+      <tr><td>Historical GPU purchase input</td><td>$12,000</td><td>$0 assumed</td></tr>
+      <tr><td>36-month total including historical purchase</td><td>$15,744</td><td>$81,360</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>In this hypothetical, the cloud estimate is $65,616 higher over three years after including
+  the on-premises purchase. Dividing that difference by the $12,000 purchase gives an
+  <strong>illustrative 547% simple three-year ROI proxy</strong>. It is undiscounted and is not
+  measured savings, an annual return, or a forecast.</p>
+  <p class="roi-caption">Because the real GPUs are already owned, the forward-looking decision
+  would compare future operating and cloud costs, not pay the historical purchase price again.
+  The example excludes host hardware and electricity beyond the stated GPU power, cooling,
+  financing, taxes, resale, failures, staff time, cloud data transfer and any cloud burst usage.
+  Availability, performance and usage may differ. Changing those assumptions changes the result.</p>
+</section>
+
 <section class="payback-chart" aria-labelledby="usage-payback">
   <h2 id="usage-payback">Usage vs. estimated payback</h2>
   <p>For a memory-comparable reference, Runpod lists an A100 PCIe with 80 GB at $1.79 per
