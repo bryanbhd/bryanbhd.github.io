@@ -35,6 +35,13 @@ code { overflow-wrap:anywhere; }
 .roi-track { background:var(--rule); border-radius:4px; height:10px; margin-top:4px; overflow:hidden; }
 .roi-high { background:#a88e60; height:100%; }
 .roi-low { background:#227a52; height:100%; }
+.payback-chart { background:var(--card); border:1px solid var(--rule); border-radius:8px; margin:24px 0; padding:16px; }
+.payback-chart h2 { border:0; margin:0 0 8px; padding:0; }
+.payback-row { margin:18px 0; }
+.payback-label { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; }
+.payback-track { background:var(--rule); border-radius:4px; height:12px; margin:6px 0; position:relative; }
+.payback-range { background:var(--accent); border-radius:4px; height:100%; position:absolute; }
+.payback-scale { color:var(--muted); display:flex; font-size:.8rem; justify-content:space-between; }
 footer { border-top:1px solid var(--rule); color:var(--muted); font-size:.85rem; margin-top:48px; padding-top:16px; }
 @media (max-width:600px) { main { padding:26px 16px 60px; } h1 { font-size:1.5rem; } }
 </style>
@@ -66,6 +73,41 @@ requests, missing samples, startup time or different performance can change the 
 <div class="note"><strong>Important:</strong> purchase price divided by estimated rental cost is
 a simple <em>gross payback proxy</em>, not full ROI or realized savings. It does not show profit,
 and it is only meaningful when the capacity being compared can meet the same workload requirements.</div>
+
+<section class="payback-chart" aria-labelledby="usage-payback">
+  <h2 id="usage-payback">Usage vs. estimated payback</h2>
+  <p>Earlier scenario: $18,244 purchase input for two GPUs; assumed rental of $1.09–$2.18 per
+  GPU-hour. The blue segment shows the range of estimated years. <strong>These are scenarios,
+  not verified ROI or realized savings.</strong></p>
+  <div class="payback-row">
+    <div class="payback-label"><span>Batch only: 2.2 GPU-hours/day</span><strong>10.6–21.1 years</strong></div>
+    <div class="payback-track" aria-hidden="true"><div class="payback-range" style="left:49.5%;width:49.5%"></div></div>
+  </div>
+  <div class="payback-row">
+    <div class="payback-label"><span>One GPU reserved 24/7, plus separate batch</span><strong>11–21 months (0.9–1.8 years)</strong></div>
+    <div class="payback-track" aria-hidden="true"><div class="payback-range" style="left:4.2%;width:4.2%"></div></div>
+  </div>
+  <div class="payback-row">
+    <div class="payback-label"><span>Two GPUs reserved 24/7, plus separate batch</span><strong>6–11 months (0.5–0.9 years)</strong></div>
+    <div class="payback-track" aria-hidden="true"><div class="payback-range" style="left:2.2%;width:2.2%"></div></div>
+  </div>
+  <div class="payback-scale" aria-hidden="true"><span>0 years</span><span>10.5 years</span><span>21 years</span></div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Usage scenario</th><th>Billed GPU-hours / month</th><th>Estimated rental / month</th><th>Gross payback</th></tr></thead>
+    <tbody>
+      <tr><td>Batch only: 2.2 hours/day</td><td>66</td><td>$72–$144</td><td>10.6–21.1 years</td></tr>
+      <tr><td>One 24/7 GPU + separate batch</td><td>786</td><td>$857–$1,713</td><td>11–21 months</td></tr>
+      <tr><td>Two 24/7 GPUs + separate batch</td><td>1,506</td><td>$1,642–$3,283</td><td>6–11 months</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="roi-caption">Different availability assumptions, not the same service at different prices.
+  The batch input is affected by missing monitoring samples. The rental GPU class differs from the
+  owned cards; electricity, hosting and resale are excluded. Batch is assumed to require additional
+  rental time; charging it again would double-count if it can run on already-reserved capacity.
+  Monthly hours assume 30 days; rental prices and payback are rounded from the inputs above.</p>
+</section>
 
 <h2>From GPU time to the whole platform</h2>
 <p>An earlier dashboard snapshot reported <strong>33.2 combined busy GPU-hours over 15 days</strong>.
@@ -111,9 +153,9 @@ a two-GPU purchase input of $18,244 and the same $1.09–$2.18 per GPU-hour rent
 <table>
 <thead><tr><th>Rental scenario</th><th>Estimated GPU rental per month</th><th>Gross payback proxy</th></tr></thead>
 <tbody>
-<tr><td>Batch only, at 2.2 hours per day</td><td>$73–$146</td><td>About 10–21 years</td></tr>
-<tr><td>One always-on GPU plus separate batch work</td><td>$868–$1,736</td><td>About 11–22 months</td></tr>
-<tr><td>Two always-on GPUs plus separate batch work</td><td>$1,663–$3,327</td><td>About 6–11 months</td></tr>
+<tr><td>Batch only, at 2.2 hours per day</td><td>$72–$144</td><td>About 10.6–21.1 years</td></tr>
+<tr><td>One always-on GPU plus separate batch work</td><td>$857–$1,713</td><td>About 11–21 months</td></tr>
+<tr><td>Two always-on GPUs plus separate batch work</td><td>$1,642–$3,283</td><td>About 6–11 months</td></tr>
 </tbody>
 </table>
 </div>
